@@ -1,43 +1,60 @@
-# Astro Starter Kit: Minimal
+# 🔥 Bonfire BBQ
 
-```sh
-npm create astro@latest -- --template minimal
-```
+Welcome to **Bonfire BBQ**, a high-impact, modern web experience for barbecue enthusiasts, backyard grillers, and culinary reviews.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+The site is built with [Astro](https://astro.build/) and is visually driven by a bold, dark editorial design system.
+
+---
+
+## 🎨 Design System: The Verge (2024)
+
+Bonfire BBQ adopts a premium, high-contrast dark editorial aesthetic inspired by The Verge's 2024 redesign.
+
+- **Canvas**: Near-black editorial canvas (`#131313`) as the default surface.
+- **Accents**: Acidic **Jelly Mint** (`#3cffd0`) and **Verge Ultraviolet** (`#5200ff`) used as eye-catching hazard accents (buttons, borders, and timeline tags).
+- **Typography**: Heavy, condensed **Manuka** displays for hero headings paired with clean **PolySans** for body and **PolySans Mono** for uppercase metadata.
+- **Tactility**: Rounded-pill everything (20px to 40px corner radii) framed by hairline 1px solid borders (`#ffffff` or accent colors). **No decorative drop-shadows or gradients** are used; elevation is represented purely by solid color blocks.
+- **Timeline**: The signature **StoryStream** vertical feed with mono-uppercase timestamps.
+
+Refer to the full specifications in [DESIGN.md](./DESIGN.md) for color palettes, typographic hierarchies, and layout rules.
+
+---
 
 ## 🚀 Project Structure
 
-Inside of your Astro project, you'll see the following folders and files:
+Inside this Astro project, you will find:
 
 ```text
 /
-├── public/
+├── .agents/skills/    # Installed developer skill files (Tailwind, GSAP, etc.)
+├── public/            # Static assets (images, icons)
 ├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+│   ├── pages/         # Routes (e.g., index.astro)
+│   └── components/    # Reusable Astro and JS/framework components
+├── AGENTS.md          # Coding guidelines and safety rules for AI agents
+└── DESIGN.md          # Full design system specifications & tokens
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+---
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+## 🧞 Developer Commands
 
-Any static assets, like images, can be placed in the `public/` directory.
+All commands are run from the root of the project:
 
-## 🧞 Commands
+| Command             | Action                                                |
+| :------------------ | :---------------------------------------------------- |
+| `npm install`       | Installs project dependencies                         |
+| `npm run dev`       | Starts the local dev server at `localhost:4321`       |
+| `npm run build`     | Builds your production-ready site to `./dist/`        |
+| `npm run preview`   | Previews your local production build before deploying |
+| `npm run astro ...` | Runs Astro CLI commands (e.g. `astro add`)            |
+| `graphify update .` | Rebuilds the codebase knowledge graph                 |
 
-All commands are run from the root of the project, from a terminal:
+---
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+## 🤖 Guidelines for AI Assistants
 
-## 👀 Want to learn more?
+Before modifying any code, all AI assistants **must** read and adhere to:
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+1. [AGENTS.md](./AGENTS.md) — Universal safety rules, conventional commits, command caching rules, and project-specific developer skills.
+2. [DESIGN.md](./DESIGN.md) — Strict visual guidelines, component stylings, and responsive behavior constraints.
