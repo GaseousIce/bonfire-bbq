@@ -1,1 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap');
+
 @import "tailwindcss";
+
+@theme {
+  --font-display: "Bebas Neue", Impact, sans-serif;
+  --font-sans: "Space Grotesk", Helvetica, Arial, sans-serif;
+  --font-mono: "Space Mono", Courier New, monospace;
+  --font-serif: "Newsreader", Georgia, serif;
+
+  --color-canvas-black: #131313;
+  --color-surface-slate: #2d2d2d;
+  --color-brand-mint: #3cffd0;
+  --color-brand-purple: #5200ff;
+  --color-border-mint: #309875;
+  --color-link-blue: #3860be;
+  --color-focus-cyan: #1eaedb;
+  --color-purple-rule: #3d00bf;
+  --color-hazard-white: #ffffff;
+  --color-dim-gray: #8c8c8c;
+  --color-image-frame: #313131;
+}
+
+@layer base {
+  body {
+    background-color: #131313;
+    color: #ffffff;
+    font-family: "Space Grotesk", Helvetica, Arial, sans-serif;
+    margin: 0;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+}
