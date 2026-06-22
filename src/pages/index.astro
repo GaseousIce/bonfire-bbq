@@ -1,17 +1,36 @@
 ---
-
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
+import SignatureDishes from '../components/SignatureDishes.astro';
+import Gallery from '../components/Gallery.astro';
+import Reservation from '../components/Reservation.astro';
+import Footer from '../components/Footer.astro';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout title="Bonfire Barbecue | Immersive Woodfire Dining & Smoke Craft">
+  <!-- Top navigation bar -->
+  <Navbar />
+
+  <!-- Main scroll sections -->
+  <main>
+    <!-- Cinematic Opening Hero -->
+    <Hero />
+
+    <!-- History / StoryStream Timeline Section -->
+    <About />
+
+    <!-- Tasting Menu / Pinned Horizontal Section -->
+    <SignatureDishes />
+
+    <!-- Atmospheric Photo Gallery stack reveal -->
+    <Gallery />
+
+    <!-- Climax Booking Form -->
+    <Reservation />
+  </main>
+
+  <!-- Brand footer -->
+  <Footer />
+</Layout>

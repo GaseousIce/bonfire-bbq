@@ -1,0 +1,60 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { 
+  title = "Bonfire Barbecue | Immersive Woodfire Dining", 
+  description = "Experience the primal art of slow-smoked brisket, hand-pulled pork, and open-flame cooking. A premium, cinematic culinary story." 
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    
+    <!-- Primary Meta Tags -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    
+    <style>
+      /* Hide scrollbar for clean presentation but allow scrolling */
+      html {
+        scrollbar-width: thin;
+        scrollbar-color: #313131 #131313;
+      }
+      
+      /* Webkit scrollbar customization */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #131313;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #313131;
+        border-radius: 3px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #3cffd0;
+      }
+    </style>
+  </head>
+  <body class="bg-canvas-black text-hazard-white selection:bg-brand-mint selection:text-canvas-black font-sans antialiased overflow-x-hidden">
+    <slot />
+  </body>
+</html>

@@ -1,0 +1,189 @@
+---
+const galleryItems = [
+  {
+    id: "h-01",
+    tag: "THE PITMASTER",
+    title: "Mastery of Fire",
+    image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80",
+    alt: "Chef grilling meat on woodfire"
+  },
+  {
+    id: "h-02",
+    tag: "THE HEARTH",
+    title: "Primal Coal Bed",
+    image: "https://images.unsplash.com/photo-1546964124-0cce460f38ef?auto=format&fit=crop&w=800&q=80",
+    alt: "Open wood fire sparks and embers"
+  },
+  {
+    id: "h-03",
+    tag: "THE BARK",
+    title: "Perfect Mahogany Crust",
+    image: "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?auto=format&fit=crop&w=800&q=80",
+    alt: "Smoked meat bark detail"
+  },
+  {
+    id: "h-04",
+    tag: "THE SPACE",
+    title: "Bonfire Dining Room",
+    image: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=800&q=80",
+    alt: "Warm brick restaurant interior"
+  }
+];
+---
+
+<section id="gallery" class="gallery-pin-container relative w-full h-[250vh] bg-canvas-black overflow-visible">
+  <!-- Pinned Content Panel -->
+  <div class="gallery-sticky-panel sticky top-0 w-full h-screen flex flex-col justify-center items-center overflow-hidden">
+    
+    <!-- Title overlay -->
+    <div class="absolute top-16 left-6 md:left-12 z-20 pointer-events-none max-w-lg">
+      <span class="text-brand-mint font-mono text-xs uppercase tracking-[2.5px] block mb-2">VISUAL CHRONICLES</span>
+      <h2 class="font-display text-4xl md:text-6xl uppercase leading-none font-black text-hazard-white tracking-tight">
+        THE SOUL OF THE PIT
+      </h2>
+    </div>
+
+    <!-- Stacked Cards Wrapper -->
+    <div class="relative w-[300px] h-[400px] sm:w-[380px] sm:h-[500px] md:w-[460px] md:h-[580px] z-10 flex items-center justify-center">
+      {galleryItems.map((item, index) => {
+        // Stack styling: slightly rotate each card to give a physical look
+        const rotations = [-2, 3, -1.5, 2];
+        const rot = rotations[index % rotations.length];
+        return (
+          <div 
+            class="gallery-card absolute w-full h-full rounded-[24px] overflow-hidden border border-white/10 bg-surface-slate p-3 flex flex-col gap-4 shadow-2xl origin-bottom"
+            style={`transform: rotate(${rot}deg); z-index: ${40 - index};`}
+          >
+            <!-- Card Image -->
+            <div class="relative flex-grow rounded-[16px] overflow-hidden border border-image-frame bg-canvas-black">
+              <img 
+                src={item.image} 
+                alt={item.alt}
+                class="gallery-img w-full h-full object-cover filter brightness-90 contrast-105 pointer-events-none"
+                loading="lazy"
+              />
+              <div class="absolute top-4 left-4 bg-canvas-black/80 backdrop-blur-sm border border-white/10 px-3 py-1 rounded-full">
+                <span class="text-[9px] font-mono uppercase tracking-[1.5px] text-brand-mint">{item.tag}</span>
+              </div>
+            </div>
+
+            <!-- Card Label -->
+            <div class="flex justify-between items-center px-2 py-1 border-t border-white/5">
+              <span class="font-sans text-sm font-bold text-hazard-white">{item.title}</span>
+              <span class="font-mono text-[10px] text-secondary-text">{item.id}</span>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+
+    <!-- Background glowing text behind stack -->
+    <div class="absolute bottom-16 right-6 md:right-12 z-20 pointer-events-none text-right font-mono text-[10px] text-secondary-text tracking-[2px] uppercase">
+      SCROLL DOWN TO FLIP PAGES <span class="text-brand-mint animate-pulse">▼</span>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const pinContainer = document.querySelector('.gallery-pin-container') as HTMLElement;
+    const cards = gsap.utils.toArray('.gallery-card') as HTMLElement[];
+
+    if (!pinContainer || cards.length === 0) return;
+
+    let mm = gsap.matchMedia();
+
+    mm.add({
+      isDesktop: "(min-width: 768px)",
+      isMobile: "(max-width: 767px)"
+    }, (context) => {
+      const { isDesktop } = context.conditions as { isDesktop: boolean };
+
+      if (isDesktop) {
+        // Create ScrollTrigger timeline pinned to the gallery section
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: pinContainer,
+            pin: true,
+            scrub: 0.6,
+            start: "top top",
+            end: "bottom bottom",
+            invalidateOnRefresh: true,
+          }
+        });
+
+        // We slide out the top cards one by one to reveal the lower ones
+        // Card 0 (top): slides left & rotates
+        tl.to(cards[0], {
+          xPercent: -130,
+          rotation: -15,
+          opacity: 0,
+          ease: "power2.inOut"
+        });
+
+        // As Card 0 leaves, Card 1 scales up slightly
+        tl.fromTo(cards[1],
+          { scale: 0.94 },
+          { scale: 1, duration: 0.5, ease: "power2.out" },
+          "-=0.4"
+        );
+
+        // Card 1: slides right & rotates
+        tl.to(cards[1], {
+          xPercent: 130,
+          rotation: 15,
+          opacity: 0,
+          ease: "power2.inOut"
+        });
+
+        // Card 2 scales up
+        tl.fromTo(cards[2],
+          { scale: 0.94 },
+          { scale: 1, duration: 0.5, ease: "power2.out" },
+          "-=0.4"
+        );
+
+        // Card 2: slides upwards
+        tl.to(cards[2], {
+          yPercent: -130,
+          rotation: -8,
+          opacity: 0,
+          ease: "power2.inOut"
+        });
+
+        // Card 3 (last) scales to 1.05 and rotates to 0
+        tl.fromTo(cards[3],
+          { scale: 0.94, rotation: 2 },
+          { scale: 1.03, rotation: 0, duration: 0.6, ease: "back.out(1.5)" },
+          "-=0.4"
+        );
+        
+        // Add a small pause at the end of the stack
+        tl.to({}, { duration: 0.3 });
+
+      } else {
+        // Mobile Layout: just standard fade in reveals as we scroll vertically
+        gsap.set(cards, { clearProps: "all" });
+        
+        cards.forEach((card, idx) => {
+          gsap.from(card, {
+            opacity: 0,
+            scale: 0.9,
+            y: 50,
+            duration: 0.8,
+            scrollTrigger: {
+              trigger: card,
+              start: "top 80%",
+              toggleActions: "play none none none"
+            }
+          });
+        });
+      }
+    });
+  });
+</script>

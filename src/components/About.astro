@@ -1,0 +1,215 @@
+---
+const timelineEvents = [
+  {
+    time: "12:00",
+    tag: "TIMBER",
+    title: "The Timber Preparation",
+    desc: "We select cured post oak, pecan, and hickory. Only logs seasoned for a full calendar year are permitted near the fire pit to ensure sweet, blue smoke.",
+    type: "slate"
+  },
+  {
+    time: "16:00",
+    tag: "IGNITION",
+    title: "Igniting the Coal Bed",
+    desc: "The embers are brought to life. A bed of white-hot coals is sculpted beneath the grates, emitting a clean, aromatic heat profile.",
+    type: "mint" // Saturated accent card (Jelly Mint)
+  },
+  {
+    time: "18:00",
+    tag: "TEMPERING",
+    title: "Tempering the Pit",
+    desc: "Beef ribs and prime briskets enter the brick smokehouse, where heat curves are tracked hour by hour, balancing at precisely 225°F.",
+    type: "slate"
+  },
+  {
+    time: "02:00",
+    tag: "MIDNIGHT",
+    title: "Deep Mahogany Bark",
+    desc: "In the quiet of the night, smoke wraps the grain. The sugars in the wood caramelize, forging the deep mahogany crust of our signature bark.",
+    type: "purple" // Saturated accent card (Ultraviolet)
+  },
+  {
+    time: "10:00",
+    tag: "MATURATION",
+    title: "Resting & Maturation",
+    desc: "Every cut rests at temperature for no less than four hours. The juices redistribute, rendering the meat incredibly tender and juicy.",
+    type: "slate"
+  }
+];
+---
+
+<section id="about" class="about-section relative w-full min-h-screen bg-canvas-black py-24 overflow-hidden border-t border-white/5">
+  <!-- Drifting Background Accent Elements -->
+  <div class="absolute top-[10%] right-[5%] text-[15vw] font-display font-black text-white/3 select-none pointer-events-none tracking-wider text-right uppercase z-0">
+    SMOKE & TIMBER
+  </div>
+  
+  <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+      
+      <!-- Left Column: StoryStream Timeline (5 Cols) -->
+      <div class="lg:col-span-7 relative flex flex-col pl-4 md:pl-12">
+        <!-- Vertical Timeline Spine -->
+        <div class="absolute left-4 md:left-6 top-4 bottom-4 w-[1px] border-l border-dashed border-brand-purple/60 z-0"></div>
+
+        <!-- Section eyebrow and title -->
+        <div class="mb-12 z-10">
+          <span class="text-brand-mint font-mono text-xs uppercase tracking-[2px] block mb-2">OUR TIMELINE</span>
+          <h2 class="font-display text-5xl md:text-7xl uppercase leading-none font-black text-hazard-white tracking-tight">
+            THE STORYSTREAM
+          </h2>
+        </div>
+
+        <!-- Timeline Cards -->
+        <div class="flex flex-col gap-8 w-full z-10">
+          {timelineEvents.map((event) => (
+            <div class="relative flex flex-col md:flex-row gap-4 md:gap-8 items-start timeline-item">
+              <!-- Left Rail Timestamp -->
+              <div class="flex items-center gap-3 md:w-20 md:flex-shrink-0 md:justify-end text-left md:text-right font-mono text-[11px] font-bold text-brand-mint tracking-[1.5px] uppercase pt-1">
+                <span>{event.time}</span>
+                <span class="w-2 h-2 rounded-full bg-brand-mint md:hidden"></span>
+              </div>
+
+              <!-- Content Card -->
+              <div class={`w-full p-6 md:p-8 rounded-[20px] border transition-all duration-300 group cursor-default relative overflow-hidden
+                ${event.type === 'mint' ? 'bg-brand-mint text-canvas-black border-transparent' : 
+                  event.type === 'purple' ? 'bg-brand-purple text-hazard-white border-transparent' : 
+                  'bg-surface-slate text-hazard-white border-white/10 hover:border-white/20'}`}
+              >
+                <div class="flex items-baseline justify-between mb-3">
+                  <span class={`font-mono text-[10px] uppercase tracking-[1.5px] font-semibold 
+                    ${event.type === 'mint' ? 'text-canvas-black/70' : 'text-brand-mint'}`}>
+                    {event.tag}
+                  </span>
+                </div>
+                <h3 class={`font-sans text-xl md:text-2xl font-bold tracking-tight mb-2 group-hover:text-link-blue transition-colors duration-180
+                  ${event.type === 'mint' ? 'text-canvas-black' : 'text-hazard-white'}`}>
+                  {event.title}
+                </h3>
+                <p class={`text-xs md:text-sm font-sans leading-relaxed
+                  ${event.type === 'mint' ? 'text-canvas-black/80' : 
+                    event.type === 'purple' ? 'text-white/80' : 'text-hazard-white/70'}`}>
+                  {event.desc}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Right Column: Layered Parallax Imagery (5 Cols + Offset) -->
+      <div class="lg:col-span-5 lg:sticky lg:top-24 flex flex-col gap-12 mt-12 lg:mt-24">
+        <!-- Floating Text Card (Philosophical Eyebrow) -->
+        <div class="border border-white/10 rounded-[20px] p-6 bg-surface-slate flex flex-col gap-4 parallax-text z-20">
+          <span class="font-mono text-[10px] uppercase tracking-[2px] text-brand-mint">THE FIRE PHILOSOPHY</span>
+          <p class="font-serif italic text-base md:text-lg text-hazard-white leading-relaxed">
+            "We do not cook with gas. We do not cook with electricity. We cook with timber, air, and patience. The bonfire is not a utility; it is the soul of our kitchen."
+          </p>
+        </div>
+
+        <!-- Overlapping Parallax Images Container -->
+        <div class="relative w-full aspect-[4/5] max-w-[400px] mx-auto z-10">
+          <!-- Back layer image (Log pile) -->
+          <div class="absolute top-[10%] left-0 w-[70%] aspect-square rounded-[20px] overflow-hidden border border-image-frame bg-canvas-black image-layer-back">
+            <img 
+              src="https://images.unsplash.com/photo-1546964124-0cce460f38ef?auto=format&fit=crop&w=600&q=80" 
+              alt="Hardwood logs for smoking"
+              class="w-full h-full object-cover filter brightness-50 contrast-125"
+              loading="lazy"
+            />
+          </div>
+
+          <!-- Front layer image (Grill chef) -->
+          <div class="absolute bottom-0 right-0 w-[75%] aspect-[4/5] rounded-[24px] overflow-hidden border border-brand-mint/30 bg-canvas-black image-layer-front">
+            <img 
+              src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80" 
+              alt="Chef grilling steak"
+              class="w-full h-full object-cover filter brightness-85 contrast-110"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // 1. Timeline Card Stagger Entry Animations
+    const timelineItems = gsap.utils.toArray('.timeline-item') as HTMLElement[];
+    timelineItems.forEach((item) => {
+      const card = item.querySelector('.rounded-\\[20px\\]');
+      const time = item.querySelector('span');
+
+      gsap.from(card, {
+        opacity: 0,
+        x: -40,
+        duration: 0.8,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: item,
+          start: 'top 85%',
+          toggleActions: 'play none none none'
+        }
+      });
+    });
+
+    // 2. Parallax Image Scrolling (Layered Depth)
+    const backImage = document.querySelector('.image-layer-back');
+    const frontImage = document.querySelector('.image-layer-front');
+    const textCard = document.querySelector('.parallax-text');
+
+    let mm = gsap.matchMedia();
+
+    mm.add("(min-width: 1024px)", () => {
+      // Back image scrolls slower upwards
+      gsap.fromTo(backImage, 
+        { y: -30 },
+        {
+          y: 60,
+          scrollTrigger: {
+            trigger: '.about-section',
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true
+          }
+        }
+      );
+
+      // Front image scrolls faster upwards (foreground pop)
+      gsap.fromTo(frontImage, 
+        { y: 50 },
+        {
+          y: -80,
+          scrollTrigger: {
+            trigger: '.about-section',
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true
+          }
+        }
+      );
+
+      // Text card floats at an offset
+      gsap.fromTo(textCard, 
+        { y: 10 },
+        {
+          y: -40,
+          scrollTrigger: {
+            trigger: '.about-section',
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true
+          }
+        }
+      );
+    });
+  });
+</script>
