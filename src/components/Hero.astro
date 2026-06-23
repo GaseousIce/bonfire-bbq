@@ -1,4 +1,5 @@
 ---
+import Button from './Button.astro';
 ---
 <section id="hero" class="relative w-full min-h-screen flex flex-col justify-center items-center overflow-hidden bg-canvas-black select-none">
   <!-- Background Image with Parallax wrapper -->
@@ -46,12 +47,12 @@
 
     <!-- CTAs -->
     <div class="hero-cta flex flex-wrap gap-4 justify-center items-center mt-6 translate-y-8 opacity-0">
-      <a href="#reserve" class="magnetic-button bg-brand-mint text-canvas-black font-mono text-[11px] font-bold uppercase tracking-[1.5px] px-8 py-3.5 rounded-full border border-transparent hover:bg-white hover:text-canvas-black transition-all duration-300">
-        <span class="magnetic-target block">Reserve A Hearth</span>
-      </a>
-      <a href="#dishes" class="magnetic-button bg-transparent text-hazard-white font-mono text-[11px] font-bold uppercase tracking-[1.5px] px-8 py-3.5 rounded-full border border-white/20 hover:border-brand-mint hover:text-brand-mint transition-all duration-300">
-        <span class="magnetic-target block">Explore Menu</span>
-      </a>
+      <Button href="#reserve" variant="primary" class="text-[11px] tracking-[1.5px] px-8 py-3.5">
+        Reserve A Hearth
+      </Button>
+      <Button href="#dishes" variant="outline" class="text-[11px] tracking-[1.5px] px-8 py-3.5">
+        Explore Menu
+      </Button>
     </div>
   </div>
 

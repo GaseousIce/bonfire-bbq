@@ -1,0 +1,69 @@
+---
+interface Props {
+  /** Render as <a> or <button> */
+  as?: "a" | "button";
+  /** Link destination (when as="a") */
+  href?: string;
+  /** Button type (when as="button") */
+  type?: "submit" | "button" | "reset";
+  /** Visual variant */
+  variant?: "primary" | "outline";
+  /** Additional classes */
+  class?: string;
+}
+
+const {
+  as = "a",
+  href,
+  type,
+  variant = "primary",
+  class: className = "",
+} = Astro.props;
+
+const Tag = as;
+
+const baseClasses =
+  "hover-button font-mono font-bold uppercase rounded-full border transition-colors duration-300 inline-flex items-center justify-center cursor-pointer";
+
+const variantClasses =
+  variant === "primary"
+    ? "bg-brand-mint text-canvas-black border-transparent hover:bg-white hover:text-canvas-black"
+    : "bg-transparent text-hazard-white border-white/20 hover:border-brand-mint hover:text-brand-mint";
+
+const allClasses = `${baseClasses} ${variantClasses} ${className}`.trim();
+---
+
+<Tag
+  href={as === "a" ? href : undefined}
+  type={as === "button" ? type || "button" : undefined}
+  class={allClasses}
+>
+  <slot />
+</Tag>
+
+<script>
+  import { gsap } from "gsap";
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const buttons = document.querySelectorAll(".hover-button");
+
+    buttons.forEach((btn) => {
+      const el = btn as HTMLElement;
+
+      const hoverTween = gsap.to(el, {
+        scale: 1.2,
+        duration: 0.6,
+        ease: "elastic.out(1, 0.5)",
+        easeReverse: "power2.in",
+        paused: true,
+      });
+
+      el.addEventListener("mouseenter", () => {
+        hoverTween.timeScale(1).play();
+      });
+      el.addEventListener("mouseleave", () => {
+        hoverTween.timeScale(1.8).reverse();
+      });
+    });
+  });
+</script>
