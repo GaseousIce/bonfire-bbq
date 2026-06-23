@@ -23,7 +23,7 @@ Before writing, modifying, or auditing code, read the instructions in the projec
 - Leverage these MCP server tools for AI-assisted debugging, route analysis, and interactive development where supported.
 
 ## 4. Git Commits and Branches
-- Use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) for commit messages and use conventional names for branches. Use `git flow` commands (e.g., `git flow feature start branch-name`) to manage branches; refer to the [git-flow commands documentation](https://git-flow.sh/docs/commands/) for details.
+- Use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) for commit messages and use conventional names for branches.
 - **NEVER** create or run commit commands on your own; write/make commits ONLY when explicitly asked by the user. Under no circumstances should you commit code unless specifically instructed.
 
 ## 5. Token Savings (RTK)
