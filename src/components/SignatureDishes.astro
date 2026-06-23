@@ -92,7 +92,7 @@ const dishes = [
 
   <!-- Horizontal Scroll Container -->
   <div class="dishes-scroll-wrapper relative w-full flex-grow flex items-center select-none overflow-hidden">
-    <div class="dishes-scroll-track flex items-center gap-8 md:gap-16 px-6 md:px-32 w-max">
+    <div class="dishes-scroll-track flex items-center gap-8 md:gap-16 pl-6 md:pl-32 pr-0 w-max">
       {dishes.map((dish) => (
         <div class="dish-card w-[280px] sm:w-[360px] md:w-[480px] flex-shrink-0 bg-surface-slate border border-white/10 hover:border-brand-mint/50 rounded-[24px] overflow-hidden transition-all duration-300 p-4 md:p-6 flex flex-col gap-6 cursor-grab active:cursor-grabbing">
           <!-- Card Image Frame -->
@@ -123,6 +123,8 @@ const dishes = [
           </div>
         </div>
       ))}
+      <!-- End Spacer to allow the last card to center -->
+      <div class="w-[calc(50vw-140px)] sm:w-[calc(50vw-180px)] md:w-[calc(50vw-240px)] flex-shrink-0 h-1"></div>
     </div>
   </div>
 </section>
@@ -169,20 +171,22 @@ const dishes = [
         cards.forEach((card) => {
           const img = card.querySelector('.dish-img');
           
-          // Card scale prominence (active card grows, others shrink)
-          gsap.fromTo(card, 
-            { scale: 0.92, opacity: 0.5 },
-            {
-              scale: 1.03,
-              opacity: 1,
-              scrollTrigger: {
-                trigger: card,
-                containerAnimation: scrollTween,
-                start: "left center+=20%",
-                end: "right center-=20%",
-                scrub: true,
-              }
+          // Card scale prominence (active card grows in the center, shrinks on sides)
+          const cardTl = gsap.timeline({
+            scrollTrigger: {
+              trigger: card,
+              containerAnimation: scrollTween,
+              start: "left right",
+              end: "right left",
+              scrub: true,
             }
+          });
+
+          cardTl.fromTo(card, 
+            { scale: 0.92, opacity: 0.5 },
+            { scale: 1.03, opacity: 1, ease: "power1.inOut", duration: 0.5 }
+          ).to(card, 
+            { scale: 0.92, opacity: 0.5, ease: "power1.inOut", duration: 0.5 }
           );
 
           // Subtle Image Zoom Parallax within card
