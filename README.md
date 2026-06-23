@@ -4,6 +4,9 @@ Welcome to **Bonfire BBQ**, a high-impact, modern web experience for barbecue en
 
 The site is built with [Astro](https://astro.build/) and is visually driven by a bold, dark editorial design system.
 
+> [!WARNING]
+> This website is still a work in progress. You may encounter incomplete components, placeholder/unpleasant animations, buggy UI layouts, or temporary visual artifacts while we continue to build and polish the experience.
+
 ---
 
 ## 🎨 Design System: The Verge (2024)
@@ -30,10 +33,21 @@ Inside this Astro project, you will find:
 ├── public/            # Static assets (images, icons)
 ├── src/
 │   ├── pages/         # Routes (e.g., index.astro)
-│   └── components/    # Reusable Astro and JS/framework components
+│   └── components/    # Reusable components (Button, About, Gallery, Hero, Navbar, Reservation, SignatureDishes, Footer)
 ├── AGENTS.md          # Coding guidelines and safety rules for AI agents
 └── DESIGN.md          # Full design system specifications & tokens
 ```
+
+---
+
+## 🍽️ Web Sections
+
+The single-page experience is structured into the following sections:
+- **Hero**: High-impact entrance with staggered text animations, floating ember canvas, smoke layers, and interactive mouse parallax depth.
+- **StoryStream (About/Timeline)**: Vertical feed documenting Bonfire's charcoal-craft and clay oven journey.
+- **Signature Dishes**: Visual display showcasing our clay-oven and woodfire specialties.
+- **Atmosphere (Gallery)**: A curated visual gallery highlighting Indian culinary and design themes.
+- **Hearth Reservation**: Responsive booking form with time/date pickers and seating preference options, powered by smooth GSAP entrance animations.
 
 ---
 
