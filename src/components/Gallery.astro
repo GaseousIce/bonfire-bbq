@@ -1,31 +1,39 @@
 ---
+import { Image } from 'astro:assets';
+import {
+  galleryBiryani,
+  gallerySigree,
+  gallerySpices,
+  galleryTandoor,
+} from '../assets/images';
+
 const galleryItems = [
   {
     id: "h-01",
     tag: "THE TANDOOR",
     title: "900°F Clay Oven",
-    image: "/images/gallery_tandoor.png",
+    image: galleryTandoor,
     alt: "Skewers of chicken roasting inside a glowing clay tandoor oven"
   },
   {
     id: "h-02",
     tag: "THE SIGREE",
     title: "Coal-Fired Kebabs",
-    image: "/images/gallery_sigree.png",
+    image: gallerySigree,
     alt: "Spicy chicken kebabs cooking over an open-air charcoal sigree grill"
   },
   {
     id: "h-03",
     tag: "THE MASALA",
     title: "Stone-Ground Spices",
-    image: "/images/gallery_spices.png",
+    image: gallerySpices,
     alt: "Aromatic whole Indian spices being crushed on a stone mortar"
   },
   {
     id: "h-04",
     tag: "THE DUM HANDI",
     title: "Slow-Steamed Biryani",
-    image: "/images/gallery_biryani.png",
+    image: galleryBiryani,
     alt: "Dough-sealed clay handi pot cooking biryani over dying embers"
   }
 ];
@@ -52,11 +60,16 @@ const galleryItems = [
           >
             <!-- Card Image -->
             <div class="relative flex-grow rounded-[16px] overflow-hidden border border-image-frame bg-canvas-black">
-              <img 
+              <Image
                 src={item.image} 
                 alt={item.alt}
                 class="gallery-img w-full h-full object-cover filter brightness-90 contrast-105 pointer-events-none"
                 loading="lazy"
+                decoding="async"
+                widths={[320, 460, 640, 920]}
+                sizes="(min-width: 768px) 460px, (min-width: 640px) 50vw, 100vw"
+                format="webp"
+                quality={78}
               />
               <div class="absolute top-4 left-4 bg-canvas-black/80 backdrop-blur-sm border border-white/10 px-3 py-1 rounded-full">
                 <span class="text-[9px] font-mono uppercase tracking-[1.5px] text-brand-mint">{item.tag}</span>

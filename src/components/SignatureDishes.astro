@@ -1,4 +1,17 @@
 ---
+import { Image } from 'astro:assets';
+import {
+  cardamomMalaiKebab,
+  chickenDumBiryani,
+  chickenJungleeKebab,
+  classicHandiBiryani,
+  crispyFriedMomos,
+  hearthRoastedShawarma,
+  stuffedMozzarellaChicken,
+  tandooriChicken,
+  tandooriMiniPlatter,
+} from '../assets/images';
+
 const dishes = [
   {
     id: "01",
@@ -6,7 +19,7 @@ const dishes = [
     title: "Chicken Dum Biryani",
     description: "Fragrant basmati rice layered with juicy, spiced marinated chicken, fresh mint, coriander, and saffron, slow-steamed in a dough-sealed clay handi.",
     price: "₹450",
-    image: "/images/chicken_dum_biryani.png"
+    image: chickenDumBiryani
   },
   {
     id: "02",
@@ -14,7 +27,7 @@ const dishes = [
     title: "Whole Tandoori Chicken",
     description: "A whole spring chicken marinated in Kashmiri red chilies, freshly crushed garlic, and hand-churned yogurt, roasted on long iron skewers in our clay oven.",
     price: "₹550",
-    image: "/images/tandoori_chicken.png"
+    image: tandooriChicken
   },
   {
     id: "03",
@@ -22,7 +35,7 @@ const dishes = [
     title: "Classic Handi Biryani",
     description: "Slow-simmered basmati rice layered with tender baby lamb, caramelized onions, kewra water, and spices, cooked under a flour lid seal over dying embers.",
     price: "₹480",
-    image: "/images/classic_handi_biryani.png"
+    image: classicHandiBiryani
   },
   {
     id: "04",
@@ -30,7 +43,7 @@ const dishes = [
     title: "Chicken Junglee Kebab",
     description: "Spicy, rustic chicken thighs roasted on skewers over an open iron sigree, coated in green chili paste, chopped cilantro, and dry-roasted peppercorns.",
     price: "₹380",
-    image: "/images/chicken_junglee_kebab.png"
+    image: chickenJungleeKebab
   },
   {
     id: "05",
@@ -38,7 +51,7 @@ const dishes = [
     title: "Crispy Fried Momos",
     description: "Hand-folded dumplings stuffed with spiced minced chicken, scallions, and fresh ginger, flash-fried to golden perfection and served with a roasted tomato chutney.",
     price: "₹220",
-    image: "/images/crispy_fried_momos.png"
+    image: crispyFriedMomos
   },
   {
     id: "06",
@@ -46,7 +59,7 @@ const dishes = [
     title: "Stuffed Mozzarella Chicken",
     description: "Tender chicken breast stuffed with fresh mozzarella, coriander pesto, and mild Indian spices, cooked over gentle pecan wood embers.",
     price: "₹490",
-    image: "/images/stuffed_mozzarella_chicken.png"
+    image: stuffedMozzarellaChicken
   },
   {
     id: "07",
@@ -54,7 +67,7 @@ const dishes = [
     title: "Hearth-Roasted Shawarma",
     description: "Shaved slow-roasted chicken thighs marinated in yogurt, garlic, lemon, and spices, wrapped in fresh flatbread with garlic toum.",
     price: "₹280",
-    image: "/images/hearth_roasted_shawarma.png"
+    image: hearthRoastedShawarma
   },
   {
     id: "08",
@@ -62,7 +75,7 @@ const dishes = [
     title: "Cardamom Malai Kebab",
     description: "Bites of boneless chicken marinated in white pepper, cream cheese, green coriander roots, and green cardamom, grilled over ash-tempered embers.",
     price: "₹390",
-    image: "/images/cardamom_malai_kebab.png"
+    image: cardamomMalaiKebab
   },
   {
     id: "09",
@@ -70,7 +83,7 @@ const dishes = [
     title: "Tandoori Mini Platter",
     description: "A curated tasting assortment featuring malai kebab, chicken tikka, junglee kebab, and grilled paneer, served with house-made mint-coriander chutney.",
     price: "₹750",
-    image: "/images/tandoori_mini_platter.png"
+    image: tandooriMiniPlatter
   }
 ];
 ---
@@ -97,11 +110,16 @@ const dishes = [
         <div class="dish-card w-[280px] sm:w-[360px] md:w-[480px] flex-shrink-0 bg-surface-slate border border-white/10 hover:border-brand-mint/50 rounded-[24px] overflow-hidden transition-all duration-300 p-4 md:p-6 flex flex-col gap-6 cursor-grab active:cursor-grabbing">
           <!-- Card Image Frame -->
           <div class="relative w-full aspect-[4/3] rounded-[16px] overflow-hidden border border-image-frame bg-canvas-black">
-            <img 
+            <Image
               src={dish.image} 
               alt={dish.title}
               class="dish-img w-full h-full object-cover filter brightness-85 contrast-110 pointer-events-none select-none"
               loading="lazy"
+              decoding="async"
+              widths={[280, 360, 480, 640, 960]}
+              sizes="(min-width: 768px) 480px, (min-width: 640px) 360px, 280px"
+              format="webp"
+              quality={78}
             />
             <div class="absolute top-4 left-4 bg-canvas-black/80 backdrop-blur-sm border border-white/15 px-3 py-1 rounded-full">
               <span class="text-[10px] font-mono uppercase tracking-[1.5px] text-brand-mint font-semibold">{dish.tag}</span>
