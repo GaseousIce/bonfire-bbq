@@ -88,9 +88,9 @@ const galleryItems = [
 
   document.addEventListener('DOMContentLoaded', () => {
     const pinContainer = document.querySelector('.gallery-pin-container') as HTMLElement;
-    const cards = gsap.utils.toArray('.gallery-card') as HTMLElement[];
+    const galleryCards = gsap.utils.toArray('.gallery-card') as HTMLElement[];
 
-    if (!pinContainer || cards.length === 0) return;
+    if (!pinContainer || galleryCards.length === 0) return;
 
     let mm = gsap.matchMedia();
 
@@ -102,7 +102,7 @@ const galleryItems = [
 
       if (isDesktop) {
         // Set initial stack z-indexes and rotations dynamically for desktop
-        cards.forEach((card, index) => {
+        galleryCards.forEach((card, index) => {
           const rotations = [-2, 3, -1.5, 2];
           const rot = rotations[index % rotations.length];
           gsap.set(card, {
@@ -129,7 +129,7 @@ const galleryItems = [
 
         // We slide out the top cards one by one to reveal the lower ones
         // Card 0 (top): slides left & rotates
-        tl.to(cards[0], {
+        tl.to(galleryCards[0], {
           xPercent: -130,
           rotation: -15,
           opacity: 0,
@@ -137,14 +137,14 @@ const galleryItems = [
         });
 
         // As Card 0 leaves, Card 1 scales up slightly
-        tl.fromTo(cards[1],
+        tl.fromTo(galleryCards[1],
           { scale: 0.94 },
           { scale: 1, duration: 0.5, ease: "power2.out" },
           "-=0.4"
         );
 
         // Card 1: slides right & rotates
-        tl.to(cards[1], {
+        tl.to(galleryCards[1], {
           xPercent: 130,
           rotation: 15,
           opacity: 0,
@@ -152,7 +152,7 @@ const galleryItems = [
         });
 
         // Card 2 scales up
-        tl.fromTo(cards[2],
+        tl.fromTo(galleryCards[2],
           { scale: 0.94 },
           { scale: 1, duration: 0.5, ease: "power2.out" },
           "-=0.4"

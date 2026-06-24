@@ -185,7 +185,7 @@ import Button from './Button.astro';
 
   document.addEventListener('DOMContentLoaded', () => {
     const section = document.querySelector('.reserve-section') as HTMLElement;
-    const info = document.querySelector('.reserve-info') as HTMLElement;
+    const reserveInfo = document.querySelector('.reserve-info') as HTMLElement;
     const cardWrap = document.querySelector('.reserve-card-wrap') as HTMLElement;
     const glow = document.querySelector('.hearth-glow') as HTMLElement;
     const glowSec = document.querySelector('.hearth-glow-secondary') as HTMLElement;
@@ -195,7 +195,7 @@ import Button from './Button.astro';
 
     // 1. Entrance Animations via ScrollTrigger
     // Text staggers up and the card scales up slightly
-    gsap.from(info.children, {
+    gsap.from(reserveInfo.children, {
       y: 40,
       opacity: 0,
       stagger: 0.12,

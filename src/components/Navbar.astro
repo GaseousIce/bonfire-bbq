@@ -85,8 +85,8 @@ import Button from './Button.astro';
   gsap.registerPlugin(ScrollTrigger);
 
   document.addEventListener('DOMContentLoaded', () => {
-    const wrapper = document.querySelector('.navbar-wrapper');
-    const container = document.querySelector('.navbar-container');
+    const navbarWrapper = document.querySelector('.navbar-wrapper');
+    const navbarContainer = document.querySelector('.navbar-container');
     const logo = document.querySelector('.brand-logo');
     const navLinks = document.querySelectorAll('.nav-link');
     const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
@@ -99,20 +99,20 @@ import Button from './Button.astro';
     ScrollTrigger.create({
       start: 'top -100',
       onEnter: () => {
-        container?.classList.add('is-sticky');
+        navbarContainer?.classList.add('is-sticky');
         
         // Sticky entrance sequence: y: -120 -> 14 -> -5 -> 0
         const tl = gsap.timeline();
-        tl.fromTo(container, 
+        tl.fromTo(navbarContainer, 
           { y: -120 }, 
           { y: 14, duration: 0.35, ease: "power2.out" }
         )
-        .to(container, { y: -5, duration: 0.15, ease: "power1.inOut" })
-        .to(container, { y: 0, duration: 0.1, ease: "power1.in" });
+        .to(navbarContainer, { y: -5, duration: 0.15, ease: "power1.inOut" })
+        .to(navbarContainer, { y: 0, duration: 0.1, ease: "power1.in" });
       },
       onLeaveBack: () => {
-        container?.classList.remove('is-sticky');
-        gsap.set(container, { clearProps: "all" });
+        navbarContainer?.classList.remove('is-sticky');
+        gsap.set(navbarContainer, { clearProps: "all" });
       }
     });
 
@@ -120,8 +120,8 @@ import Button from './Button.astro';
     logo?.addEventListener('mousemove', (e) => {
       const mouseEvent = e as MouseEvent;
       const rect = logo.getBoundingClientRect();
-      const x = mouseEvent.clientX - rect.left - rect.width / 2;
-      const tilt = (x / rect.width) * 20; // max 10 degrees tilt
+      const offsetX = mouseEvent.clientX - rect.left - rect.width / 2;
+      const tilt = (offsetX / rect.width) * 20; // max 10 degrees tilt
       
       gsap.to(logo, {
         rotation: tilt,
@@ -142,9 +142,9 @@ import Button from './Button.astro';
 
     // 3. Nav link hover interactions
     navLinks.forEach(link => {
-      const el = link as HTMLElement;
+      const linkElement = link as HTMLElement;
       
-      const hoverTween = gsap.to(el, {
+      const hoverTween = gsap.to(linkElement, {
         scale: 1.08,
         duration: 0.35,
         ease: 'back.out(1.4)',
@@ -152,8 +152,8 @@ import Button from './Button.astro';
         paused: true
       });
       
-      el.addEventListener('mouseenter', () => hoverTween.play());
-      el.addEventListener('mouseleave', () => hoverTween.reverse());
+      linkElement.addEventListener('mouseenter', () => hoverTween.play());
+      linkElement.addEventListener('mouseleave', () => hoverTween.reverse());
     });
 
     // 4. Mobile drawer open/close
