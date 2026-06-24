@@ -31,12 +31,12 @@ const galleryItems = [
 ];
 ---
 
-<section id="gallery" class="gallery-pin-container relative w-full h-[250vh] bg-canvas-black overflow-visible">
-  <!-- Pinned Content Panel -->
-  <div class="gallery-sticky-panel sticky top-0 w-full h-screen flex flex-col justify-center items-center overflow-hidden">
+<section id="gallery" class="gallery-pin-container relative w-full h-auto md:h-[250vh] bg-canvas-black overflow-visible py-16 md:py-0">
+  <!-- Pinned Content Panel (GSAP pins this on desktop) -->
+  <div class="gallery-sticky-panel relative w-full h-auto md:h-screen flex flex-col justify-start md:justify-center items-center overflow-visible md:overflow-hidden">
     
     <!-- Title overlay -->
-    <div class="absolute top-16 left-6 md:left-12 z-20 pointer-events-none max-w-lg">
+    <div class="w-full max-w-7xl mx-auto px-6 md:px-12 mb-12 md:absolute md:top-16 md:left-12 md:px-0 md:mb-0 z-20 pointer-events-none">
       <span class="text-brand-mint font-mono text-xs uppercase tracking-[2.5px] block mb-2">CLAY & COAL CHRONICLES</span>
       <h2 class="font-display text-4xl md:text-6xl uppercase leading-none font-black text-hazard-white tracking-tight">
         THE SOUL OF THE HEARTH
@@ -44,15 +44,11 @@ const galleryItems = [
     </div>
 
     <!-- Stacked Cards Wrapper -->
-    <div class="relative w-[300px] h-[400px] sm:w-[380px] sm:h-[500px] md:w-[460px] md:h-[580px] z-10 flex items-center justify-center">
-      {galleryItems.map((item, index) => {
-        // Stack styling: slightly rotate each card to give a physical look
-        const rotations = [-2, 3, -1.5, 2];
-        const rot = rotations[index % rotations.length];
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 w-full max-w-lg sm:max-w-3xl md:max-w-none md:relative md:w-[460px] md:h-[580px] md:flex md:items-center md:justify-center z-10 px-6 md:px-0">
+      {galleryItems.map((item) => {
         return (
           <div 
-            class="gallery-card absolute w-full h-full rounded-[24px] overflow-hidden border border-white/10 bg-surface-slate p-3 flex flex-col gap-4 shadow-2xl origin-bottom"
-            style={`transform: rotate(${rot}deg); z-index: ${40 - index};`}
+            class="gallery-card relative w-full aspect-[4/5] sm:aspect-[3/4] md:absolute md:w-full md:h-full md:aspect-none rounded-[24px] overflow-hidden border border-white/10 bg-surface-slate p-3 flex flex-col gap-4 shadow-2xl origin-bottom"
           >
             <!-- Card Image -->
             <div class="relative flex-grow rounded-[16px] overflow-hidden border border-image-frame bg-canvas-black">
@@ -78,7 +74,7 @@ const galleryItems = [
     </div>
 
     <!-- Background glowing text behind stack -->
-    <div class="absolute bottom-16 right-6 md:right-12 z-20 pointer-events-none text-right font-mono text-[10px] text-secondary-text tracking-[2px] uppercase">
+    <div class="hidden md:block absolute bottom-16 right-12 z-20 pointer-events-none text-right font-mono text-[10px] text-secondary-text tracking-[2px] uppercase">
       SCROLL DOWN TO FLIP PAGES <span class="text-brand-mint animate-pulse">▼</span>
     </div>
   </div>
@@ -105,11 +101,25 @@ const galleryItems = [
       const { isDesktop } = context.conditions as { isDesktop: boolean };
 
       if (isDesktop) {
-        // Create ScrollTrigger timeline pinned to the gallery section
+        // Set initial stack z-indexes and rotations dynamically for desktop
+        cards.forEach((card, index) => {
+          const rotations = [-2, 3, -1.5, 2];
+          const rot = rotations[index % rotations.length];
+          gsap.set(card, {
+            rotation: rot,
+            zIndex: 40 - index,
+            xPercent: 0,
+            yPercent: 0,
+            scale: 1,
+            opacity: 1
+          });
+        });
+
+        // Create ScrollTrigger timeline pinning the sticky panel inside the container
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: pinContainer,
-            pin: true,
+            pin: ".gallery-sticky-panel",
             scrub: 0.6,
             start: "top top",
             end: "bottom bottom",
@@ -167,18 +177,19 @@ const galleryItems = [
         tl.to({}, { duration: 0.3 });
 
       } else {
-        // Mobile Layout: just standard fade in reveals as we scroll vertically
+        // Mobile Layout: clear all inline styles so they render in standard grid flow
         gsap.set(cards, { clearProps: "all" });
         
-        cards.forEach((card, idx) => {
+        // Fade in reveals for individual cards in the grid as they scroll into view
+        cards.forEach((card) => {
           gsap.from(card, {
             opacity: 0,
-            scale: 0.9,
-            y: 50,
-            duration: 0.8,
+            scale: 0.95,
+            y: 30,
+            duration: 0.6,
             scrollTrigger: {
               trigger: card,
-              start: "top 80%",
+              start: "top 85%",
               toggleActions: "play none none none"
             }
           });
