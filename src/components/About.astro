@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+
 const timelineEvents = [
   {
     time: "08:00",
@@ -116,21 +118,31 @@ const timelineEvents = [
         <div class="relative w-full aspect-[4/5] max-w-[400px] mx-auto z-10">
           <!-- Back layer image (Log pile) -->
           <div class="absolute top-[10%] left-0 w-[70%] aspect-square rounded-[20px] overflow-hidden border border-image-frame bg-canvas-black image-layer-back">
-            <img 
+            <Image
               src="https://images.unsplash.com/photo-1546964124-0cce460f38ef?auto=format&fit=crop&w=600&q=80" 
               alt="Hardwood logs for smoking"
               class="w-full h-full object-cover filter brightness-50 contrast-125"
               loading="lazy"
+              decoding="async"
+              width={600}
+              height={600}
+              format="webp"
+              quality={75}
             />
           </div>
 
           <!-- Front layer image (Grill chef) -->
           <div class="absolute bottom-0 right-0 w-[75%] aspect-[4/5] rounded-[24px] overflow-hidden border border-brand-mint/30 bg-canvas-black image-layer-front">
-            <img 
+            <Image
               src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80" 
               alt="Chef grilling steak"
               class="w-full h-full object-cover filter brightness-85 contrast-110"
               loading="lazy"
+              decoding="async"
+              width={600}
+              height={750}
+              format="webp"
+              quality={75}
             />
           </div>
         </div>
@@ -184,7 +196,7 @@ const timelineEvents = [
             trigger: item,
             start: 'top 90%',
             end: 'top 55%',
-            scrub: true, // Bind directly and instantaneously to scroll speed
+            scrub: 1,
             invalidateOnRefresh: true,
           }
         });

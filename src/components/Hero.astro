@@ -1,14 +1,22 @@
 ---
 import Button from './Button.astro';
+import { Image } from 'astro:assets';
+import { heroTandoor } from '../assets/images';
 ---
 <section id="hero" class="relative w-full min-h-screen flex flex-col justify-center items-center overflow-hidden bg-canvas-black select-none">
   <!-- Background Image with Parallax wrapper -->
   <div class="absolute inset-0 w-full h-full scale-[1.12] hero-bg-wrap">
-    <img 
-      src="/images/hero_tandoor.png" 
+    <Image
+      src={heroTandoor}
       alt="Bonfire Indian tandoor cooking"
       class="w-full h-full object-cover filter brightness-30 contrast-125 select-none pointer-events-none"
       loading="eager"
+      fetchpriority="high"
+      decoding="async"
+      widths={[640, 960, 1280, 1600, 1920]}
+      sizes="100vw"
+      format="webp"
+      quality={82}
     />
     <div class="absolute inset-0 bg-gradient-to-t from-canvas-black via-transparent to-canvas-black/80"></div>
   </div>
@@ -18,9 +26,6 @@ import Button from './Button.astro';
     <div class="smoke-layer smoke-1 absolute -inset-[10%] bg-[url('https://images.unsplash.com/photo-1608897013039-887f21d8c804?auto=format&fit=crop&w=1000&q=80')] bg-cover mix-blend-screen opacity-20 filter blur-lg"></div>
     <div class="smoke-layer smoke-2 absolute -inset-[10%] bg-[url('https://images.unsplash.com/photo-1546964124-0cce460f38ef?auto=format&fit=crop&w=1000&q=80')] bg-cover mix-blend-screen opacity-15 filter blur-2xl"></div>
   </div>
-
-  <!-- Ember Particle Canvas -->
-  <canvas id="ember-canvas" class="absolute inset-0 w-full h-full pointer-events-none z-15"></canvas>
 
   <!-- Content Container -->
   <div class="hero-content relative z-20 max-w-5xl mx-auto px-6 text-center flex flex-col items-center gap-6 pointer-events-auto">
@@ -81,7 +86,6 @@ import Button from './Button.astro';
     const deck = document.querySelector('.hero-deck');
     const cta = document.querySelector('.hero-cta');
     const scrollDown = document.querySelector('.hero-scroll-down');
-    const canvas = document.getElementById('ember-canvas') as HTMLCanvasElement;
     
     // ----------------------------------------------------
     // 1. Cinematic Opening sequence (deferred until loading screen completes)
@@ -185,86 +189,7 @@ import Button from './Button.astro';
     });
 
 
-    // ----------------------------------------------------
-    // 3. Floating Ember Particle Canvas
-    // ----------------------------------------------------
-    if (canvas) {
-      const ctx = canvas.getContext('2d');
-      let particles: Array<{
-        x: number;
-        y: number;
-        size: number;
-        speedX: number;
-        speedY: number;
-        alpha: number;
-        decay: number;
-        color: string;
-      }> = [];
-
-      const colors = [
-        'rgba(60, 255, 208, ', // Mint spark
-        'rgba(255, 124, 60, ', // Fire orange
-        'rgba(255, 218, 68, ', // Yellow spark
-        'rgba(255, 90, 95, ',  // Soft red ember
-      ];
-
-      const resizeCanvas = () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-      };
-      
-      resizeCanvas();
-      window.addEventListener('resize', resizeCanvas);
-
-      const createParticle = () => {
-        const x = Math.random() * canvas.width;
-        const y = canvas.height + 20;
-        const size = Math.random() * 2.5 + 0.5;
-        const speedX = Math.random() * 2 - 1;
-        const speedY = -(Math.random() * 1.5 + 0.5);
-        const alpha = Math.random() * 0.8 + 0.2;
-        const decay = Math.random() * 0.005 + 0.002;
-        // Mint particles are rare (10% chance)
-        const isMint = Math.random() < 0.15;
-        const color = isMint ? colors[0] : colors[Math.floor(Math.random() * (colors.length - 1)) + 1];
-
-        particles.push({ x, y, size, speedX, speedY, alpha, decay, color });
-      };
-
-      const animateParticles = () => {
-        if (!ctx) return;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Generate particles based on screen width (less on mobile)
-        const density = window.innerWidth < 768 ? 0.3 : 0.8;
-        if (Math.random() < density) {
-          createParticle();
-        }
-
-        particles.forEach((p, index) => {
-          p.y += p.speedY;
-          // Sine wave path drift
-          p.x += p.speedX + Math.sin(p.y * 0.01) * 0.4;
-          p.alpha -= p.decay;
-
-          if (p.alpha <= 0 || p.y < -10) {
-            particles.splice(index, 1);
-            return;
-          }
-
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-          ctx.fillStyle = `${p.color}${p.alpha})`;
-          ctx.fill();
-        });
-
-        requestAnimationFrame(animateParticles);
-      };
-
-      animateParticles();
-    }
-
-    // 4. Slow smoke drift animation
+    // 3. Slow smoke drift animation
     gsap.to('.smoke-1', {
       xPercent: 12,
       yPercent: -8,
