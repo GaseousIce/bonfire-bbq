@@ -38,7 +38,7 @@ import Button from './Button.astro';
 
       <!-- Right Column: Booking Card Form (6 Cols) -->
       <div class="lg:col-span-6 reserve-card-wrap">
-        <div class="bg-surface-slate border border-white/10 rounded-[24px] p-6 md:p-8 flex flex-col gap-6 relative shadow-2xl overflow-hidden hover:border-brand-mint/30 transition-all duration-300">
+        <div class="bg-surface-slate border border-white/10 rounded-[24px] p-6 md:p-8 flex flex-col gap-6 relative shadow-2xl hover:border-brand-mint/30 transition-all duration-300">
           <div class="flex justify-between items-baseline border-b border-white/5 pb-4">
             <span class="font-mono text-[10px] uppercase tracking-[2px] text-brand-mint font-semibold">HEARTH BOOKING</span>
             <span class="font-mono text-[9px] text-secondary-text">CODE: PIT-001</span>
@@ -85,31 +85,43 @@ import Button from './Button.astro';
               </div>
               <!-- Guests Count -->
               <div class="flex flex-col gap-2">
-                <label for="guests" class="font-mono text-[10px] uppercase tracking-[1.5px] text-hazard-white/80">Hearth Seating</label>
-                <select 
-                  id="guests"
-                  class="bg-canvas-black border border-white/20 text-sm font-sans text-hazard-white px-4 py-3 rounded-[12px] focus:outline-none focus:border-brand-mint focus:ring-1 focus:ring-brand-purple transition-all duration-150"
-                >
-                  <option value="2">2 Pitmasters</option>
-                  <option value="4">4 Pitmasters</option>
-                  <option value="6">6 Pitmasters</option>
-                  <option value="8">8+ (Private Table)</option>
-                </select>
+                <label class="font-mono text-[10px] uppercase tracking-[1.5px] text-hazard-white/80">Hearth Seating</label>
+                <div class="custom-select relative" data-name="guests">
+                  <input type="hidden" name="guests" value="" />
+                  <button type="button" class="custom-select-trigger bg-canvas-black border border-white/20 text-sm font-sans text-hazard-white px-4 py-3 rounded-[12px] focus:outline-none focus:border-brand-mint focus:ring-1 focus:ring-brand-purple transition-all duration-150 w-full flex items-center justify-between cursor-pointer" role="combobox" aria-expanded="false" aria-haspopup="listbox" aria-label="Hearth Seating">
+                    <span class="custom-select-label text-secondary-text">Select seating</span>
+                    <svg class="custom-select-arrow w-3 h-2 text-hazard-white/60" width="12" height="8" viewBox="0 0 12 8" fill="none" style="transform-origin: center;">
+                      <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                  </button>
+                  <div class="custom-select-options absolute top-full left-0 right-0 z-20 mt-1.5 bg-canvas-black border border-white/10 rounded-[12px] overflow-hidden shadow-2xl" role="listbox" style="display: none; opacity: 0; transform: translateY(-6px);">
+                    <button type="button" class="custom-select-option w-full text-left px-4 py-3 text-sm font-sans text-hazard-white hover:bg-white/5 hover:text-brand-mint transition-colors duration-150 border-b border-white/5 last:border-b-0 cursor-pointer" role="option" data-value="2">2 Pitmasters</button>
+                    <button type="button" class="custom-select-option w-full text-left px-4 py-3 text-sm font-sans text-hazard-white hover:bg-white/5 hover:text-brand-mint transition-colors duration-150 border-b border-white/5 last:border-b-0 cursor-pointer" role="option" data-value="4">4 Pitmasters</button>
+                    <button type="button" class="custom-select-option w-full text-left px-4 py-3 text-sm font-sans text-hazard-white hover:bg-white/5 hover:text-brand-mint transition-colors duration-150 border-b border-white/5 last:border-b-0 cursor-pointer" role="option" data-value="6">6 Pitmasters</button>
+                    <button type="button" class="custom-select-option w-full text-left px-4 py-3 text-sm font-sans text-hazard-white hover:bg-white/5 hover:text-brand-mint transition-colors duration-150 border-b border-white/5 last:border-b-0 cursor-pointer" role="option" data-value="8">8+ (Private Table)</button>
+                  </div>
+                </div>
               </div>
             </div>
 
             <!-- Select Table Preference -->
             <div class="flex flex-col gap-2">
-              <label for="preference" class="font-mono text-[10px] uppercase tracking-[1.5px] text-hazard-white/80">Hearth Preference</label>
-              <select 
-                id="preference"
-                class="bg-canvas-black border border-white/20 text-sm font-sans text-hazard-white px-4 py-3 rounded-[12px] focus:outline-none focus:border-brand-mint focus:ring-1 focus:ring-brand-purple transition-all duration-150"
-              >
-                <option value="tandoor-side">Tandoor Side (Direct clay oven view)</option>
-                <option value="sigree-view">Sigree Grill View (Plated kebabs prep view)</option>
-                <option value="biryani-lounge">Biryani Hearth Lounge (Aromatic claypot steam)</option>
-                <option value="chefs-table">Chef's Table (Curated multi-course tasting)</option>
-              </select>
+              <label class="font-mono text-[10px] uppercase tracking-[1.5px] text-hazard-white/80">Hearth Preference</label>
+              <div class="custom-select relative" data-name="preference">
+                <input type="hidden" name="preference" value="" />
+                <button type="button" class="custom-select-trigger bg-canvas-black border border-white/20 text-sm font-sans text-hazard-white px-4 py-3 rounded-[12px] focus:outline-none focus:border-brand-mint focus:ring-1 focus:ring-brand-purple transition-all duration-150 w-full flex items-center justify-between cursor-pointer" role="combobox" aria-expanded="false" aria-haspopup="listbox" aria-label="Hearth Preference">
+                  <span class="custom-select-label text-secondary-text">Select preference</span>
+                  <svg class="custom-select-arrow w-3 h-2 text-hazard-white/60" width="12" height="8" viewBox="0 0 12 8" fill="none" style="transform-origin: center;">
+                    <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  </svg>
+                </button>
+                <div class="custom-select-options absolute top-full left-0 right-0 z-20 mt-1.5 bg-canvas-black border border-white/10 rounded-[12px] overflow-hidden shadow-2xl" role="listbox" style="display: none; opacity: 0; transform: translateY(-6px);">
+                  <button type="button" class="custom-select-option w-full text-left px-4 py-3 text-sm font-sans text-hazard-white hover:bg-white/5 hover:text-brand-mint transition-colors duration-150 border-b border-white/5 last:border-b-0 cursor-pointer" role="option" data-value="tandoor-side">Tandoor Side (Direct clay oven view)</button>
+                  <button type="button" class="custom-select-option w-full text-left px-4 py-3 text-sm font-sans text-hazard-white hover:bg-white/5 hover:text-brand-mint transition-colors duration-150 border-b border-white/5 last:border-b-0 cursor-pointer" role="option" data-value="sigree-view">Sigree Grill View (Plated kebabs prep view)</button>
+                  <button type="button" class="custom-select-option w-full text-left px-4 py-3 text-sm font-sans text-hazard-white hover:bg-white/5 hover:text-brand-mint transition-colors duration-150 border-b border-white/5 last:border-b-0 cursor-pointer" role="option" data-value="biryani-lounge">Biryani Hearth Lounge (Aromatic claypot steam)</button>
+                  <button type="button" class="custom-select-option w-full text-left px-4 py-3 text-sm font-sans text-hazard-white hover:bg-white/5 hover:text-brand-mint transition-colors duration-150 border-b border-white/5 last:border-b-0 cursor-pointer" role="option" data-value="chefs-table">Chef's Table (Curated multi-course tasting)</button>
+                </div>
+              </div>
             </div>
 
             <!-- Submit CTA -->
@@ -183,6 +195,84 @@ import Button from './Button.astro';
         }
       }
     );
+
+    // Custom GSAP dropdowns
+    const dropdowns = document.querySelectorAll('.custom-select') as NodeListOf<HTMLElement>;
+
+    dropdowns.forEach((dropdown) => {
+      const trigger = dropdown.querySelector('.custom-select-trigger') as HTMLElement;
+      const options = dropdown.querySelector('.custom-select-options') as HTMLElement;
+      const label = dropdown.querySelector('.custom-select-label') as HTMLElement;
+      const arrow = dropdown.querySelector('.custom-select-arrow') as HTMLElement;
+      const hiddenInput = dropdown.querySelector('input[type="hidden"]') as HTMLInputElement;
+      const optionEls = dropdown.querySelectorAll('.custom-select-option') as NodeListOf<HTMLElement>;
+
+      let isOpen = false;
+
+      // GSAP tween for dropdown opening (opacity + y, NO scale)
+      const openTween = gsap.fromTo(options,
+        { opacity: 0, y: -6 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.5,
+          ease: 'elastic.out(1, 0.4)',
+          easeReverse: 'power2.in',
+          paused: true,
+          onReverseComplete: () => {
+            options.style.display = 'none';
+          }
+        }
+      );
+
+      // Arrow rotation tween
+      const arrowTween = gsap.to(arrow, {
+        rotation: 180,
+        duration: 0.3,
+        ease: 'power2.out',
+        paused: true,
+      });
+
+      function openDropdown() {
+        if (isOpen) return;
+        isOpen = true;
+        trigger.setAttribute('aria-expanded', 'true');
+        options.style.display = 'block';
+        openTween.restart();
+        arrowTween.play();
+      }
+
+      function closeDropdown() {
+        if (!isOpen) return;
+        isOpen = false;
+        trigger.setAttribute('aria-expanded', 'false');
+        openTween.timeScale(2).reverse();
+        arrowTween.timeScale(2).reverse();
+      }
+
+      trigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        isOpen ? closeDropdown() : openDropdown();
+      });
+
+      optionEls.forEach((opt) => {
+        opt.addEventListener('click', () => {
+          const value = opt.dataset.value;
+          const text = opt.textContent;
+          label.textContent = text;
+          label.classList.remove('text-secondary-text');
+          if (hiddenInput) hiddenInput.value = value || '';
+          dropdown.dataset.value = value || '';
+          closeDropdown();
+        });
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!dropdown.contains(e.target as Node) && isOpen) {
+          closeDropdown();
+        }
+      });
+    });
 
   });
 </script>
