@@ -137,10 +137,10 @@ const dishes = [
 
   document.addEventListener('DOMContentLoaded', () => {
     const pinSection = document.querySelector('.dishes-pin-container') as HTMLElement;
-    const track = document.querySelector('.dishes-scroll-track') as HTMLElement;
-    const cards = gsap.utils.toArray('.dish-card') as HTMLElement[];
+    const scrollTrack = document.querySelector('.dishes-scroll-track') as HTMLElement;
+    const dishCards = gsap.utils.toArray('.dish-card') as HTMLElement[];
 
-    if (!pinSection || !track || cards.length === 0) return;
+    if (!pinSection || !scrollTrack || dishCards.length === 0) return;
 
     // We only execute horizontal scroll pin on desktop screen sizes (> 768px)
     // On mobile we let it behave as a standard swipeable container
@@ -154,21 +154,21 @@ const dishes = [
 
       if (isDesktop) {
         // 1. Horizontal Scroll Pin & Tween
-        const scrollTween = gsap.to(track, {
-          x: () => -(track.scrollWidth - window.innerWidth),
+        const scrollTween = gsap.to(scrollTrack, {
+          x: () => -(scrollTrack.scrollWidth - window.innerWidth),
           ease: "none",
           scrollTrigger: {
             trigger: pinSection,
             pin: true,
             scrub: 0.8,
             start: "top top",
-            end: () => `+=${track.scrollWidth - window.innerWidth}`,
+            end: () => `+=${scrollTrack.scrollWidth - window.innerWidth}`,
             invalidateOnRefresh: true,
           }
         });
 
         // 2. Card Scaling & Image Parallax using containerAnimation
-        cards.forEach((card) => {
+        dishCards.forEach((card) => {
           const img = card.querySelector('.dish-img');
           
           // Card scale prominence (active card grows in the center, shrinks on sides)
@@ -212,7 +212,7 @@ const dishes = [
         gsap.set(cards, { clearProps: "all" });
         
         // Scroll entry animations for cards in vertical layout
-        cards.forEach((card) => {
+        dishCards.forEach((card) => {
           gsap.from(card, {
             y: 50,
             opacity: 0,

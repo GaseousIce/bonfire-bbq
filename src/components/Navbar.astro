@@ -61,11 +61,10 @@ import Button from './Button.astro';
 
 <style>
   /* Sticky navbar styles */
-  .navbar-container.is-sticky {
-    background-color: rgba(45, 45, 45, 0.9); /* Surface Slate with alpha */
+  .navbar-container {
+    background-color: rgba(45, 45, 45, 0.9);
     backdrop-filter: blur(12px);
-    border-color: #3cffd0; /* Jelly mint border */
-    transform: scale(0.96);
+    border-color: #3cffd0;
   }
 
   .nav-link:hover span.absolute {
@@ -80,48 +79,23 @@ import Button from './Button.astro';
 
 <script>
   import { gsap } from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-  // Make sure to register plugins
-  gsap.registerPlugin(ScrollTrigger);
 
   document.addEventListener('DOMContentLoaded', () => {
     const wrapper = document.querySelector('.navbar-wrapper');
     const container = document.querySelector('.navbar-container');
     const logo = document.querySelector('.brand-logo');
     const navLinks = document.querySelectorAll('.nav-link');
+    const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
     const mobileToggle = document.querySelector('.mobile-toggle');
     const mobileClose = document.querySelector('.mobile-close');
     const mobileDrawer = document.querySelector('.mobile-drawer');
 
-    // 1. Sticky Navbar Transition via ScrollTrigger
-    // We create a ScrollTrigger that triggers when we scroll past 100px from top
-    ScrollTrigger.create({
-      start: 'top -100',
-      onEnter: () => {
-        container?.classList.add('is-sticky');
-        
-        // Sticky entrance sequence: y: -120 -> 14 -> -5 -> 0
-        const tl = gsap.timeline();
-        tl.fromTo(container, 
-          { y: -120 }, 
-          { y: 14, duration: 0.35, ease: "power2.out" }
-        )
-        .to(container, { y: -5, duration: 0.15, ease: "power1.inOut" })
-        .to(container, { y: 0, duration: 0.1, ease: "power1.in" });
-      },
-      onLeaveBack: () => {
-        container?.classList.remove('is-sticky');
-        gsap.set(container, { clearProps: "all" });
-      }
-    });
-
-    // 2. Logo Tilt micro-interaction
+    // 1. Logo Tilt micro-interaction
     logo?.addEventListener('mousemove', (e) => {
       const mouseEvent = e as MouseEvent;
       const rect = logo.getBoundingClientRect();
-      const x = mouseEvent.clientX - rect.left - rect.width / 2;
-      const tilt = (x / rect.width) * 20; // max 10 degrees tilt
+      const offsetX = mouseEvent.clientX - rect.left - rect.width / 2;
+      const tilt = (offsetX / rect.width) * 20; // max 10 degrees tilt
       
       gsap.to(logo, {
         rotation: tilt,
@@ -142,9 +116,9 @@ import Button from './Button.astro';
 
     // 3. Nav link hover interactions
     navLinks.forEach(link => {
-      const el = link as HTMLElement;
+      const linkElement = link as HTMLElement;
       
-      const hoverTween = gsap.to(el, {
+      const hoverTween = gsap.to(linkElement, {
         scale: 1.08,
         duration: 0.35,
         ease: 'back.out(1.4)',
@@ -152,8 +126,8 @@ import Button from './Button.astro';
         paused: true
       });
       
-      el.addEventListener('mouseenter', () => hoverTween.play());
-      el.addEventListener('mouseleave', () => hoverTween.reverse());
+      linkElement.addEventListener('mouseenter', () => hoverTween.play());
+      linkElement.addEventListener('mouseleave', () => hoverTween.reverse());
     });
 
     // 4. Mobile drawer open/close
@@ -165,8 +139,31 @@ import Button from './Button.astro';
       mobileDrawer?.classList.add('translate-x-full');
     });
 
-    document.querySelectorAll('.mobile-nav-link').forEach(link => {
-      link.addEventListener('click', () => {
+    // 5. Nav link clicks via smoother (fixes ScrollSmoother conflict)
+    const smoother = window.__smoother;
+
+    const scrollToSection = (href: string) => {
+      if (!smoother) return;
+      if (href === '#hero') return smoother.scrollTo(0, false);
+      const section = document.querySelector(href);
+      if (!section) return;
+      const rect = section.getBoundingClientRect();
+      smoother.scrollTo(smoother.scrollTop() + rect.top - 80, false);
+    };
+
+    navLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const href = link.getAttribute('href');
+        if (href) scrollToSection(href);
+      });
+    });
+
+    mobileNavLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const href = link.getAttribute('href');
+        if (href) scrollToSection(href);
         mobileDrawer?.classList.add('translate-x-full');
       });
     });

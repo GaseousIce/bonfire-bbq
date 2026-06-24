@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import LoadingScreen from '../components/LoadingScreen.astro';
+import Navbar from '../components/Navbar.astro';
 
 interface Props {
   title?: string;
@@ -57,6 +58,25 @@ const {
   </head>
   <body class="bg-canvas-black text-hazard-white selection:bg-brand-mint selection:text-canvas-black font-sans antialiased overflow-x-hidden">
     <LoadingScreen />
-    <slot />
+    <Navbar />
+    <div id="smooth-wrapper">
+      <div id="smooth-content">
+        <slot />
+      </div>
+    </div>
+    <script>
+      import { gsap } from 'gsap';
+      import { ScrollTrigger } from 'gsap/ScrollTrigger';
+      import { ScrollSmoother } from 'gsap/ScrollSmoother';
+
+      gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+
+      window.__smoother = ScrollSmoother.create({
+        wrapper: '#smooth-wrapper',
+        content: '#smooth-content',
+        smooth: 1,
+        effects: true,
+      });
+    </script>
   </body>
 </html>
