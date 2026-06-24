@@ -82,7 +82,6 @@ import Button from './Button.astro';
   import { gsap } from 'gsap';
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-  // Make sure to register plugins
   gsap.registerPlugin(ScrollTrigger);
 
   document.addEventListener('DOMContentLoaded', () => {
@@ -90,6 +89,7 @@ import Button from './Button.astro';
     const container = document.querySelector('.navbar-container');
     const logo = document.querySelector('.brand-logo');
     const navLinks = document.querySelectorAll('.nav-link');
+    const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
     const mobileToggle = document.querySelector('.mobile-toggle');
     const mobileClose = document.querySelector('.mobile-close');
     const mobileDrawer = document.querySelector('.mobile-drawer');
@@ -165,8 +165,30 @@ import Button from './Button.astro';
       mobileDrawer?.classList.add('translate-x-full');
     });
 
-    document.querySelectorAll('.mobile-nav-link').forEach(link => {
-      link.addEventListener('click', () => {
+    // 5. Nav link clicks via smoother (fixes ScrollSmoother conflict)
+    const smoother = window.__smoother;
+
+    navLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const href = link.getAttribute('href');
+        if (!href || !smoother) return;
+        if (href === '#hero') return smoother.scrollTo(0, false);
+        const el = document.querySelector(href);
+        if (el) smoother.scrollTo(el.offsetTop - 80, false);
+      });
+    });
+
+    mobileNavLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const href = link.getAttribute('href');
+        if (!href || !smoother) return;
+        if (href === '#hero') smoother.scrollTo(0, false);
+        else {
+          const el = document.querySelector(href);
+          if (el) smoother.scrollTo(el.offsetTop - 80, false);
+        }
         mobileDrawer?.classList.add('translate-x-full');
       });
     });
