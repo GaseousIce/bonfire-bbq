@@ -101,6 +101,9 @@ const galleryItems = [
       const { isDesktop } = context.conditions as { isDesktop: boolean };
 
       if (isDesktop) {
+        // Promote pinned panel and cards to compositor layers
+        gsap.set('.gallery-sticky-panel', { willChange: 'transform' });
+
         // Set initial stack z-indexes and rotations dynamically for desktop
         galleryCards.forEach((card, index) => {
           const rotations = [-2, 3, -1.5, 2];

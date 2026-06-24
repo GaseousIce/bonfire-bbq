@@ -153,6 +153,10 @@ const dishes = [
       const { isDesktop } = context.conditions as { isDesktop: boolean };
 
       if (isDesktop) {
+        // Promote scroll track and cards to compositor layers
+        gsap.set(scrollTrack, { willChange: 'transform' });
+        gsap.set(dishCards, { willChange: 'transform' });
+
         // 1. Horizontal Scroll Pin & Tween
         const scrollTween = gsap.to(scrollTrack, {
           x: () => -(scrollTrack.scrollWidth - window.innerWidth),

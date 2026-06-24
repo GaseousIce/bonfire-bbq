@@ -40,6 +40,12 @@ const {
         scrollbar-color: #313131 #131313;
       }
       
+      /* Promote smooth-wrapper/content to compositor layers */
+      #smooth-wrapper,
+      #smooth-content {
+        will-change: transform;
+      }
+
       /* Webkit scrollbar customization */
       ::-webkit-scrollbar {
         width: 6px;
@@ -74,7 +80,7 @@ const {
       window.__smoother = ScrollSmoother.create({
         wrapper: '#smooth-wrapper',
         content: '#smooth-content',
-        smooth: 1,
+        smooth: 0.5,
         effects: true,
       });
     </script>
