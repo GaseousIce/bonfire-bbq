@@ -71,18 +71,60 @@ import Button from './Button.astro';
               </div>
             </div>
 
+            <!-- Date/Time Picker (full width) -->
+            <div class="flex flex-col gap-2">
+              <label class="font-mono text-[10px] uppercase tracking-[1.5px] text-hazard-white/80">Arrival Time</label>
+              <div class="custom-datetime relative">
+                <input type="hidden" name="datetime" value="" />
+                <button type="button" class="custom-dt-trigger bg-canvas-black border border-white/20 text-sm font-sans text-hazard-white px-4 py-3 rounded-[12px] focus:outline-none focus:border-brand-mint focus:ring-1 focus:ring-brand-purple transition-all duration-150 w-full flex items-center justify-between cursor-pointer" role="combobox" aria-expanded="false" aria-label="Arrival Time">
+                  <span class="custom-dt-label text-secondary-text">Select date &amp; time</span>
+                  <svg class="w-3.5 h-3.5 text-hazard-white/60 flex-shrink-0" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <rect x="1" y="2" width="12" height="11" rx="1.5" stroke="currentColor" stroke-width="1.2"/>
+                    <path d="M1 5h12" stroke="currentColor" stroke-width="1.2"/>
+                    <path d="M4.5 1v2M9.5 1v2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                  </svg>
+                </button>
+
+                <!-- Calendar panel -->
+                <div class="custom-dt-panel absolute top-full left-0 right-0 z-30 mt-1.5 bg-canvas-black border border-white/10 rounded-[16px] shadow-2xl min-w-[300px]" style="display: none; opacity: 0; transform: translateY(-6px);">
+                  <!-- Month header -->
+                  <div class="flex items-center justify-between px-5 pt-4 pb-1.5">
+                    <button type="button" class="dt-month-prev text-hazard-white/50 hover:text-brand-mint transition-colors text-xl leading-none p-1 cursor-pointer bg-transparent border-none" aria-label="Previous month">&#8249;</button>
+                    <span class="dt-month-label font-mono text-xs uppercase tracking-[1.5px] text-hazard-white font-semibold"></span>
+                    <button type="button" class="dt-month-next text-hazard-white/50 hover:text-brand-mint transition-colors text-xl leading-none p-1 cursor-pointer bg-transparent border-none" aria-label="Next month">&#8250;</button>
+                  </div>
+
+                  <!-- Day-of-week headers -->
+                  <div class="grid grid-cols-7 px-5 pb-1">
+                    <span class="text-center font-mono text-[9px] uppercase tracking-[1px] text-secondary-text">Su</span>
+                    <span class="text-center font-mono text-[9px] uppercase tracking-[1px] text-secondary-text">Mo</span>
+                    <span class="text-center font-mono text-[9px] uppercase tracking-[1px] text-secondary-text">Tu</span>
+                    <span class="text-center font-mono text-[9px] uppercase tracking-[1px] text-secondary-text">We</span>
+                    <span class="text-center font-mono text-[9px] uppercase tracking-[1px] text-secondary-text">Th</span>
+                    <span class="text-center font-mono text-[9px] uppercase tracking-[1px] text-secondary-text">Fr</span>
+                    <span class="text-center font-mono text-[9px] uppercase tracking-[1px] text-secondary-text">Sa</span>
+                  </div>
+
+                  <!-- Day cells -->
+                  <div class="dt-days grid grid-cols-7 px-5 pb-2 gap-0.5"></div>
+
+                  <!-- Time picker footer -->
+                  <div class="border-t border-white/5 px-5 py-3 flex items-center gap-2">
+                    <span class="font-mono text-[10px] uppercase tracking-[1px] text-secondary-text mr-0.5">at</span>
+                    <select class="dt-hour bg-canvas-black border border-white/10 text-sm font-sans text-hazard-white px-2 py-1.5 rounded-[8px] focus:outline-none focus:border-brand-mint w-[64px] cursor-pointer">
+                    </select>
+                    <span class="text-hazard-white/30 font-mono text-sm">:</span>
+                    <select class="dt-minute bg-canvas-black border border-white/10 text-sm font-sans text-hazard-white px-2 py-1.5 rounded-[8px] focus:outline-none focus:border-brand-mint w-[64px] cursor-pointer">
+                    </select>
+                    <button type="button" class="dt-ampm bg-canvas-black border border-white/10 text-sm font-sans text-hazard-white px-2 py-1.5 rounded-[8px] hover:border-brand-mint/50 transition-colors w-[52px] cursor-pointer">PM</button>
+                    <button type="button" class="dt-done ml-auto font-mono text-[10px] uppercase tracking-[1.5px] text-brand-mint hover:text-white transition-colors cursor-pointer bg-transparent border-none p-1">Done</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <!-- Grid row -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <!-- Date/Time Picker -->
-              <div class="flex flex-col gap-2">
-                <label for="datetime" class="font-mono text-[10px] uppercase tracking-[1.5px] text-hazard-white/80">Arrival Time</label>
-                <input 
-                  type="datetime-local" 
-                  id="datetime" 
-                  required
-                  class="bg-canvas-black border border-white/20 text-sm font-sans text-hazard-white px-4 py-3 rounded-[12px] focus:outline-none focus:border-brand-mint focus:ring-1 focus:ring-brand-purple transition-all duration-150"
-                />
-              </div>
               <!-- Guests Count -->
               <div class="flex flex-col gap-2">
                 <label class="font-mono text-[10px] uppercase tracking-[1.5px] text-hazard-white/80">Hearth Seating</label>
@@ -102,24 +144,23 @@ import Button from './Button.astro';
                   </div>
                 </div>
               </div>
-            </div>
-
-            <!-- Select Table Preference -->
-            <div class="flex flex-col gap-2">
-              <label class="font-mono text-[10px] uppercase tracking-[1.5px] text-hazard-white/80">Hearth Preference</label>
-              <div class="custom-select relative" data-name="preference">
-                <input type="hidden" name="preference" value="" />
-                <button type="button" class="custom-select-trigger bg-canvas-black border border-white/20 text-sm font-sans text-hazard-white px-4 py-3 rounded-[12px] focus:outline-none focus:border-brand-mint focus:ring-1 focus:ring-brand-purple transition-all duration-150 w-full flex items-center justify-between cursor-pointer" role="combobox" aria-expanded="false" aria-haspopup="listbox" aria-label="Hearth Preference">
-                  <span class="custom-select-label text-secondary-text">Select preference</span>
-                  <svg class="custom-select-arrow w-3 h-2 text-hazard-white/60" width="12" height="8" viewBox="0 0 12 8" fill="none" style="transform-origin: center;">
-                    <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                  </svg>
-                </button>
-                <div class="custom-select-options absolute top-full left-0 right-0 z-20 mt-1.5 bg-canvas-black border border-white/10 rounded-[12px] overflow-hidden shadow-2xl" role="listbox" style="display: none; opacity: 0; transform: translateY(-6px);">
-                  <button type="button" class="custom-select-option w-full text-left px-4 py-3 text-sm font-sans text-hazard-white hover:bg-white/5 hover:text-brand-mint transition-colors duration-150 border-b border-white/5 last:border-b-0 cursor-pointer" role="option" data-value="tandoor-side">Tandoor Side (Direct clay oven view)</button>
-                  <button type="button" class="custom-select-option w-full text-left px-4 py-3 text-sm font-sans text-hazard-white hover:bg-white/5 hover:text-brand-mint transition-colors duration-150 border-b border-white/5 last:border-b-0 cursor-pointer" role="option" data-value="sigree-view">Sigree Grill View (Plated kebabs prep view)</button>
-                  <button type="button" class="custom-select-option w-full text-left px-4 py-3 text-sm font-sans text-hazard-white hover:bg-white/5 hover:text-brand-mint transition-colors duration-150 border-b border-white/5 last:border-b-0 cursor-pointer" role="option" data-value="biryani-lounge">Biryani Hearth Lounge (Aromatic claypot steam)</button>
-                  <button type="button" class="custom-select-option w-full text-left px-4 py-3 text-sm font-sans text-hazard-white hover:bg-white/5 hover:text-brand-mint transition-colors duration-150 border-b border-white/5 last:border-b-0 cursor-pointer" role="option" data-value="chefs-table">Chef's Table (Curated multi-course tasting)</button>
+              <!-- Select Table Preference -->
+              <div class="flex flex-col gap-2">
+                <label class="font-mono text-[10px] uppercase tracking-[1.5px] text-hazard-white/80">Hearth Preference</label>
+                <div class="custom-select relative" data-name="preference">
+                  <input type="hidden" name="preference" value="" />
+                  <button type="button" class="custom-select-trigger bg-canvas-black border border-white/20 text-sm font-sans text-hazard-white px-4 py-3 rounded-[12px] focus:outline-none focus:border-brand-mint focus:ring-1 focus:ring-brand-purple transition-all duration-150 w-full flex items-center justify-between cursor-pointer" role="combobox" aria-expanded="false" aria-haspopup="listbox" aria-label="Hearth Preference">
+                    <span class="custom-select-label text-secondary-text">Select preference</span>
+                    <svg class="custom-select-arrow w-3 h-2 text-hazard-white/60" width="12" height="8" viewBox="0 0 12 8" fill="none" style="transform-origin: center;">
+                      <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                  </button>
+                  <div class="custom-select-options absolute top-full left-0 right-0 z-20 mt-1.5 bg-canvas-black border border-white/10 rounded-[12px] overflow-hidden shadow-2xl" role="listbox" style="display: none; opacity: 0; transform: translateY(-6px);">
+                    <button type="button" class="custom-select-option w-full text-left px-4 py-3 text-sm font-sans text-hazard-white hover:bg-white/5 hover:text-brand-mint transition-colors duration-150 border-b border-white/5 last:border-b-0 cursor-pointer" role="option" data-value="tandoor-side">Tandoor Side (Direct clay oven view)</button>
+                    <button type="button" class="custom-select-option w-full text-left px-4 py-3 text-sm font-sans text-hazard-white hover:bg-white/5 hover:text-brand-mint transition-colors duration-150 border-b border-white/5 last:border-b-0 cursor-pointer" role="option" data-value="sigree-view">Sigree Grill View (Plated kebabs prep view)</button>
+                    <button type="button" class="custom-select-option w-full text-left px-4 py-3 text-sm font-sans text-hazard-white hover:bg-white/5 hover:text-brand-mint transition-colors duration-150 border-b border-white/5 last:border-b-0 cursor-pointer" role="option" data-value="biryani-lounge">Biryani Hearth Lounge (Aromatic claypot steam)</button>
+                    <button type="button" class="custom-select-option w-full text-left px-4 py-3 text-sm font-sans text-hazard-white hover:bg-white/5 hover:text-brand-mint transition-colors duration-150 border-b border-white/5 last:border-b-0 cursor-pointer" role="option" data-value="chefs-table">Chef's Table (Curated multi-course tasting)</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -273,6 +314,207 @@ import Button from './Button.astro';
         }
       });
     });
+
+    // Custom GSAP date picker
+    const dtEl = document.querySelector('.custom-datetime');
+    if (dtEl) {
+      const trigger = dtEl.querySelector('.custom-dt-trigger') as HTMLElement;
+      const panel = dtEl.querySelector('.custom-dt-panel') as HTMLElement;
+      const label = dtEl.querySelector('.custom-dt-label') as HTMLElement;
+      const hiddenInput = dtEl.querySelector('input[type="hidden"]') as HTMLInputElement;
+      const monthLabel = dtEl.querySelector('.dt-month-label') as HTMLElement;
+      const daysGrid = dtEl.querySelector('.dt-days') as HTMLElement;
+      const prevBtn = dtEl.querySelector('.dt-month-prev') as HTMLElement;
+      const nextBtn = dtEl.querySelector('.dt-month-next') as HTMLElement;
+      const hourSelect = dtEl.querySelector('.dt-hour') as HTMLSelectElement;
+      const minuteSelect = dtEl.querySelector('.dt-minute') as HTMLSelectElement;
+      const ampmBtn = dtEl.querySelector('.dt-ampm') as HTMLElement;
+      const doneBtn = dtEl.querySelector('.dt-done') as HTMLElement;
+
+      let dtOpen = false;
+      let viewedMonth = new Date().getMonth();
+      let viewedYear = new Date().getFullYear();
+      let selectedDate: Date | null = null;
+      let selectedHour = 7;
+      let selectedMinute = 0;
+      let selectedAmPm = 'PM';
+
+      // Populate time selects
+      for (let h = 1; h <= 12; h++) {
+        const opt = document.createElement('option');
+        opt.value = String(h);
+        opt.textContent = h.toString().padStart(2, '0');
+        if (h === selectedHour) opt.selected = true;
+        hourSelect.appendChild(opt);
+      }
+
+      for (let m = 0; m < 60; m += 15) {
+        const opt = document.createElement('option');
+        opt.value = String(m);
+        opt.textContent = m.toString().padStart(2, '0');
+        if (m === selectedMinute) opt.selected = true;
+        minuteSelect.appendChild(opt);
+      }
+
+      const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+      function renderCalendar() {
+        monthLabel.textContent = `${monthNames[viewedMonth]} ${viewedYear}`;
+
+        const firstDay = new Date(viewedYear, viewedMonth, 1).getDay();
+        const daysInMonth = new Date(viewedYear, viewedMonth + 1, 0).getDate();
+        const today = new Date();
+
+        daysGrid.innerHTML = '';
+
+        for (let i = 0; i < firstDay; i++) {
+          const empty = document.createElement('div');
+          daysGrid.appendChild(empty);
+        }
+
+        for (let d = 1; d <= daysInMonth; d++) {
+          const dayEl = document.createElement('button');
+          dayEl.type = 'button';
+          dayEl.className = 'dt-day text-center font-sans text-sm w-full aspect-square rounded-[8px] flex items-center justify-center cursor-pointer transition-colors duration-150';
+          dayEl.textContent = String(d);
+
+          const dateObj = new Date(viewedYear, viewedMonth, d);
+          const isCurrentDay = dateObj.toDateString() === today.toDateString();
+          const isSel = selectedDate && dateObj.toDateString() === selectedDate.toDateString();
+
+          if (isSel) {
+            dayEl.classList.add('bg-brand-mint', 'text-canvas-black', 'font-semibold');
+          } else if (isCurrentDay) {
+            dayEl.classList.add('border', 'border-brand-mint/40', 'text-brand-mint');
+          } else {
+            dayEl.classList.add('text-hazard-white/80', 'hover:bg-white/5', 'hover:text-brand-mint');
+          }
+
+          dayEl.addEventListener('click', (e) => {
+            e.stopPropagation();
+            selectedDate = dateObj;
+            renderCalendar();
+          });
+
+          daysGrid.appendChild(dayEl);
+        }
+      }
+
+      // Panel open/close tween
+      const dtPanelTween = gsap.fromTo(panel,
+        { opacity: 0, y: -6 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.5,
+          ease: 'elastic.out(1, 0.4)',
+          easeReverse: 'power2.in',
+          paused: true,
+          onReverseComplete: () => {
+            panel.style.display = 'none';
+          }
+        }
+      );
+
+      function staggerDayCells() {
+        const cells = daysGrid.querySelectorAll('.dt-day');
+        if (cells.length) {
+          gsap.fromTo(cells,
+            { opacity: 0, y: 10, scale: 0.9 },
+            {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              duration: 0.35,
+              stagger: 0.025,
+              ease: 'back.out(1.4)',
+              clearProps: 'scale'
+            }
+          );
+        }
+      }
+
+      function openDtPanel() {
+        if (dtOpen) return;
+        dtOpen = true;
+        trigger.setAttribute('aria-expanded', 'true');
+        renderCalendar();
+        panel.style.display = 'block';
+        dtPanelTween.restart();
+        staggerDayCells();
+      }
+
+      function closeDtPanel() {
+        if (!dtOpen) return;
+        dtOpen = false;
+        trigger.setAttribute('aria-expanded', 'false');
+        dtPanelTween.timeScale(2).reverse();
+      }
+
+      trigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dtOpen ? closeDtPanel() : openDtPanel();
+      });
+
+      prevBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        viewedMonth--;
+        if (viewedMonth < 0) { viewedMonth = 11; viewedYear--; }
+        renderCalendar();
+        gsap.fromTo(daysGrid.querySelectorAll('.dt-day'),
+          { opacity: 0, x: -10 },
+          { opacity: 1, x: 0, duration: 0.3, stagger: 0.015, ease: 'power2.out', clearProps: 'x' }
+        );
+      });
+
+      nextBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        viewedMonth++;
+        if (viewedMonth > 11) { viewedMonth = 0; viewedYear++; }
+        renderCalendar();
+        gsap.fromTo(daysGrid.querySelectorAll('.dt-day'),
+          { opacity: 0, x: 10 },
+          { opacity: 1, x: 0, duration: 0.3, stagger: 0.015, ease: 'power2.out', clearProps: 'x' }
+        );
+      });
+
+      ampmBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        selectedAmPm = selectedAmPm === 'PM' ? 'AM' : 'PM';
+        ampmBtn.textContent = selectedAmPm;
+      });
+
+      doneBtn.addEventListener('click', () => {
+        if (!selectedDate) return;
+
+        const hour = parseInt(hourSelect.value);
+        const minute = parseInt(minuteSelect.value);
+        const hour24 = selectedAmPm === 'PM'
+          ? (hour === 12 ? 12 : hour + 12)
+          : (hour === 12 ? 0 : hour);
+
+        const dt = new Date(selectedDate);
+        dt.setHours(hour24, minute, 0, 0);
+
+        const monthShort = dt.toLocaleString('default', { month: 'short' });
+        const day = dt.getDate();
+        const hDisplay = hour.toString().padStart(2, '0');
+        const mDisplay = minute.toString().padStart(2, '0');
+        label.textContent = `${monthShort} ${day}, ${hDisplay}:${mDisplay} ${selectedAmPm}`;
+        label.classList.remove('text-secondary-text');
+        hiddenInput.value = dt.toISOString();
+
+        closeDtPanel();
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!dtEl.contains(e.target as Node) && dtOpen) {
+          closeDtPanel();
+        }
+      });
+
+      renderCalendar();
+    }
 
   });
 </script>
