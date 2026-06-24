@@ -28,3 +28,4 @@ Before writing, modifying, or auditing code, read the instructions in the projec
 
 ## 5. Token Savings (RTK)
 - Always prefix shell commands with `rtk` (e.g., `rtk git status`, `rtk git fetch`) to minimize token consumption by filtering and compressing command output before it reaches the context, as detailed in [.agents/rules/antigravity-rtk-rules.md](./.agents/rules/antigravity-rtk-rules.md).
+- **Note:** RTK should only be used for **general commands** (e.g., `git`, `npm`, `dir`, `ls`) and **not** for PowerShell-exclusive cmdlets (e.g., `Get-ChildItem`, `Set-Content`, `Remove-Item`). PowerShell-native commands will be filtered directly without RTK.
