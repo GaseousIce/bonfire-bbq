@@ -77,10 +77,12 @@ const {
 
       gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
+      ScrollTrigger.normalizeScroll(true);
+
       window.__smoother = ScrollSmoother.create({
         wrapper: '#smooth-wrapper',
         content: '#smooth-content',
-        smooth: 0.5,
+        smooth: 0.3,
         effects: true,
       });
     </script>
