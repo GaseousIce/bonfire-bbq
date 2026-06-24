@@ -1,0 +1,127 @@
+---
+---
+
+<div
+  id="loading-screen"
+  class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-canvas-black select-none"
+>
+  <div class="flex flex-col items-center gap-6">
+    <h1
+      class="loading-title font-display uppercase text-hazard-white text-[clamp(64px,18vw,140px)] font-black tracking-tighter leading-[0.85] flex overflow-hidden py-2"
+    >
+      {
+        Array.from("BONFIRE").map((char) => (
+          <span
+            class="loading-char inline-block translate-y-[110%] rotate-6"
+            style="transform-origin: bottom center;"
+          >{char}</span>
+        ))
+      }
+    </h1>
+
+    <p
+      class="loading-tagline font-mono text-[10px] md:text-xs uppercase tracking-[3px] text-brand-mint opacity-0"
+    >
+      Indian Coal & Clay Oven Craft
+    </p>
+
+    <div
+      class="loading-progress-wrap w-40 md:w-56 h-[2px] bg-white/10 mt-8 overflow-hidden rounded-full opacity-0"
+    >
+      <div
+        class="loading-progress-bar h-full w-0 bg-brand-mint rounded-full"
+      ></div>
+    </div>
+
+    <p
+      class="loading-pct font-mono text-[10px] tracking-[2px] text-hazard-white/40 opacity-0"
+    >
+      0%
+    </p>
+  </div>
+</div>
+
+<script>
+  import { gsap } from 'gsap';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const screen = document.getElementById('loading-screen');
+    const chars = gsap.utils.toArray('.loading-char');
+    const tagline = document.querySelector('.loading-tagline');
+    const progressWrap = document.querySelector('.loading-progress-wrap');
+    const progressBar = document.querySelector('.loading-progress-bar');
+    const pct = document.querySelector('.loading-pct');
+
+    if (!screen) return;
+
+    const startTime = Date.now();
+    const MIN_DURATION = 2800;
+
+    // Entrance timeline
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+    tl.to(chars, {
+      y: '0%',
+      rotation: 0,
+      stagger: 0.08,
+      duration: 1.2,
+      ease: 'back.out(1.5)',
+    })
+      .to(tagline, { autoAlpha: 1, duration: 0.6 }, '-=0.4')
+      .to(progressWrap, { autoAlpha: 1, duration: 0.4 }, '-=0.2')
+      .to(pct, { autoAlpha: 1, duration: 0.2 }, '<');
+
+    // Fake progress fill (stops at 80%, waiting for real load)
+    const progress = { val: 0 };
+    const fillTween = gsap.to(progress, {
+      val: 80,
+      duration: 2,
+      ease: 'power1.inOut',
+      delay: tl.duration(),
+      onUpdate: () => {
+        const v = Math.round(progress.val);
+        progressBar.style.width = v + '%';
+        pct.textContent = v + '%';
+      },
+    });
+
+    const completeLoading = () => {
+      const elapsed = Date.now() - startTime;
+      const remaining = Math.max(0, MIN_DURATION - elapsed);
+
+      setTimeout(() => {
+        fillTween.kill();
+        gsap.to(progress, {
+          val: 100,
+          duration: 0.3,
+          ease: 'power2.out',
+          overwrite: true,
+          onUpdate: () => {
+            const v = Math.round(progress.val);
+            progressBar.style.width = v + '%';
+            pct.textContent = v + '%';
+          },
+          onComplete: () => {
+            // Fire event early so Hero animation overlaps with loading screen exit
+            document.dispatchEvent(new CustomEvent('loading-complete'));
+
+            gsap.to(screen, {
+              autoAlpha: 0,
+              scale: 0.95,
+              duration: 0.8,
+              ease: 'power2.inOut',
+              delay: 0.3,
+              onComplete: () => screen.remove(),
+            });
+          },
+        });
+      }, remaining);
+    };
+
+    if (document.readyState === 'complete') {
+      completeLoading();
+    } else {
+      window.addEventListener('load', completeLoading);
+    }
+  });
+</script>
