@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import LoadingScreen from '../components/LoadingScreen.astro';
+import Navbar from '../components/Navbar.astro';
 
 interface Props {
   title?: string;
@@ -57,6 +58,7 @@ const {
   </head>
   <body class="bg-canvas-black text-hazard-white selection:bg-brand-mint selection:text-canvas-black font-sans antialiased overflow-x-hidden">
     <LoadingScreen />
+    <Navbar />
     <div id="smooth-wrapper">
       <div id="smooth-content">
         <slot />

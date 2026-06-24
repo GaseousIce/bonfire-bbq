@@ -159,7 +159,7 @@ const galleryItems = [
         );
 
         // Card 2: slides upwards
-        tl.to(cards[2], {
+        tl.to(galleryCards[2], {
           yPercent: -130,
           rotation: -8,
           opacity: 0,
@@ -167,7 +167,7 @@ const galleryItems = [
         });
 
         // Card 3 (last) scales to 1.05 and rotates to 0
-        tl.fromTo(cards[3],
+        tl.fromTo(galleryCards[3],
           { scale: 0.94, rotation: 2 },
           { scale: 1.03, rotation: 0, duration: 0.6, ease: "back.out(1.5)" },
           "-=0.4"
@@ -178,10 +178,10 @@ const galleryItems = [
 
       } else {
         // Mobile Layout: clear all inline styles so they render in standard grid flow
-        gsap.set(cards, { clearProps: "all" });
+        gsap.set(galleryCards, { clearProps: "all" });
         
         // Fade in reveals for individual cards in the grid as they scroll into view
-        cards.forEach((card) => {
+        galleryCards.forEach((card) => {
           gsap.from(card, {
             opacity: 0,
             scale: 0.95,
