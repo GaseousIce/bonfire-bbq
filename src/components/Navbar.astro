@@ -168,14 +168,20 @@ import Button from './Button.astro';
     // 5. Nav link clicks via smoother (fixes ScrollSmoother conflict)
     const smoother = window.__smoother;
 
+    const scrollToSection = (href: string) => {
+      if (!smoother) return;
+      if (href === '#hero') return smoother.scrollTo(0, false);
+      const section = document.querySelector(href);
+      if (!section) return;
+      const rect = section.getBoundingClientRect();
+      smoother.scrollTo(smoother.scrollTop() + rect.top - 80, false);
+    };
+
     navLinks.forEach(link => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
         const href = link.getAttribute('href');
-        if (!href || !smoother) return;
-        if (href === '#hero') return smoother.scrollTo(0, false);
-        const el = document.querySelector(href);
-        if (el) smoother.scrollTo(el.offsetTop - 80, false);
+        if (href) scrollToSection(href);
       });
     });
 
@@ -183,12 +189,7 @@ import Button from './Button.astro';
       link.addEventListener('click', (e) => {
         e.preventDefault();
         const href = link.getAttribute('href');
-        if (!href || !smoother) return;
-        if (href === '#hero') smoother.scrollTo(0, false);
-        else {
-          const el = document.querySelector(href);
-          if (el) smoother.scrollTo(el.offsetTop - 80, false);
-        }
+        if (href) scrollToSection(href);
         mobileDrawer?.classList.add('translate-x-full');
       });
     });
