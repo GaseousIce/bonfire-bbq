@@ -57,6 +57,24 @@ const {
   </head>
   <body class="bg-canvas-black text-hazard-white selection:bg-brand-mint selection:text-canvas-black font-sans antialiased overflow-x-hidden">
     <LoadingScreen />
-    <slot />
+    <div id="smooth-wrapper">
+      <div id="smooth-content">
+        <slot />
+      </div>
+    </div>
+    <script>
+      import { gsap } from 'gsap';
+      import { ScrollTrigger } from 'gsap/ScrollTrigger';
+      import { ScrollSmoother } from 'gsap/ScrollSmoother';
+
+      gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+
+      ScrollSmoother.create({
+        wrapper: '#smooth-wrapper',
+        content: '#smooth-content',
+        smooth: 1,
+        effects: true,
+      });
+    </script>
   </body>
 </html>
