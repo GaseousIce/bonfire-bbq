@@ -90,7 +90,13 @@ import Button from './Button.astro';
     const mobileClose = document.querySelector('.mobile-close');
     const mobileDrawer = document.querySelector('.mobile-drawer');
 
-    // 1. Logo Tilt micro-interaction
+    // 1. Logo click — scroll to top via smoother
+    logo?.addEventListener('click', (e) => {
+      e.preventDefault();
+      scrollToSection('#hero');
+    });
+
+    // 2. Logo Tilt micro-interaction
     logo?.addEventListener('mousemove', (e) => {
       const mouseEvent = e as MouseEvent;
       const rect = logo.getBoundingClientRect();
