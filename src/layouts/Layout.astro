@@ -21,6 +21,14 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
+
+    <!-- Preconnect hints for Google Fonts — saves 200-500ms font TTFB -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&family=Newsreader:ital,opsz,wght@1,6..72,400&display=swap" />
+
+    <!-- Preconnect for Unsplash images (Hero + About sections) -->
+    <link rel="preconnect" href="https://images.unsplash.com" />
     
     <!-- Primary Meta Tags -->
     <title>{title}</title>
@@ -75,15 +83,26 @@ const {
       import { ScrollTrigger } from 'gsap/ScrollTrigger';
       import { ScrollSmoother } from 'gsap/ScrollSmoother';
 
+      // Extend Window so TypeScript recognises window.__smoother
+      declare global {
+        interface Window {
+          __smoother?: ScrollSmoother;
+        }
+      }
+
       gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
       ScrollTrigger.normalizeScroll(true);
 
-      window.__smoother = ScrollSmoother.create({
-        wrapper: '#smooth-wrapper',
-        content: '#smooth-content',
-        smooth: 0.3,
-        effects: true,
+      // Only run ScrollSmoother on desktop — reduces jank on low-end mobile devices
+      const mm = gsap.matchMedia();
+      mm.add('(min-width: 768px)', () => {
+        window.__smoother = ScrollSmoother.create({
+          wrapper: '#smooth-wrapper',
+          content: '#smooth-content',
+          smooth: 0.3,
+          effects: true,
+        });
       });
     </script>
   </body>

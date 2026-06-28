@@ -1,8 +1,8 @@
 ---
 import Button from './Button.astro';
 ---
-<header class="navbar-wrapper fixed top-0 left-0 w-full z-50 px-4 md:px-8 py-6 transition-all duration-300">
-  <div class="navbar-container max-w-7xl mx-auto flex items-center justify-between bg-canvas-black border border-white/10 rounded-3xl px-6 py-3 transition-all duration-300">
+<header class="navbar-wrapper fixed top-0 left-0 w-full z-50 px-4 md:px-8 py-6 transition-[padding,background-color,border-color] duration-300">
+  <div class="navbar-container max-w-7xl mx-auto flex items-center justify-between bg-canvas-black border border-white/10 rounded-3xl px-6 py-3 transition-[padding,background-color,border-color] duration-300">
     <!-- Brand Logo -->
     <a href="#hero" class="brand-logo flex items-center gap-2 group cursor-pointer">
       <span class="logo-icon w-8 h-8 rounded-lg bg-brand-mint flex items-center justify-center font-display text-canvas-black text-xl font-black">B</span>
@@ -13,15 +13,15 @@ import Button from './Button.astro';
     <nav class="hidden md:flex items-center gap-8">
       <a href="#about" class="nav-link relative py-1 text-xs font-mono uppercase tracking-[1.8px] text-hazard-white hover:text-link-blue transition-colors duration-180">
         <span class="magnetic-target block">Timeline</span>
-        <span class="absolute bottom-0 left-0 w-0 h-[1px] bg-brand-mint transition-all duration-300 group-hover:w-full"></span>
+        <span class="absolute bottom-0 left-0 w-0 h-[1px] bg-brand-mint transition-[width] duration-300 group-hover:w-full"></span>
       </a>
       <a href="#dishes" class="nav-link relative py-1 text-xs font-mono uppercase tracking-[1.8px] text-hazard-white hover:text-link-blue transition-colors duration-180">
         <span class="magnetic-target block">Menu</span>
-        <span class="absolute bottom-0 left-0 w-0 h-[1px] bg-brand-mint transition-all duration-300 group-hover:w-full"></span>
+        <span class="absolute bottom-0 left-0 w-0 h-[1px] bg-brand-mint transition-[width] duration-300 group-hover:w-full"></span>
       </a>
       <a href="#gallery" class="nav-link relative py-1 text-xs font-mono uppercase tracking-[1.8px] text-hazard-white hover:text-link-blue transition-colors duration-180">
         <span class="magnetic-target block">Atmosphere</span>
-        <span class="absolute bottom-0 left-0 w-0 h-[1px] bg-brand-mint transition-all duration-300 group-hover:w-full"></span>
+        <span class="absolute bottom-0 left-0 w-0 h-[1px] bg-brand-mint transition-[width] duration-300 group-hover:w-full"></span>
       </a>
     </nav>
 
@@ -90,28 +90,43 @@ import Button from './Button.astro';
     const mobileClose = document.querySelector('.mobile-close');
     const mobileDrawer = document.querySelector('.mobile-drawer');
 
-    // 1. Logo click — scroll to top via smoother
-    logo?.addEventListener('click', (e) => {
-      e.preventDefault();
-      scrollToSection('#hero');
-    });
+    // 1. Logo Tilt micro-interaction
+    let logoMouseX = 0;
+    let logoMouseY = 0;
+    let logoRafId: number | null = null;
 
-    // 2. Logo Tilt micro-interaction
-    logo?.addEventListener('mousemove', (e) => {
-      const mouseEvent = e as MouseEvent;
+    const updateLogoTilt = () => {
+      if (!logo) return;
       const rect = logo.getBoundingClientRect();
-      const offsetX = mouseEvent.clientX - rect.left - rect.width / 2;
+      const offsetX = logoMouseX - rect.left - rect.width / 2;
       const tilt = (offsetX / rect.width) * 20; // max 10 degrees tilt
-      
+
       gsap.to(logo, {
         rotation: tilt,
         scale: 1.05,
         duration: 0.3,
         ease: 'power2.out'
       });
+
+      logoRafId = null;
+    };
+
+    logo?.addEventListener('mousemove', (e) => {
+      const mouseEvent = e as MouseEvent;
+      logoMouseX = mouseEvent.clientX;
+      logoMouseY = mouseEvent.clientY;
+
+      if (logoRafId === null) {
+        logoRafId = requestAnimationFrame(updateLogoTilt);
+      }
     });
 
     logo?.addEventListener('mouseleave', () => {
+      if (logoRafId !== null) {
+        cancelAnimationFrame(logoRafId);
+        logoRafId = null;
+      }
+
       gsap.to(logo, {
         rotation: 0,
         scale: 1,
@@ -156,6 +171,12 @@ import Button from './Button.astro';
       const rect = section.getBoundingClientRect();
       smoother.scrollTo(smoother.scrollTop() + rect.top - 80, false);
     };
+
+    logo?.addEventListener('click', (e) => {
+      e.preventDefault();
+      const href = logo.getAttribute('href');
+      if (href) scrollToSection(href);
+    });
 
     navLinks.forEach(link => {
       link.addEventListener('click', (e) => {

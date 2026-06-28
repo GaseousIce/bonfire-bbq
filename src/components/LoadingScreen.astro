@@ -49,13 +49,13 @@
     const chars = gsap.utils.toArray('.loading-char');
     const tagline = document.querySelector('.loading-tagline');
     const progressWrap = document.querySelector('.loading-progress-wrap');
-    const progressBar = document.querySelector('.loading-progress-bar');
-    const pct = document.querySelector('.loading-pct');
+    const progressBar = document.querySelector('.loading-progress-bar') as HTMLElement | null;
+    const pct = document.querySelector('.loading-pct') as HTMLElement | null;
 
-    if (!screen) return;
+    if (!screen || !progressBar || !pct) return;
 
     const startTime = Date.now();
-    const MIN_DURATION = 2800;
+    const MIN_DURATION = 800;
 
     // Entrance timeline
     const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });

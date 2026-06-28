@@ -107,7 +107,7 @@ const dishes = [
   <div class="dishes-scroll-wrapper relative w-full flex-grow flex items-center select-none overflow-hidden">
     <div class="dishes-scroll-track flex items-center gap-8 md:gap-16 pl-6 md:pl-32 pr-0 w-max">
       {dishes.map((dish) => (
-        <div class="dish-card w-[280px] sm:w-[360px] md:w-[480px] flex-shrink-0 bg-surface-slate border border-white/10 hover:border-brand-mint/50 rounded-[24px] overflow-hidden transition-all duration-300 p-4 md:p-6 flex flex-col gap-6 cursor-grab active:cursor-grabbing">
+        <div class="dish-card w-[280px] sm:w-[360px] md:w-[480px] flex-shrink-0 bg-surface-slate border border-white/10 hover:border-brand-mint/50 rounded-[24px] overflow-hidden transition-[border-color] duration-300 p-4 md:p-6 flex flex-col gap-6 cursor-grab active:cursor-grabbing">
           <!-- Card Image Frame -->
           <div class="relative w-full aspect-[4/3] rounded-[16px] overflow-hidden border border-image-frame bg-canvas-black">
             <Image
@@ -147,11 +147,16 @@ const dishes = [
   </div>
 </section>
 
+<style>
+  /* Defer off-screen rendering — browser skips paint/layout until near viewport */
+  .dishes-pin-container {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 100vh;
+  }
+</style>
+
 <script>
   import { gsap } from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-  gsap.registerPlugin(ScrollTrigger);
 
   document.addEventListener('DOMContentLoaded', () => {
     const pinSection = document.querySelector('.dishes-pin-container') as HTMLElement;
@@ -230,8 +235,8 @@ const dishes = [
         });
       } else {
         // Mobile layout: add native swiping overlay and standard animations
-        gsap.set(track, { clearProps: "all" });
-        gsap.set(cards, { clearProps: "all" });
+        gsap.set(scrollTrack, { clearProps: "all" });
+        gsap.set(dishCards, { clearProps: "all" });
         
         // Scroll entry animations for cards in vertical layout
         dishCards.forEach((card) => {
