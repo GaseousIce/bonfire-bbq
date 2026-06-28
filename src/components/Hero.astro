@@ -73,6 +73,7 @@ import { heroTandoor } from '../assets/images';
 <style>
   .smoke-layer {
     background-position: center;
+    will-change: transform, opacity;
   }
 </style>
 
@@ -143,10 +144,15 @@ import { heroTandoor } from '../assets/images';
     // 2. Mouse Parallax (Gentle Depth Movement)
     // ----------------------------------------------------
     const heroSection = document.getElementById('hero');
-    heroSection?.addEventListener('mousemove', (e) => {
+    let mouseX = 0;
+    let mouseY = 0;
+    let rafId: number | null = null;
+
+    const updateParallax = () => {
+      if (!heroSection) return;
       const { width, height } = heroSection.getBoundingClientRect();
-      const xDiff = e.clientX - width / 2;
-      const yDiff = e.clientY - height / 2;
+      const xDiff = mouseX - width / 2;
+      const yDiff = mouseY - height / 2;
 
       // Parallax values
       gsap.to(bgWrap, {
@@ -176,9 +182,25 @@ import { heroTandoor } from '../assets/images';
         duration: 1.8,
         ease: 'power1.out'
       });
+
+      rafId = null;
+    };
+
+    heroSection?.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+
+      if (rafId === null) {
+        rafId = requestAnimationFrame(updateParallax);
+      }
     });
 
     heroSection?.addEventListener('mouseleave', () => {
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+      }
+
       gsap.to([bgWrap, '.hero-content', '.smoke-1', '.smoke-2'], {
         x: 0,
         y: 0,
