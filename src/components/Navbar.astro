@@ -172,6 +172,12 @@ import Button from './Button.astro';
       smoother.scrollTo(smoother.scrollTop() + rect.top - 80, false);
     };
 
+    logo?.addEventListener('click', (e) => {
+      e.preventDefault();
+      const href = logo.getAttribute('href');
+      if (href) scrollToSection(href);
+    });
+
     navLinks.forEach(link => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
