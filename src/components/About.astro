@@ -162,9 +162,6 @@ const timelineEvents = [
 
 <script>
   import { gsap } from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-  gsap.registerPlugin(ScrollTrigger);
 
   document.addEventListener('DOMContentLoaded', () => {
     const timelineItems = gsap.utils.toArray('.timeline-item') as HTMLElement[];

@@ -91,21 +91,42 @@ import Button from './Button.astro';
     const mobileDrawer = document.querySelector('.mobile-drawer');
 
     // 1. Logo Tilt micro-interaction
-    logo?.addEventListener('mousemove', (e) => {
-      const mouseEvent = e as MouseEvent;
+    let logoMouseX = 0;
+    let logoMouseY = 0;
+    let logoRafId: number | null = null;
+
+    const updateLogoTilt = () => {
+      if (!logo) return;
       const rect = logo.getBoundingClientRect();
-      const offsetX = mouseEvent.clientX - rect.left - rect.width / 2;
+      const offsetX = logoMouseX - rect.left - rect.width / 2;
       const tilt = (offsetX / rect.width) * 20; // max 10 degrees tilt
-      
+
       gsap.to(logo, {
         rotation: tilt,
         scale: 1.05,
         duration: 0.3,
         ease: 'power2.out'
       });
+
+      logoRafId = null;
+    };
+
+    logo?.addEventListener('mousemove', (e) => {
+      const mouseEvent = e as MouseEvent;
+      logoMouseX = mouseEvent.clientX;
+      logoMouseY = mouseEvent.clientY;
+
+      if (logoRafId === null) {
+        logoRafId = requestAnimationFrame(updateLogoTilt);
+      }
     });
 
     logo?.addEventListener('mouseleave', () => {
+      if (logoRafId !== null) {
+        cancelAnimationFrame(logoRafId);
+        logoRafId = null;
+      }
+
       gsap.to(logo, {
         rotation: 0,
         scale: 1,
