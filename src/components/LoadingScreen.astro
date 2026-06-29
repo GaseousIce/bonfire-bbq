@@ -101,8 +101,73 @@
             percentDisplay.textContent = percent + '%';
           },
           onComplete: () => {
-            // Fire event early so Hero animation overlaps with loading screen exit
-            document.dispatchEvent(new CustomEvent('loading-complete'));
+            // Run Hero cinematic entrance inline rather than through custom event
+            const heroBackgroundWrapper = document.querySelector('.hero-bg-wrap');
+            const eyebrow = document.querySelector('.hero-eyebrow');
+            const chars = document.querySelectorAll('.hero-char');
+            const deck = document.querySelector('.hero-deck');
+            const heroCta = document.querySelector('.hero-cta');
+            const scrollDown = document.querySelector('.hero-scroll-down');
+
+            const masterTimeline = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+            masterTimeline.fromTo(
+              heroBackgroundWrapper,
+              { scale: 1.15 },
+              { scale: 1, duration: 2.2, ease: 'power2.out' }
+            );
+
+            masterTimeline.to(
+              chars,
+              {
+                y: '0%',
+                rotation: 0,
+                stagger: 0.08,
+                duration: 1.2,
+                ease: 'back.out(1.5)',
+              },
+              '-=1.6',
+            );
+
+            masterTimeline.to(
+              eyebrow,
+              {
+                y: 0,
+                opacity: 1,
+                duration: 0.8,
+              },
+              '-=0.8',
+            );
+
+            masterTimeline.to(
+              deck,
+              {
+                y: 0,
+                opacity: 1,
+                duration: 0.8,
+              },
+              '-=0.6',
+            );
+
+            masterTimeline.to(
+              heroCta,
+              {
+                y: 0,
+                opacity: 1,
+                duration: 0.9,
+                ease: 'back.out(1.8)',
+              },
+              '-=0.4',
+            );
+
+            masterTimeline.to(
+              scrollDown,
+              {
+                opacity: 1,
+                duration: 0.6,
+              },
+              '-=0.2',
+            );
 
             gsap.to(screen, {
               autoAlpha: 0,

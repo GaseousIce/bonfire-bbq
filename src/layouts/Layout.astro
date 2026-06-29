@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import LoadingScreen from '../components/LoadingScreen.astro';
 import Navbar from '../components/Navbar.astro';
+import { heroTandoor } from '../assets/images';
 
 interface Props {
   title?: string;
@@ -32,6 +33,9 @@ const {
 
     <!-- Preconnect for Unsplash images (Hero + About sections) -->
     <link rel="preconnect" href="https://images.unsplash.com" />
+
+    <!-- Preload hero image -->
+    <link rel="preload" href={heroTandoor.src} as="image" type="image/webp" fetchpriority="high" />
 
     <!-- Primary Meta Tags -->
     <title>{title}</title>
