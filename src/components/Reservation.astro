@@ -396,6 +396,7 @@ import Button from './Button.astro';
   import { gsap } from 'gsap';
 
   document.addEventListener('DOMContentLoaded', () => {
+    const resCtrl = new AbortController();
     const reserveSection = document.querySelector('.reserve-section') as HTMLElement;
     const reserveInfo = document.querySelector('.reserve-info') as HTMLElement;
     const reservationCardWrapper = document.querySelector('.reserve-card-wrap') as HTMLElement;
@@ -527,7 +528,7 @@ import Button from './Button.astro';
         if (!dropdownContainer.contains(clickEvent.target as Node) && isDropdownOpen) {
           closeDropdown();
         }
-      });
+      }, { signal: resCtrl.signal });
     });
 
     // Custom GSAP date picker
@@ -757,7 +758,7 @@ import Button from './Button.astro';
         if (!dateTimeContainer.contains(clickEvent.target as Node) && isCalendarOpen) {
           closeCalendarPanel();
         }
-      });
+      }, { signal: resCtrl.signal });
 
       renderCalendar();
     }

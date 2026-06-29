@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import LoadingScreen from '../components/LoadingScreen.astro';
 import Navbar from '../components/Navbar.astro';
+import { getImage } from 'astro:assets';
 import { heroTandoor } from '../assets/images';
 
 interface Props {
@@ -13,6 +14,13 @@ const {
   title = 'Bonfire Barbecue | Indian Coal & Clay Oven | Tandoor & Grill Craft',
   description = 'Experience the primal art of clay tandoors, open-fire sigree kebabs, and slow-steamed biryani. A premium, cinematic Indian culinary story.',
 } = Astro.props;
+
+const heroImage = await getImage({
+  src: heroTandoor,
+  format: 'webp',
+  width: 1920,
+  quality: 82,
+});
 ---
 
 <!doctype html>
@@ -34,8 +42,8 @@ const {
     <!-- Preconnect for Unsplash images (Hero + About sections) -->
     <link rel="preconnect" href="https://images.unsplash.com" />
 
-    <!-- Preload hero image -->
-    <link rel="preload" href={heroTandoor.src} as="image" type="image/webp" fetchpriority="high" />
+    <!-- Preload hero image (WebP via getImage — avoids preloading the 776 KB source PNG) -->
+    <link rel="preload" href={heroImage.src} as="image" type="image/webp" fetchpriority="high" />
 
     <!-- Primary Meta Tags -->
     <title>{title}</title>

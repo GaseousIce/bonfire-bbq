@@ -167,6 +167,7 @@ const currentYear = new Date().getFullYear();
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
+    const footerCtrl = new AbortController();
     const navLinks = document.querySelectorAll('.footer-nav-link');
 
     const scrollToSection = (href: string) => {
@@ -296,6 +297,6 @@ const currentYear = new Date().getFullYear();
       if (keyboardEvent.key === 'Escape' && legalModal?.classList.contains('opacity-100')) {
         closeModal();
       }
-    });
+    }, { signal: footerCtrl.signal });
   });
 </script>
