@@ -168,15 +168,25 @@ const currentYear = new Date().getFullYear();
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const navLinks = document.querySelectorAll('.footer-nav-link');
-    const smoother = window.__smoother;
 
     const scrollToSection = (href: string) => {
-      if (!smoother) return;
-      if (href === '#hero') return smoother.scrollTo(0, false);
+      const smoother = window.__smoother;
+      if (href === '#hero') {
+        if (smoother) {
+          smoother.scrollTo(0, false);
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        return;
+      }
       const section = document.querySelector(href);
       if (!section) return;
-      const rect = section.getBoundingClientRect();
-      smoother.scrollTo(smoother.scrollTop() + rect.top - 80, false);
+      if (smoother) {
+        const rect = section.getBoundingClientRect();
+        smoother.scrollTo(smoother.scrollTop() + rect.top - 80, false);
+      } else {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
     };
 
     navLinks.forEach((link) => {

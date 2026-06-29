@@ -209,7 +209,7 @@ import Button from './Button.astro';
     });
 
     // 3. Nav link hover interactions
-    navLinks.forEach((link) => {
+    navLinkElements.forEach((link) => {
       const linkElement = link as HTMLElement;
 
       const hoverTween = gsap.to(linkElement, {
@@ -234,15 +234,24 @@ import Button from './Button.astro';
     });
 
     // 5. Nav link & CTA clicks via smoother (fixes ScrollSmoother conflict)
-    const smoother = window.__smoother;
-
     const scrollToSection = (href: string) => {
-      if (!smoother) return;
-      if (href === '#hero') return smoother.scrollTo(0, false);
+      const smoother = window.__smoother;
+      if (href === '#hero') {
+        if (smoother) {
+          smoother.scrollTo(0, false);
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        return;
+      }
       const targetSection = document.querySelector(href);
       if (!targetSection) return;
-      const rect = targetSection.getBoundingClientRect();
-      smoother.scrollTo(smoother.scrollTop() + rect.top - 80, false);
+      if (smoother) {
+        const rect = targetSection.getBoundingClientRect();
+        smoother.scrollTo(smoother.scrollTop() + rect.top - 80, false);
+      } else {
+        targetSection.scrollIntoView({ behavior: 'smooth' });
+      }
     };
 
     logo?.addEventListener('click', (clickEvent) => {

@@ -278,15 +278,25 @@ import { heroTandoor } from '../assets/images';
 
     // 4. Smooth scrolling for Hero CTA buttons
     const heroCtaButtons = document.querySelectorAll('.hero-cta-btn');
-    const smoother = window.__smoother;
 
     const scrollToSection = (href: string) => {
-      if (!smoother) return;
-      if (href === '#hero') return smoother.scrollTo(0, false);
+      const smoother = window.__smoother;
+      if (href === '#hero') {
+        if (smoother) {
+          smoother.scrollTo(0, false);
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        return;
+      }
       const targetSection = document.querySelector(href);
       if (!targetSection) return;
-      const rect = targetSection.getBoundingClientRect();
-      smoother.scrollTo(smoother.scrollTop() + rect.top - 80, false);
+      if (smoother) {
+        const rect = targetSection.getBoundingClientRect();
+        smoother.scrollTo(smoother.scrollTop() + rect.top - 80, false);
+      } else {
+        targetSection.scrollIntoView({ behavior: 'smooth' });
+      }
     };
 
     heroCtaButtons.forEach((ctaButton) => {
