@@ -396,13 +396,13 @@ import Button from './Button.astro';
   import { gsap } from 'gsap';
 
   document.addEventListener('DOMContentLoaded', () => {
-    const section = document.querySelector('.reserve-section') as HTMLElement;
+    const reserveSection = document.querySelector('.reserve-section') as HTMLElement;
     const reserveInfo = document.querySelector('.reserve-info') as HTMLElement;
     const reservationCardWrapper = document.querySelector('.reserve-card-wrap') as HTMLElement;
     const primaryHearthGlow = document.querySelector('.hearth-glow') as HTMLElement;
     const secondaryHearthGlow = document.querySelector('.hearth-glow-secondary') as HTMLElement;
 
-    if (!section) return;
+    if (!reserveSection) return;
 
     // 1. Entrance Animations via ScrollTrigger
     // Text staggers up and the card scales up slightly
@@ -634,7 +634,7 @@ import Button from './Button.astro';
       }
 
       // Panel open/close tween
-      const dtPanelTween = gsap.fromTo(
+      const calendarPanelTween = gsap.fromTo(
         calendarPanelElement,
         { opacity: 0, y: -6 },
         {
@@ -650,11 +650,11 @@ import Button from './Button.astro';
         },
       );
 
-      function staggerDayCells() {
-        const cells = calendarDaysGrid.querySelectorAll('.dt-day');
-        if (cells.length) {
+      function staggerCalendarDays() {
+        const dayButtons = calendarDaysGrid.querySelectorAll('.dt-day');
+        if (dayButtons.length) {
           gsap.fromTo(
-            cells,
+            dayButtons,
             { opacity: 0, y: 10, scale: 0.9 },
             {
               opacity: 1,
@@ -669,26 +669,26 @@ import Button from './Button.astro';
         }
       }
 
-      function openDtPanel() {
+      function openCalendarPanel() {
         if (isCalendarOpen) return;
         isCalendarOpen = true;
         dateTimeTriggerButton.setAttribute('aria-expanded', 'true');
         renderCalendar();
         calendarPanelElement.style.display = 'block';
-        dtPanelTween.restart();
-        staggerDayCells();
+        calendarPanelTween.restart();
+        staggerCalendarDays();
       }
 
-      function closeDtPanel() {
+      function closeCalendarPanel() {
         if (!isCalendarOpen) return;
         isCalendarOpen = false;
         dateTimeTriggerButton.setAttribute('aria-expanded', 'false');
-        dtPanelTween.timeScale(2).reverse();
+        calendarPanelTween.timeScale(2).reverse();
       }
 
       dateTimeTriggerButton.addEventListener('click', (clickEvent) => {
         clickEvent.stopPropagation();
-        isCalendarOpen ? closeDtPanel() : openDtPanel();
+        isCalendarOpen ? closeCalendarPanel() : openCalendarPanel();
       });
 
       previousMonthButton.addEventListener('click', (clickEvent) => {
@@ -740,18 +740,18 @@ import Button from './Button.astro';
 
         const monthShort = selectedDateTimeObject.toLocaleString('default', { month: 'short' });
         const day = selectedDateTimeObject.getDate();
-        const hDisplay = hour.toString().padStart(2, '0');
-        const mDisplay = minute.toString().padStart(2, '0');
-        dateTimeLabelElement.textContent = `${monthShort} ${day}, ${hDisplay}:${mDisplay} ${selectedAmPm}`;
+        const formattedHour = hour.toString().padStart(2, '0');
+        const formattedMinute = minute.toString().padStart(2, '0');
+        dateTimeLabelElement.textContent = `${monthShort} ${day}, ${formattedHour}:${formattedMinute} ${selectedAmPm}`;
         dateTimeLabelElement.classList.remove('text-secondary-text');
         hiddenInput.value = selectedDateTimeObject.toISOString();
 
-        closeDtPanel();
+        closeCalendarPanel();
       });
 
       document.addEventListener('click', (clickEvent) => {
         if (!dateTimeContainer.contains(clickEvent.target as Node) && isCalendarOpen) {
-          closeDtPanel();
+          closeCalendarPanel();
         }
       });
 

@@ -112,24 +112,24 @@ import { heroTandoor } from '../assets/images';
   import { gsap } from 'gsap';
 
   document.addEventListener('DOMContentLoaded', () => {
-    const bgWrap = document.querySelector('.hero-bg-wrap');
+    const heroBackgroundWrapper = document.querySelector('.hero-bg-wrap');
     const eyebrow = document.querySelector('.hero-eyebrow');
     const chars = document.querySelectorAll('.hero-char');
     const deck = document.querySelector('.hero-deck');
-    const cta = document.querySelector('.hero-cta');
+    const heroCta = document.querySelector('.hero-cta');
     const scrollDown = document.querySelector('.hero-scroll-down');
 
     // ----------------------------------------------------
     // 1. Cinematic Opening sequence (deferred until loading screen completes)
     // ----------------------------------------------------
     const startCinematic = () => {
-      const masterTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+      const masterTimeline = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
       // Background settles: zoom/scale reduction from 1.15 to 1
-      masterTl.fromTo(bgWrap, { scale: 1.15 }, { scale: 1, duration: 2.2, ease: 'power2.out' });
+      masterTimeline.fromTo(heroBackgroundWrapper, { scale: 1.15 }, { scale: 1, duration: 2.2, ease: 'power2.out' });
 
       // Characters stagger upwards with slight rotation overshoot
-      masterTl.to(
+      masterTimeline.to(
         chars,
         {
           y: '0%',
@@ -142,7 +142,7 @@ import { heroTandoor } from '../assets/images';
       );
 
       // Eyebrow and supporting content follow
-      masterTl.to(
+      masterTimeline.to(
         eyebrow,
         {
           y: 0,
@@ -152,7 +152,7 @@ import { heroTandoor } from '../assets/images';
         '-=0.8',
       );
 
-      masterTl.to(
+      masterTimeline.to(
         deck,
         {
           y: 0,
@@ -163,8 +163,8 @@ import { heroTandoor } from '../assets/images';
       );
 
       // CTA enters with spring overshoot
-      masterTl.to(
-        cta,
+      masterTimeline.to(
+        heroCta,
         {
           y: 0,
           opacity: 1,
@@ -175,7 +175,7 @@ import { heroTandoor } from '../assets/images';
       );
 
       // Scroll Down Indicator enters
-      masterTl.to(
+      masterTimeline.to(
         scrollDown,
         {
           opacity: 1,
@@ -198,34 +198,34 @@ import { heroTandoor } from '../assets/images';
     const updateParallax = () => {
       if (!heroSection) return;
       const { width, height } = heroSection.getBoundingClientRect();
-      const xDiff = mouseX - width / 2;
-      const yDiff = mouseY - height / 2;
+      const xOffset = mouseX - width / 2;
+      const yOffset = mouseY - height / 2;
 
       // Parallax values
-      gsap.to(bgWrap, {
-        x: -xDiff * 0.025,
-        y: -yDiff * 0.025,
+      gsap.to(heroBackgroundWrapper, {
+        x: -xOffset * 0.025,
+        y: -yOffset * 0.025,
         duration: 1.2,
         ease: 'power2.out',
       });
 
       gsap.to('.hero-content', {
-        x: xDiff * 0.015,
-        y: yDiff * 0.015,
+        x: xOffset * 0.015,
+        y: yOffset * 0.015,
         duration: 1.0,
         ease: 'power2.out',
       });
 
       gsap.to('.smoke-1', {
-        x: xDiff * 0.04,
-        y: yDiff * 0.04,
+        x: xOffset * 0.04,
+        y: yOffset * 0.04,
         duration: 1.5,
         ease: 'power1.out',
       });
 
       gsap.to('.smoke-2', {
-        x: -xDiff * 0.03,
-        y: -yDiff * 0.03,
+        x: -xOffset * 0.03,
+        y: -yOffset * 0.03,
         duration: 1.8,
         ease: 'power1.out',
       });
@@ -233,9 +233,9 @@ import { heroTandoor } from '../assets/images';
       animationFrameId = null;
     };
 
-    heroSection?.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
+    heroSection?.addEventListener('mousemove', (mouseEvent) => {
+      mouseX = mouseEvent.clientX;
+      mouseY = mouseEvent.clientY;
 
       if (animationFrameId === null) {
         animationFrameId = requestAnimationFrame(updateParallax);
@@ -248,7 +248,7 @@ import { heroTandoor } from '../assets/images';
         animationFrameId = null;
       }
 
-      gsap.to([bgWrap, '.hero-content', '.smoke-1', '.smoke-2'], {
+      gsap.to([heroBackgroundWrapper, '.hero-content', '.smoke-1', '.smoke-2'], {
         x: 0,
         y: 0,
         scale: 1,
@@ -277,22 +277,22 @@ import { heroTandoor } from '../assets/images';
     });
 
     // 4. Smooth scrolling for Hero CTA buttons
-    const heroCtaBtns = document.querySelectorAll('.hero-cta-btn');
+    const heroCtaButtons = document.querySelectorAll('.hero-cta-btn');
     const smoother = window.__smoother;
 
     const scrollToSection = (href: string) => {
       if (!smoother) return;
       if (href === '#hero') return smoother.scrollTo(0, false);
-      const section = document.querySelector(href);
-      if (!section) return;
-      const rect = section.getBoundingClientRect();
+      const targetSection = document.querySelector(href);
+      if (!targetSection) return;
+      const rect = targetSection.getBoundingClientRect();
       smoother.scrollTo(smoother.scrollTop() + rect.top - 80, false);
     };
 
-    heroCtaBtns.forEach((btn) => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const href = btn.getAttribute('href');
+    heroCtaButtons.forEach((ctaButton) => {
+      ctaButton.addEventListener('click', (clickEvent) => {
+        clickEvent.preventDefault();
+        const href = ctaButton.getAttribute('href');
         if (href) scrollToSection(href);
       });
     });

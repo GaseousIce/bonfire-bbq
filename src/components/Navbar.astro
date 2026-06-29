@@ -153,11 +153,11 @@ import Button from './Button.astro';
   import { gsap } from 'gsap';
 
   document.addEventListener('DOMContentLoaded', () => {
-    const wrapper = document.querySelector('.navbar-wrapper');
-    const container = document.querySelector('.navbar-container');
+    const navbarWrapper = document.querySelector('.navbar-wrapper');
+    const navbarContainer = document.querySelector('.navbar-container');
     const logo = document.querySelector('.brand-logo');
-    const navLinks = document.querySelectorAll('.nav-link');
-    const navCtas = document.querySelectorAll('.nav-cta');
+    const navLinkElements = document.querySelectorAll('.nav-link');
+    const navCtaButtons = document.querySelectorAll('.nav-cta');
     const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
     const mobileToggle = document.querySelector('.mobile-toggle');
     const mobileClose = document.querySelector('.mobile-close');
@@ -239,38 +239,38 @@ import Button from './Button.astro';
     const scrollToSection = (href: string) => {
       if (!smoother) return;
       if (href === '#hero') return smoother.scrollTo(0, false);
-      const section = document.querySelector(href);
-      if (!section) return;
-      const rect = section.getBoundingClientRect();
+      const targetSection = document.querySelector(href);
+      if (!targetSection) return;
+      const rect = targetSection.getBoundingClientRect();
       smoother.scrollTo(smoother.scrollTop() + rect.top - 80, false);
     };
 
-    logo?.addEventListener('click', (e) => {
-      e.preventDefault();
+    logo?.addEventListener('click', (clickEvent) => {
+      clickEvent.preventDefault();
       const href = logo.getAttribute('href');
       if (href) scrollToSection(href);
     });
 
-    navLinks.forEach((link) => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const href = link.getAttribute('href');
+    navLinkElements.forEach((navLinkElement) => {
+      navLinkElement.addEventListener('click', (clickEvent) => {
+        clickEvent.preventDefault();
+        const href = navLinkElement.getAttribute('href');
         if (href) scrollToSection(href);
       });
     });
 
-    navCtas.forEach((cta) => {
-      cta.addEventListener('click', (e) => {
-        e.preventDefault();
-        const href = cta.getAttribute('href');
+    navCtaButtons.forEach((navCtaButton) => {
+      navCtaButton.addEventListener('click', (clickEvent) => {
+        clickEvent.preventDefault();
+        const href = navCtaButton.getAttribute('href');
         if (href) scrollToSection(href);
       });
     });
 
-    mobileNavLinks.forEach((link) => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const href = link.getAttribute('href');
+    mobileNavLinks.forEach((mobileNavLink) => {
+      mobileNavLink.addEventListener('click', (clickEvent) => {
+        clickEvent.preventDefault();
+        const href = mobileNavLink.getAttribute('href');
         if (href) scrollToSection(href);
         mobileDrawer?.classList.add('translate-x-full');
       });
