@@ -240,7 +240,7 @@ const timelineEvents = [
         const isDesktop = window.innerWidth >= 768;
         const startX = isDesktop ? -100 : -40;
 
-        const itemTl = gsap.timeline({
+        const itemTimeline = gsap.timeline({
           scrollTrigger: {
             trigger: item,
             start: 'top 90%',
@@ -251,7 +251,7 @@ const timelineEvents = [
         });
 
         if (card) {
-          itemTl.fromTo(
+          itemTimeline.fromTo(
             card,
             { opacity: 0, x: startX, scale: 0.9 },
             { opacity: 1, x: 0, scale: 1, ease: 'none', duration: 1 },
@@ -260,7 +260,7 @@ const timelineEvents = [
         }
 
         if (dot) {
-          itemTl.fromTo(
+          itemTimeline.fromTo(
             dot,
             {
               backgroundColor: '#131313',
@@ -279,7 +279,7 @@ const timelineEvents = [
         }
 
         if (time) {
-          itemTl.fromTo(time, { opacity: 0.3 }, { opacity: 1, ease: 'none', duration: 1 }, 0);
+          itemTimeline.fromTo(time, { opacity: 0.3 }, { opacity: 1, ease: 'none', duration: 1 }, 0);
         }
       });
     }

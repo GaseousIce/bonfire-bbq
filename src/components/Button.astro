@@ -41,8 +41,8 @@ const allClasses = `${baseClasses} ${variantClasses} ${className}`.trim();
   document.addEventListener('DOMContentLoaded', () => {
     const buttons = document.querySelectorAll('.hover-button');
 
-    buttons.forEach((btn) => {
-      const btnElement = btn as HTMLElement;
+    buttons.forEach((button) => {
+      const btnElement = button as HTMLElement;
 
       const hoverTween = gsap.to(btnElement, {
         scale: 1.2,

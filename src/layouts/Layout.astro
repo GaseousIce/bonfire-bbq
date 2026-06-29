@@ -100,8 +100,8 @@ const {
       ScrollTrigger.normalizeScroll(true);
 
       // Only run ScrollSmoother on desktop — reduces jank on low-end mobile devices
-      const mm = gsap.matchMedia();
-      mm.add('(min-width: 768px)', () => {
+      const mediaMatcher = gsap.matchMedia();
+      mediaMatcher.add('(min-width: 768px)', () => {
         window.__smoother = ScrollSmoother.create({
           wrapper: '#smooth-wrapper',
           content: '#smooth-content',

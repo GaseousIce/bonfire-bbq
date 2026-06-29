@@ -193,7 +193,7 @@ import { heroTandoor } from '../assets/images';
     const heroSection = document.getElementById('hero');
     let mouseX = 0;
     let mouseY = 0;
-    let rafId: number | null = null;
+    let animationFrameId: number | null = null;
 
     const updateParallax = () => {
       if (!heroSection) return;
@@ -230,22 +230,22 @@ import { heroTandoor } from '../assets/images';
         ease: 'power1.out',
       });
 
-      rafId = null;
+      animationFrameId = null;
     };
 
     heroSection?.addEventListener('mousemove', (e) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
 
-      if (rafId === null) {
-        rafId = requestAnimationFrame(updateParallax);
+      if (animationFrameId === null) {
+        animationFrameId = requestAnimationFrame(updateParallax);
       }
     });
 
     heroSection?.addEventListener('mouseleave', () => {
-      if (rafId !== null) {
-        cancelAnimationFrame(rafId);
-        rafId = null;
+      if (animationFrameId !== null) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
       }
 
       gsap.to([bgWrap, '.hero-content', '.smoke-1', '.smoke-2'], {

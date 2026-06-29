@@ -166,7 +166,7 @@ import Button from './Button.astro';
     // 1. Logo Tilt micro-interaction
     let logoMouseX = 0;
     let logoMouseY = 0;
-    let logoRafId: number | null = null;
+    let logoAnimationFrameId: number | null = null;
 
     const updateLogoTilt = () => {
       if (!logo) return;
@@ -181,7 +181,7 @@ import Button from './Button.astro';
         ease: 'power2.out',
       });
 
-      logoRafId = null;
+      logoAnimationFrameId = null;
     };
 
     logo?.addEventListener('mousemove', (e) => {
@@ -189,15 +189,15 @@ import Button from './Button.astro';
       logoMouseX = mouseEvent.clientX;
       logoMouseY = mouseEvent.clientY;
 
-      if (logoRafId === null) {
-        logoRafId = requestAnimationFrame(updateLogoTilt);
+      if (logoAnimationFrameId === null) {
+        logoAnimationFrameId = requestAnimationFrame(updateLogoTilt);
       }
     });
 
     logo?.addEventListener('mouseleave', () => {
-      if (logoRafId !== null) {
-        cancelAnimationFrame(logoRafId);
-        logoRafId = null;
+      if (logoAnimationFrameId !== null) {
+        cancelAnimationFrame(logoAnimationFrameId);
+        logoAnimationFrameId = null;
       }
 
       gsap.to(logo, {

@@ -235,7 +235,7 @@ const dishes = [
             const img = card.querySelector('.dish-img');
 
             // Card scale prominence (active card grows in the center, shrinks on sides)
-            const cardTl = gsap.timeline({
+            const cardTimeline = gsap.timeline({
               scrollTrigger: {
                 trigger: card,
                 containerAnimation: scrollTween,
@@ -245,7 +245,7 @@ const dishes = [
               },
             });
 
-            cardTl
+            cardTimeline
               .fromTo(
                 card,
                 { scale: 0.92, opacity: 0.5 },
