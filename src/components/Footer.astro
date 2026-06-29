@@ -111,20 +111,66 @@ const currentYear = new Date().getFullYear();
         <span>&copy; {currentYear} BONFIRE BARBECUE. ALL HEARTHS RESERVED.</span>
       </div>
       <div class="flex gap-6">
-        <a href="#" class="hover:text-link-blue transition-colors">Privacy Policy</a>
-        <a href="#" class="hover:text-link-blue transition-colors">Terms of Service</a>
+        <button type="button" class="legal-modal-trigger hover:text-link-blue transition-colors cursor-pointer" data-modal="privacy">Privacy Policy</button>
+        <button type="button" class="legal-modal-trigger hover:text-link-blue transition-colors cursor-pointer" data-modal="terms">Terms of Service</button>
       </div>
     </div>
   </div>
 </footer>
 
+<!-- Legal Modal Dialog -->
+<div
+  id="legal-modal"
+  class="fixed inset-0 z-50 bg-canvas-black/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 opacity-0 pointer-events-none transition-opacity duration-300"
+  aria-hidden="true"
+  role="dialog"
+  aria-modal="true"
+>
+  <div
+    class="bg-canvas-black border border-white/10 rounded-2xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden relative transform scale-95 transition-transform duration-300"
+    id="legal-modal-card"
+  >
+    <!-- Modal Header -->
+    <div class="flex items-center justify-between px-6 py-5 border-b border-white/10 bg-white/[0.02]">
+      <div class="flex items-center gap-3">
+        <span class="w-2 h-2 rounded-full bg-brand-mint"></span>
+        <h3 id="legal-modal-title" class="font-mono text-xs uppercase tracking-[2px] text-brand-mint font-bold">
+          HEARTH CHARTER
+        </h3>
+      </div>
+      <button
+        type="button"
+        id="legal-modal-close"
+        class="text-hazard-white/60 hover:text-brand-mint p-1 rounded-lg transition-colors cursor-pointer text-base font-mono leading-none"
+        aria-label="Close dialog"
+      >
+        ✕
+      </button>
+    </div>
+
+    <!-- Modal Body -->
+    <div id="legal-modal-content" class="p-6 overflow-y-auto space-y-4 font-sans text-xs text-hazard-white/80 leading-relaxed max-h-[60vh]">
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="px-6 py-4 border-t border-white/10 bg-white/[0.02] flex justify-end">
+      <button
+        type="button"
+        id="legal-modal-done"
+        class="font-mono text-[11px] uppercase tracking-[1.5px] font-bold px-6 py-2.5 rounded-full bg-brand-mint text-canvas-black hover:bg-white transition-colors cursor-pointer"
+      >
+        Acknowledge &amp; Close
+      </button>
+    </div>
+  </div>
+</div>
+
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const navLinks = document.querySelectorAll('.footer-nav-link');
-
     const smoother = window.__smoother;
 
-    const scrollToSection = (href) => {
+    const scrollToSection = (href: string) => {
       if (!smoother) return;
       if (href === '#hero') return smoother.scrollTo(0, false);
       const section = document.querySelector(href);
@@ -139,6 +185,107 @@ const currentYear = new Date().getFullYear();
         const href = link.getAttribute('href');
         if (href) scrollToSection(href);
       });
+    });
+
+    // Legal Modal Functionality
+    const legalModal = document.getElementById('legal-modal');
+    const legalModalCard = document.getElementById('legal-modal-card');
+    const legalModalTitle = document.getElementById('legal-modal-title');
+    const legalModalContent = document.getElementById('legal-modal-content');
+    const legalModalClose = document.getElementById('legal-modal-close');
+    const legalModalDone = document.getElementById('legal-modal-done');
+    const modalTriggers = document.querySelectorAll('.legal-modal-trigger');
+
+    // Move modal element to document.body so fixed positioning is relative to window viewport (outside smooth-content container)
+    if (legalModal) {
+      document.body.appendChild(legalModal);
+    }
+
+    const legalTexts: Record<string, { title: string; html: string }> = {
+      privacy: {
+        title: 'PRIVACY POLICY — HEARTH DATA CHARTER',
+        html: `
+          <p class="text-hazard-white font-semibold">1. Hearth Commitment</p>
+          <p>At Bonfire Barbecue, we protect your personal information with the same dedication we bring to our open-fire cooking. This charter outlines how we manage your details when reserving seating or contacting our pit masters.</p>
+          <p class="text-hazard-white font-semibold pt-2">2. Information Collection</p>
+          <p>We collect only essential details required to manage reservations and seating preferences, including your name, email address, phone number, party size, and dietary notes.</p>
+          <p class="text-hazard-white font-semibold pt-2">3. Culinary Analytics</p>
+          <p>We analyze anonymized visit metrics to optimize seasonal menu rotation and maintain kitchen pacing during peak dining hours.</p>
+          <p class="text-hazard-white font-semibold pt-2">4. Data Protection</p>
+          <p>Your details are securely encrypted. We strictly never sell, rent, or trade your personal information to third parties.</p>
+        `
+      },
+      terms: {
+        title: 'TERMS OF SERVICE — DINING PROTOCOL',
+        html: `
+          <p class="text-hazard-white font-semibold">1. Reservation Holding Pacing</p>
+          <p>Tables are held for up to 15 minutes past scheduled booking times. Due to live coal kitchen preparation, late arrivals may experience adjusted table seating or staggered dish timing.</p>
+          <p class="text-hazard-white font-semibold pt-2">2. Pitmaster Tasting & Dietary Notes</p>
+          <p>Our dishes highlight traditional tandoori roasting and authentic spice blends. Please inform your server or note during booking of any severe food allergies.</p>
+          <p class="text-hazard-white font-semibold pt-2">3. Party Cancellations</p>
+          <p>For parties of 6 or more, we kindly request 24 hours advance cancellation notice to assist our culinary team with fresh daily sourcing.</p>
+          <p class="text-hazard-white font-semibold pt-2">4. Atmosphere & Conduct</p>
+          <p>Bonfire Barbecue preserves a cinematic, immersive hearth environment. Guests are asked to observe courteous dining etiquette near live charcoal stations.</p>
+        `
+      }
+    };
+
+    const openModal = (type: string) => {
+      const data = legalTexts[type];
+      if (!data || !legalModal || !legalModalTitle || !legalModalContent || !legalModalCard) return;
+      
+      legalModalTitle.textContent = data.title;
+      legalModalContent.innerHTML = data.html;
+      
+      legalModal.classList.remove('opacity-0', 'pointer-events-none');
+      legalModal.classList.add('opacity-100', 'pointer-events-auto');
+      legalModal.setAttribute('aria-hidden', 'false');
+      
+      legalModalCard.classList.remove('scale-95');
+      legalModalCard.classList.add('scale-100');
+
+      // Lock background scrolling and pause ScrollSmoother
+      document.body.style.overflow = 'hidden';
+      const sm = window.__smoother;
+      if (sm) sm.paused(true);
+    };
+
+    const closeModal = () => {
+      if (!legalModal || !legalModalCard) return;
+      legalModal.classList.remove('opacity-100', 'pointer-events-auto');
+      legalModal.classList.add('opacity-0', 'pointer-events-none');
+      legalModal.setAttribute('aria-hidden', 'true');
+      
+      legalModalCard.classList.remove('scale-100');
+      legalModalCard.classList.add('scale-95');
+
+      // Restore background scrolling and unpause ScrollSmoother
+      document.body.style.overflow = '';
+      const sm = window.__smoother;
+      if (sm) sm.paused(false);
+    };
+
+    modalTriggers.forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const modalType = (btn as HTMLElement).getAttribute('data-modal');
+        if (modalType) openModal(modalType);
+      });
+    });
+
+    if (legalModalClose) legalModalClose.addEventListener('click', closeModal);
+    if (legalModalDone) legalModalDone.addEventListener('click', closeModal);
+
+    if (legalModal) {
+      legalModal.addEventListener('click', (e) => {
+        if (e.target === legalModal) closeModal();
+      });
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && legalModal?.classList.contains('opacity-100')) {
+        closeModal();
+      }
     });
   });
 </script>

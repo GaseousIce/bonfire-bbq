@@ -104,13 +104,16 @@ import Button from './Button.astro';
 
             <!-- Date/Time Picker (full width) -->
             <div class="flex flex-col gap-2">
-              <label class="font-mono text-[10px] uppercase tracking-[1.5px] text-hazard-white/80"
+              <label
+                for="datetime-trigger"
+                class="font-mono text-[10px] uppercase tracking-[1.5px] text-hazard-white/80"
                 >Arrival Time</label
               >
               <div class="custom-datetime relative">
                 <input type="hidden" name="datetime" value="" />
                 <button
                   type="button"
+                  id="datetime-trigger"
                   class="custom-dt-trigger bg-canvas-black border border-white/20 text-sm font-sans text-hazard-white px-4 py-3 rounded-[12px] focus:outline-none focus:border-brand-mint focus:ring-1 focus:ring-brand-purple transition-[border-color,box-shadow] duration-150 w-full flex items-center justify-between cursor-pointer"
                   role="combobox"
                   aria-expanded="false"
@@ -232,13 +235,16 @@ import Button from './Button.astro';
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <!-- Guests Count -->
               <div class="flex flex-col gap-2">
-                <label class="font-mono text-[10px] uppercase tracking-[1.5px] text-hazard-white/80"
+                <label
+                  for="guests-trigger"
+                  class="font-mono text-[10px] uppercase tracking-[1.5px] text-hazard-white/80"
                   >Hearth Seating</label
                 >
                 <div class="custom-select relative" data-name="guests">
                   <input type="hidden" name="guests" value="" />
                   <button
                     type="button"
+                    id="guests-trigger"
                     class="custom-select-trigger bg-canvas-black border border-white/20 text-sm font-sans text-hazard-white px-4 py-3 rounded-[12px] focus:outline-none focus:border-brand-mint focus:ring-1 focus:ring-brand-purple transition-[border-color,box-shadow] duration-150 w-full flex items-center justify-between cursor-pointer"
                     role="combobox"
                     aria-expanded="false"
@@ -295,13 +301,16 @@ import Button from './Button.astro';
               </div>
               <!-- Select Table Preference -->
               <div class="flex flex-col gap-2">
-                <label class="font-mono text-[10px] uppercase tracking-[1.5px] text-hazard-white/80"
+                <label
+                  for="preference-trigger"
+                  class="font-mono text-[10px] uppercase tracking-[1.5px] text-hazard-white/80"
                   >Hearth Preference</label
                 >
                 <div class="custom-select relative" data-name="preference">
                   <input type="hidden" name="preference" value="" />
                   <button
                     type="button"
+                    id="preference-trigger"
                     class="custom-select-trigger bg-canvas-black border border-white/20 text-sm font-sans text-hazard-white px-4 py-3 rounded-[12px] focus:outline-none focus:border-brand-mint focus:ring-1 focus:ring-brand-purple transition-[border-color,box-shadow] duration-150 w-full flex items-center justify-between cursor-pointer"
                     role="combobox"
                     aria-expanded="false"
