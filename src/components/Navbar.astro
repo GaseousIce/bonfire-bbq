@@ -184,35 +184,34 @@ import Button from './Button.astro';
       logoAnimationFrameId = null;
     };
 
-    logo?.addEventListener('mousemove', (e) => {
-      const mouseEvent = e as MouseEvent;
-      logoMouseX = mouseEvent.clientX;
-      logoMouseY = mouseEvent.clientY;
+    if (logo) {
+      logo.addEventListener('mousemove', (mouseEvent: MouseEvent) => {
+        logoMouseX = mouseEvent.clientX;
+        logoMouseY = mouseEvent.clientY;
 
-      if (logoAnimationFrameId === null) {
-        logoAnimationFrameId = requestAnimationFrame(updateLogoTilt);
-      }
-    });
-
-    logo?.addEventListener('mouseleave', () => {
-      if (logoAnimationFrameId !== null) {
-        cancelAnimationFrame(logoAnimationFrameId);
-        logoAnimationFrameId = null;
-      }
-
-      gsap.to(logo, {
-        rotation: 0,
-        scale: 1,
-        duration: 0.6,
-        ease: 'elastic.out(1.2, 0.4)',
+        if (logoAnimationFrameId === null) {
+          logoAnimationFrameId = requestAnimationFrame(updateLogoTilt);
+        }
       });
-    });
+
+      logo.addEventListener('mouseleave', () => {
+        if (logoAnimationFrameId !== null) {
+          cancelAnimationFrame(logoAnimationFrameId);
+          logoAnimationFrameId = null;
+        }
+
+        gsap.to(logo, {
+          rotation: 0,
+          scale: 1,
+          duration: 0.6,
+          ease: 'elastic.out(1.2, 0.4)',
+        });
+      });
+    }
 
     // 3. Nav link hover interactions
-    navLinkElements.forEach((link) => {
-      const linkElement = link as HTMLElement;
-
-      const hoverTween = gsap.to(linkElement, {
+    navLinkElements.forEach((navLinkElement) => {
+      const hoverTween = gsap.to(navLinkElement, {
         scale: 1.08,
         duration: 0.35,
         ease: 'back.out(1.4)',
@@ -220,8 +219,8 @@ import Button from './Button.astro';
         paused: true,
       });
 
-      linkElement.addEventListener('mouseenter', () => hoverTween.play());
-      linkElement.addEventListener('mouseleave', () => hoverTween.reverse());
+      navLinkElement.addEventListener('mouseenter', () => hoverTween.play());
+      navLinkElement.addEventListener('mouseleave', () => hoverTween.reverse());
     });
 
     // 4. Mobile drawer open/close

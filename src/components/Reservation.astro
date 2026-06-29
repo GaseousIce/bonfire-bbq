@@ -413,7 +413,7 @@ import Button from './Button.astro';
       duration: 0.8,
       ease: 'power3.out',
       scrollTrigger: {
-        trigger: section,
+        trigger: reserveSection,
         start: 'top 75%',
         toggleActions: 'play none none none',
       },
@@ -426,7 +426,7 @@ import Button from './Button.astro';
       duration: 1.0,
       ease: 'back.out(1.5)',
       scrollTrigger: {
-        trigger: section,
+        trigger: reserveSection,
         start: 'top 70%',
         toggleActions: 'play none none none',
       },
@@ -442,7 +442,7 @@ import Button from './Button.astro';
         duration: 1.8,
         ease: 'power2.out',
         scrollTrigger: {
-          trigger: section,
+          trigger: reserveSection,
           start: 'top 80%',
           toggleActions: 'play none none none',
         },
@@ -595,9 +595,9 @@ import Button from './Button.astro';
 
         calendarDaysGrid.innerHTML = '';
 
-        for (let i = 0; i < firstDay; i++) {
-          const empty = document.createElement('div');
-          calendarDaysGrid.appendChild(empty);
+        for (let dayIndex = 0; dayIndex < firstDay; dayIndex++) {
+          const emptyCell = document.createElement('div');
+          calendarDaysGrid.appendChild(emptyCell);
         }
 
         for (let dayOfMonth = 1; dayOfMonth <= daysInMonth; dayOfMonth++) {

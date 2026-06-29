@@ -179,20 +179,20 @@ const currentYear = new Date().getFullYear();
         }
         return;
       }
-      const section = document.querySelector(href);
-      if (!section) return;
+      const targetSection = document.querySelector(href);
+      if (!targetSection) return;
       if (smoother) {
-        const rect = section.getBoundingClientRect();
+        const rect = targetSection.getBoundingClientRect();
         smoother.scrollTo(smoother.scrollTop() + rect.top - 80, false);
       } else {
-        section.scrollIntoView({ behavior: 'smooth' });
+        targetSection.scrollIntoView({ behavior: 'smooth' });
       }
     };
 
-    navLinks.forEach((link) => {
-      link.addEventListener('click', (clickEvent) => {
+    navLinks.forEach((footerNavLink) => {
+      footerNavLink.addEventListener('click', (clickEvent) => {
         clickEvent.preventDefault();
-        const href = link.getAttribute('href');
+        const href = footerNavLink.getAttribute('href');
         if (href) scrollToSection(href);
       });
     });
