@@ -1,0 +1,6 @@
+dist/
+node_modules/
+graphify-out/
+.astro/
+.agents/
+package-lock.json

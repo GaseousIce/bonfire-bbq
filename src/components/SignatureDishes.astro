@@ -14,135 +14,167 @@ import {
 
 const dishes = [
   {
-    id: "01",
-    tag: "DUM PUKHT",
-    title: "Chicken Dum Biryani",
-    description: "Fragrant basmati rice layered with juicy, spiced marinated chicken, fresh mint, coriander, and saffron, slow-steamed in a dough-sealed clay handi.",
-    price: "₹450",
-    image: chickenDumBiryani
+    id: '01',
+    tag: 'DUM PUKHT',
+    title: 'Chicken Dum Biryani',
+    description:
+      'Fragrant basmati rice layered with juicy, spiced marinated chicken, fresh mint, coriander, and saffron, slow-steamed in a dough-sealed clay handi.',
+    price: '₹450',
+    image: chickenDumBiryani,
   },
   {
-    id: "02",
-    tag: "CLAY TANDOOR",
-    title: "Whole Tandoori Chicken",
-    description: "A whole spring chicken marinated in Kashmiri red chilies, freshly crushed garlic, and hand-churned yogurt, roasted on long iron skewers in our clay oven.",
-    price: "₹550",
-    image: tandooriChicken
+    id: '02',
+    tag: 'CLAY TANDOOR',
+    title: 'Whole Tandoori Chicken',
+    description:
+      'A whole spring chicken marinated in Kashmiri red chilies, freshly crushed garlic, and hand-churned yogurt, roasted on long iron skewers in our clay oven.',
+    price: '₹550',
+    image: tandooriChicken,
   },
   {
-    id: "03",
-    tag: "HERITAGE RECIPE",
-    title: "Classic Handi Biryani",
-    description: "Slow-simmered basmati rice layered with tender baby lamb, caramelized onions, kewra water, and spices, cooked under a flour lid seal over dying embers.",
-    price: "₹480",
-    image: classicHandiBiryani
+    id: '03',
+    tag: 'HERITAGE RECIPE',
+    title: 'Classic Handi Biryani',
+    description:
+      'Slow-simmered basmati rice layered with tender baby lamb, caramelized onions, kewra water, and spices, cooked under a flour lid seal over dying embers.',
+    price: '₹480',
+    image: classicHandiBiryani,
   },
   {
-    id: "04",
-    tag: "SIGREE CHARCOAL",
-    title: "Chicken Junglee Kebab",
-    description: "Spicy, rustic chicken thighs roasted on skewers over an open iron sigree, coated in green chili paste, chopped cilantro, and dry-roasted peppercorns.",
-    price: "₹380",
-    image: chickenJungleeKebab
+    id: '04',
+    tag: 'SIGREE CHARCOAL',
+    title: 'Chicken Junglee Kebab',
+    description:
+      'Spicy, rustic chicken thighs roasted on skewers over an open iron sigree, coated in green chili paste, chopped cilantro, and dry-roasted peppercorns.',
+    price: '₹380',
+    image: chickenJungleeKebab,
   },
   {
-    id: "05",
-    tag: "STEAMED & CRISPED",
-    title: "Crispy Fried Momos",
-    description: "Hand-folded dumplings stuffed with spiced minced chicken, scallions, and fresh ginger, flash-fried to golden perfection and served with a roasted tomato chutney.",
-    price: "₹220",
-    image: crispyFriedMomos
+    id: '05',
+    tag: 'STEAMED & CRISPED',
+    title: 'Crispy Fried Momos',
+    description:
+      'Hand-folded dumplings stuffed with spiced minced chicken, scallions, and fresh ginger, flash-fried to golden perfection and served with a roasted tomato chutney.',
+    price: '₹220',
+    image: crispyFriedMomos,
   },
   {
-    id: "06",
-    tag: "EAST-WEST FUSION",
-    title: "Stuffed Mozzarella Chicken",
-    description: "Tender chicken breast stuffed with fresh mozzarella, coriander pesto, and mild Indian spices, cooked over gentle pecan wood embers.",
-    price: "₹490",
-    image: stuffedMozzarellaChicken
+    id: '06',
+    tag: 'EAST-WEST FUSION',
+    title: 'Stuffed Mozzarella Chicken',
+    description:
+      'Tender chicken breast stuffed with fresh mozzarella, coriander pesto, and mild Indian spices, cooked over gentle pecan wood embers.',
+    price: '₹490',
+    image: stuffedMozzarellaChicken,
   },
   {
-    id: "07",
-    tag: "SPIT ROASTED",
-    title: "Hearth-Roasted Shawarma",
-    description: "Shaved slow-roasted chicken thighs marinated in yogurt, garlic, lemon, and spices, wrapped in fresh flatbread with garlic toum.",
-    price: "₹280",
-    image: hearthRoastedShawarma
+    id: '07',
+    tag: 'SPIT ROASTED',
+    title: 'Hearth-Roasted Shawarma',
+    description:
+      'Shaved slow-roasted chicken thighs marinated in yogurt, garlic, lemon, and spices, wrapped in fresh flatbread with garlic toum.',
+    price: '₹280',
+    image: hearthRoastedShawarma,
   },
   {
-    id: "08",
-    tag: "CREAMY HEARTH",
-    title: "Cardamom Malai Kebab",
-    description: "Bites of boneless chicken marinated in white pepper, cream cheese, green coriander roots, and green cardamom, grilled over ash-tempered embers.",
-    price: "₹390",
-    image: cardamomMalaiKebab
+    id: '08',
+    tag: 'CREAMY HEARTH',
+    title: 'Cardamom Malai Kebab',
+    description:
+      'Bites of boneless chicken marinated in white pepper, cream cheese, green coriander roots, and green cardamom, grilled over ash-tempered embers.',
+    price: '₹390',
+    image: cardamomMalaiKebab,
   },
   {
-    id: "09",
-    tag: "THE HEARTH BOARD",
-    title: "Tandoori Mini Platter",
-    description: "A curated tasting assortment featuring malai kebab, chicken tikka, junglee kebab, and grilled paneer, served with house-made mint-coriander chutney.",
-    price: "₹750",
-    image: tandooriMiniPlatter
-  }
+    id: '09',
+    tag: 'THE HEARTH BOARD',
+    title: 'Tandoori Mini Platter',
+    description:
+      'A curated tasting assortment featuring malai kebab, chicken tikka, junglee kebab, and grilled paneer, served with house-made mint-coriander chutney.',
+    price: '₹750',
+    image: tandooriMiniPlatter,
+  },
 ];
 ---
 
-<section id="dishes" class="dishes-pin-container relative w-full min-h-screen bg-canvas-black overflow-hidden flex flex-col justify-center py-20">
-  <div class="max-w-7xl mx-auto w-full px-6 md:px-12 mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+<section
+  id="dishes"
+  class="dishes-pin-container relative w-full min-h-screen bg-canvas-black overflow-hidden flex flex-col justify-center py-20"
+>
+  <div
+    class="max-w-7xl mx-auto w-full px-6 md:px-12 mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-6"
+  >
     <div>
-      <span class="text-brand-mint font-mono text-xs uppercase tracking-[2.5px] block mb-2">CURATED HEARTH SELECTIONS</span>
-      <h2 class="font-display text-[min(10vw,80px)] uppercase leading-none text-hazard-white font-black tracking-tight">
+      <span class="text-brand-mint font-mono text-xs uppercase tracking-[2.5px] block mb-2"
+        >CURATED HEARTH SELECTIONS</span
+      >
+      <h2
+        class="font-display text-[min(10vw,80px)] uppercase leading-none text-hazard-white font-black tracking-tight"
+      >
         SIGNATURE DISHES
       </h2>
     </div>
     <div class="max-w-sm">
       <p class="text-xs md:text-sm font-sans text-secondary-text leading-relaxed">
-        Our culinary story is written in charcoal, clay, and spice. Browse our signature menu, where each card represents a chapter of woodfire and clay-oven craft.
+        Our culinary story is written in charcoal, clay, and spice. Browse our signature menu, where
+        each card represents a chapter of woodfire and clay-oven craft.
       </p>
     </div>
   </div>
 
   <!-- Horizontal Scroll Container -->
-  <div class="dishes-scroll-wrapper relative w-full flex-grow flex items-center select-none overflow-hidden">
+  <div
+    class="dishes-scroll-wrapper relative w-full flex-grow flex items-center select-none overflow-hidden"
+  >
     <div class="dishes-scroll-track flex items-center gap-8 md:gap-16 pl-6 md:pl-32 pr-0 w-max">
-      {dishes.map((dish) => (
-        <div class="dish-card w-[280px] sm:w-[360px] md:w-[480px] flex-shrink-0 bg-surface-slate border border-white/10 hover:border-brand-mint/50 rounded-[24px] overflow-hidden transition-[border-color] duration-300 p-4 md:p-6 flex flex-col gap-6 cursor-grab active:cursor-grabbing">
-          <!-- Card Image Frame -->
-          <div class="relative w-full aspect-[4/3] rounded-[16px] overflow-hidden border border-image-frame bg-canvas-black">
-            <Image
-              src={dish.image} 
-              alt={dish.title}
-              class="dish-img w-full h-full object-cover filter brightness-85 contrast-110 pointer-events-none select-none"
-              loading="lazy"
-              decoding="async"
-              widths={[280, 360, 480, 640, 960]}
-              sizes="(min-width: 768px) 480px, (min-width: 640px) 360px, 280px"
-              format="webp"
-              quality={78}
-            />
-            <div class="absolute top-4 left-4 bg-canvas-black/80 backdrop-blur-sm border border-white/15 px-3 py-1 rounded-full">
-              <span class="text-[10px] font-mono uppercase tracking-[1.5px] text-brand-mint font-semibold">{dish.tag}</span>
+      {
+        dishes.map((dish) => (
+          <div class="dish-card w-[280px] sm:w-[360px] md:w-[480px] flex-shrink-0 bg-surface-slate border border-white/10 hover:border-brand-mint/50 rounded-[24px] overflow-hidden transition-[border-color] duration-300 p-4 md:p-6 flex flex-col gap-6 cursor-grab active:cursor-grabbing">
+            {/* Card Image Frame */}
+            <div class="relative w-full aspect-[4/3] rounded-[16px] overflow-hidden border border-image-frame bg-canvas-black">
+              <Image
+                src={dish.image}
+                alt={dish.title}
+                class="dish-img w-full h-full object-cover filter brightness-85 contrast-110 pointer-events-none select-none"
+                loading="lazy"
+                decoding="async"
+                widths={[280, 360, 480, 640, 960]}
+                sizes="(min-width: 768px) 480px, (min-width: 640px) 360px, 280px"
+                format="webp"
+                quality={78}
+              />
+              <div class="absolute top-4 left-4 bg-canvas-black/80 backdrop-blur-sm border border-white/15 px-3 py-1 rounded-full">
+                <span class="text-[10px] font-mono uppercase tracking-[1.5px] text-brand-mint font-semibold">
+                  {dish.tag}
+                </span>
+              </div>
+              <div class="absolute bottom-4 right-4 bg-canvas-black/80 backdrop-blur-sm border border-white/15 px-3 py-1 rounded-full">
+                <span class="text-[10px] font-mono uppercase tracking-[1px] text-hazard-white font-bold">
+                  {dish.price}
+                </span>
+              </div>
             </div>
-            <div class="absolute bottom-4 right-4 bg-canvas-black/80 backdrop-blur-sm border border-white/15 px-3 py-1 rounded-full">
-              <span class="text-[10px] font-mono uppercase tracking-[1px] text-hazard-white font-bold">{dish.price}</span>
-            </div>
-          </div>
 
-          <!-- Card Content -->
-          <div class="dish-details flex flex-col gap-3">
-            <div class="flex items-baseline justify-between border-b border-white/10 pb-2">
-              <h3 class="font-sans text-lg md:text-2xl font-bold tracking-tight text-hazard-white">{dish.title}</h3>
-              <span class="text-xs font-mono text-secondary-text font-medium">{dish.id}</span>
+            {/* Card Content */}
+            <div class="dish-details flex flex-col gap-3">
+              <div class="flex items-baseline justify-between border-b border-white/10 pb-2">
+                <h3 class="font-sans text-lg md:text-2xl font-bold tracking-tight text-hazard-white">
+                  {dish.title}
+                </h3>
+                <span class="text-xs font-mono text-secondary-text font-medium">{dish.id}</span>
+              </div>
+              <p class="text-xs md:text-sm font-serif italic text-hazard-white/70 leading-relaxed min-h-[72px]">
+                {dish.description}
+              </p>
             </div>
-            <p class="text-xs md:text-sm font-serif italic text-hazard-white/70 leading-relaxed min-h-[72px]">
-              {dish.description}
-            </p>
           </div>
-        </div>
-      ))}
+        ))
+      }
       <!-- End Spacer to allow the last card to center -->
-      <div class="w-[calc(50vw-140px)] sm:w-[calc(50vw-180px)] md:w-[calc(50vw-240px)] flex-shrink-0 h-1"></div>
+      <div
+        class="w-[calc(50vw-140px)] sm:w-[calc(50vw-180px)] md:w-[calc(50vw-240px)] flex-shrink-0 h-1"
+      >
+      </div>
     </div>
   </div>
 </section>
@@ -169,89 +201,94 @@ const dishes = [
     // On mobile we let it behave as a standard swipeable container
     let mm = gsap.matchMedia();
 
-    mm.add({
-      isDesktop: "(min-width: 768px)",
-      isMobile: "(max-width: 767px)"
-    }, (context) => {
-      const { isDesktop } = context.conditions as { isDesktop: boolean };
+    mm.add(
+      {
+        isDesktop: '(min-width: 768px)',
+        isMobile: '(max-width: 767px)',
+      },
+      (context) => {
+        const { isDesktop } = context.conditions as { isDesktop: boolean };
 
-      if (isDesktop) {
-        // Promote scroll track and cards to compositor layers
-        gsap.set(scrollTrack, { willChange: 'transform' });
-        gsap.set(dishCards, { willChange: 'transform' });
+        if (isDesktop) {
+          // Promote scroll track and cards to compositor layers
+          gsap.set(scrollTrack, { willChange: 'transform' });
+          gsap.set(dishCards, { willChange: 'transform' });
 
-        // 1. Horizontal Scroll Pin & Tween
-        const scrollTween = gsap.to(scrollTrack, {
-          x: () => -(scrollTrack.scrollWidth - window.innerWidth),
-          ease: "none",
-          scrollTrigger: {
-            trigger: pinSection,
-            pin: true,
-            scrub: 0.8,
-            start: "top top",
-            end: () => `+=${scrollTrack.scrollWidth - window.innerWidth}`,
-            invalidateOnRefresh: true,
-          }
-        });
-
-        // 2. Card Scaling & Image Parallax using containerAnimation
-        dishCards.forEach((card) => {
-          const img = card.querySelector('.dish-img');
-          
-          // Card scale prominence (active card grows in the center, shrinks on sides)
-          const cardTl = gsap.timeline({
+          // 1. Horizontal Scroll Pin & Tween
+          const scrollTween = gsap.to(scrollTrack, {
+            x: () => -(scrollTrack.scrollWidth - window.innerWidth),
+            ease: 'none',
             scrollTrigger: {
-              trigger: card,
-              containerAnimation: scrollTween,
-              start: "left right",
-              end: "right left",
-              scrub: 1,
-            }
+              trigger: pinSection,
+              pin: true,
+              scrub: 0.8,
+              start: 'top top',
+              end: () => `+=${scrollTrack.scrollWidth - window.innerWidth}`,
+              invalidateOnRefresh: true,
+            },
           });
 
-          cardTl.fromTo(card, 
-            { scale: 0.92, opacity: 0.5 },
-            { scale: 1.03, opacity: 1, ease: "power1.inOut", duration: 0.5 }
-          ).to(card, 
-            { scale: 0.92, opacity: 0.5, ease: "power1.inOut", duration: 0.5 }
-          );
+          // 2. Card Scaling & Image Parallax using containerAnimation
+          dishCards.forEach((card) => {
+            const img = card.querySelector('.dish-img');
 
-          // Subtle Image Zoom Parallax within card
-          gsap.fromTo(img,
-            { scale: 1.02, xPercent: -3 },
-            {
-              scale: 1.15,
-              xPercent: 3,
-              ease: "none",
+            // Card scale prominence (active card grows in the center, shrinks on sides)
+            const cardTl = gsap.timeline({
               scrollTrigger: {
                 trigger: card,
-              containerAnimation: scrollTween,
-              start: "left right",
-              end: "right left",
-              scrub: 1,
-              }
-            }
-          );
-        });
-      } else {
-        // Mobile layout: add native swiping overlay and standard animations
-        gsap.set(scrollTrack, { clearProps: "all" });
-        gsap.set(dishCards, { clearProps: "all" });
-        
-        // Scroll entry animations for cards in vertical layout
-        dishCards.forEach((card) => {
-          gsap.from(card, {
-            y: 50,
-            opacity: 0,
-            duration: 0.6,
-            scrollTrigger: {
-              trigger: card,
-              start: "top 85%",
-              toggleActions: "play none none none"
-            }
+                containerAnimation: scrollTween,
+                start: 'left right',
+                end: 'right left',
+                scrub: 1,
+              },
+            });
+
+            cardTl
+              .fromTo(
+                card,
+                { scale: 0.92, opacity: 0.5 },
+                { scale: 1.03, opacity: 1, ease: 'power1.inOut', duration: 0.5 },
+              )
+              .to(card, { scale: 0.92, opacity: 0.5, ease: 'power1.inOut', duration: 0.5 });
+
+            // Subtle Image Zoom Parallax within card
+            gsap.fromTo(
+              img,
+              { scale: 1.02, xPercent: -3 },
+              {
+                scale: 1.15,
+                xPercent: 3,
+                ease: 'none',
+                scrollTrigger: {
+                  trigger: card,
+                  containerAnimation: scrollTween,
+                  start: 'left right',
+                  end: 'right left',
+                  scrub: 1,
+                },
+              },
+            );
           });
-        });
-      }
-    });
+        } else {
+          // Mobile layout: add native swiping overlay and standard animations
+          gsap.set(scrollTrack, { clearProps: 'all' });
+          gsap.set(dishCards, { clearProps: 'all' });
+
+          // Scroll entry animations for cards in vertical layout
+          dishCards.forEach((card) => {
+            gsap.from(card, {
+              y: 50,
+              opacity: 0,
+              duration: 0.6,
+              scrollTrigger: {
+                trigger: card,
+                start: 'top 85%',
+                toggleActions: 'play none none none',
+              },
+            });
+          });
+        }
+      },
+    );
   });
 </script>

@@ -1,60 +1,132 @@
 ---
 import Button from './Button.astro';
 ---
-<header class="navbar-wrapper fixed top-0 left-0 w-full z-50 px-4 md:px-8 py-6 transition-[padding,background-color,border-color] duration-300">
-  <div class="navbar-container max-w-7xl mx-auto flex items-center justify-between bg-canvas-black border border-white/10 rounded-3xl px-6 py-3 transition-[padding,background-color,border-color] duration-300">
+
+<header
+  class="navbar-wrapper fixed top-0 left-0 w-full z-50 px-4 md:px-8 py-6 transition-[padding,background-color,border-color] duration-300"
+>
+  <div
+    class="navbar-container max-w-7xl mx-auto flex items-center justify-between bg-canvas-black border border-white/10 rounded-3xl px-6 py-3 transition-[padding,background-color,border-color] duration-300"
+  >
     <!-- Brand Logo -->
     <a href="#hero" class="brand-logo flex items-center gap-2 group cursor-pointer">
-      <span class="logo-icon w-8 h-8 rounded-lg bg-brand-mint flex items-center justify-center font-display text-canvas-black text-xl font-black">B</span>
-      <span class="font-display text-2xl tracking-wider text-hazard-white select-none">BONFIRE</span>
+      <span
+        class="logo-icon w-8 h-8 rounded-lg bg-brand-mint flex items-center justify-center font-display text-canvas-black text-xl font-black"
+        >B</span
+      >
+      <span class="font-display text-2xl tracking-wider text-hazard-white select-none">BONFIRE</span
+      >
     </a>
 
     <!-- Nav Links (Desktop) -->
     <nav class="hidden md:flex items-center gap-8">
-      <a href="#about" class="nav-link relative py-1 text-xs font-mono uppercase tracking-[1.8px] text-hazard-white hover:text-link-blue transition-colors duration-180">
+      <a
+        href="#about"
+        class="nav-link relative py-1 text-xs font-mono uppercase tracking-[1.8px] text-hazard-white hover:text-link-blue transition-colors duration-180"
+      >
         <span class="magnetic-target block">Timeline</span>
-        <span class="absolute bottom-0 left-0 w-0 h-[1px] bg-brand-mint transition-[width] duration-300 group-hover:w-full"></span>
+        <span
+          class="absolute bottom-0 left-0 w-0 h-[1px] bg-brand-mint transition-[width] duration-300 group-hover:w-full"
+        ></span>
       </a>
-      <a href="#dishes" class="nav-link relative py-1 text-xs font-mono uppercase tracking-[1.8px] text-hazard-white hover:text-link-blue transition-colors duration-180">
+      <a
+        href="#dishes"
+        class="nav-link relative py-1 text-xs font-mono uppercase tracking-[1.8px] text-hazard-white hover:text-link-blue transition-colors duration-180"
+      >
         <span class="magnetic-target block">Menu</span>
-        <span class="absolute bottom-0 left-0 w-0 h-[1px] bg-brand-mint transition-[width] duration-300 group-hover:w-full"></span>
+        <span
+          class="absolute bottom-0 left-0 w-0 h-[1px] bg-brand-mint transition-[width] duration-300 group-hover:w-full"
+        ></span>
       </a>
-      <a href="#gallery" class="nav-link relative py-1 text-xs font-mono uppercase tracking-[1.8px] text-hazard-white hover:text-link-blue transition-colors duration-180">
+      <a
+        href="#gallery"
+        class="nav-link relative py-1 text-xs font-mono uppercase tracking-[1.8px] text-hazard-white hover:text-link-blue transition-colors duration-180"
+      >
         <span class="magnetic-target block">Atmosphere</span>
-        <span class="absolute bottom-0 left-0 w-0 h-[1px] bg-brand-mint transition-[width] duration-300 group-hover:w-full"></span>
+        <span
+          class="absolute bottom-0 left-0 w-0 h-[1px] bg-brand-mint transition-[width] duration-300 group-hover:w-full"
+        ></span>
       </a>
     </nav>
 
     <!-- Right Side CTA -->
     <div class="flex items-center gap-4">
-      <Button href="#reserve" variant="primary" class="hidden sm:inline-block text-[11px] font-semibold tracking-[1.5px] px-6 py-2.5">
+      <Button
+        href="#reserve"
+        variant="primary"
+        class="hidden sm:inline-block text-[11px] font-semibold tracking-[1.5px] px-6 py-2.5"
+      >
         Book Table
       </Button>
-      
+
       <!-- Mobile Menu Toggle -->
-      <button class="mobile-toggle p-2 text-hazard-white md:hidden hover:text-brand-mint" aria-label="Toggle Menu">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+      <button
+        class="mobile-toggle p-2 text-hazard-white md:hidden hover:text-brand-mint"
+        aria-label="Toggle Menu"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16m-7 6h7"></path>
         </svg>
       </button>
     </div>
   </div>
 
   <!-- Mobile Drawer Menu -->
-  <div class="mobile-drawer fixed inset-y-0 right-0 w-64 bg-canvas-black border-l border-white/10 p-8 transform translate-x-full transition-transform duration-300 z-50 flex flex-col gap-8 shadow-2xl">
+  <div
+    class="mobile-drawer fixed inset-y-0 right-0 w-64 bg-canvas-black border-l border-white/10 p-8 transform translate-x-full transition-transform duration-300 z-50 flex flex-col gap-8 shadow-2xl"
+  >
     <div class="flex justify-between items-center">
       <span class="font-display text-xl tracking-wider text-hazard-white">BONFIRE</span>
-      <button class="mobile-close p-2 text-hazard-white hover:text-brand-mint" aria-label="Close Menu">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      <button
+        class="mobile-close p-2 text-hazard-white hover:text-brand-mint"
+        aria-label="Close Menu"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"></path>
         </svg>
       </button>
     </div>
     <nav class="flex flex-col gap-6 mt-8">
-      <a href="#about" class="mobile-nav-link text-lg font-mono uppercase tracking-[2px] text-hazard-white hover:text-link-blue transition-colors">Timeline</a>
-      <a href="#dishes" class="mobile-nav-link text-lg font-mono uppercase tracking-[2px] text-hazard-white hover:text-link-blue transition-colors">Menu</a>
-      <a href="#gallery" class="mobile-nav-link text-lg font-mono uppercase tracking-[2px] text-hazard-white hover:text-link-blue transition-colors">Atmosphere</a>
-      <a href="#reserve" class="mobile-nav-link text-lg font-mono uppercase tracking-[2px] text-brand-mint hover:text-link-blue transition-colors">Book Table</a>
+      <a
+        href="#about"
+        class="mobile-nav-link text-lg font-mono uppercase tracking-[2px] text-hazard-white hover:text-link-blue transition-colors"
+        >Timeline</a
+      >
+      <a
+        href="#dishes"
+        class="mobile-nav-link text-lg font-mono uppercase tracking-[2px] text-hazard-white hover:text-link-blue transition-colors"
+        >Menu</a
+      >
+      <a
+        href="#gallery"
+        class="mobile-nav-link text-lg font-mono uppercase tracking-[2px] text-hazard-white hover:text-link-blue transition-colors"
+        >Atmosphere</a
+      >
+      <a
+        href="#reserve"
+        class="mobile-nav-link text-lg font-mono uppercase tracking-[2px] text-brand-mint hover:text-link-blue transition-colors"
+        >Book Table</a
+      >
     </nav>
   </div>
 </header>
@@ -105,7 +177,7 @@ import Button from './Button.astro';
         rotation: tilt,
         scale: 1.05,
         duration: 0.3,
-        ease: 'power2.out'
+        ease: 'power2.out',
       });
 
       logoRafId = null;
@@ -131,22 +203,22 @@ import Button from './Button.astro';
         rotation: 0,
         scale: 1,
         duration: 0.6,
-        ease: 'elastic.out(1.2, 0.4)'
+        ease: 'elastic.out(1.2, 0.4)',
       });
     });
 
     // 3. Nav link hover interactions
-    navLinks.forEach(link => {
+    navLinks.forEach((link) => {
       const linkElement = link as HTMLElement;
-      
+
       const hoverTween = gsap.to(linkElement, {
         scale: 1.08,
         duration: 0.35,
         ease: 'back.out(1.4)',
         easeReverse: 'power2.in',
-        paused: true
+        paused: true,
       });
-      
+
       linkElement.addEventListener('mouseenter', () => hoverTween.play());
       linkElement.addEventListener('mouseleave', () => hoverTween.reverse());
     });
@@ -178,7 +250,7 @@ import Button from './Button.astro';
       if (href) scrollToSection(href);
     });
 
-    navLinks.forEach(link => {
+    navLinks.forEach((link) => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
         const href = link.getAttribute('href');
@@ -186,7 +258,7 @@ import Button from './Button.astro';
       });
     });
 
-    mobileNavLinks.forEach(link => {
+    mobileNavLinks.forEach((link) => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
         const href = link.getAttribute('href');

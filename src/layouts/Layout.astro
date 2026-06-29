@@ -8,13 +8,13 @@ interface Props {
   description?: string;
 }
 
-const { 
-  title = "Bonfire Barbecue | Indian Coal & Clay Oven | Tandoor & Grill Craft", 
-  description = "Experience the primal art of clay tandoors, open-fire sigree kebabs, and slow-steamed biryani. A premium, cinematic Indian culinary story." 
+const {
+  title = 'Bonfire Barbecue | Indian Coal & Clay Oven | Tandoor & Grill Craft',
+  description = 'Experience the primal art of clay tandoors, open-fire sigree kebabs, and slow-steamed biryani. A premium, cinematic Indian culinary story.',
 } = Astro.props;
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -25,11 +25,14 @@ const {
     <!-- Preconnect hints for Google Fonts — saves 200-500ms font TTFB -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&family=Newsreader:ital,opsz,wght@1,6..72,400&display=swap" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&family=Newsreader:ital,opsz,wght@1,6..72,400&display=swap"
+    />
 
     <!-- Preconnect for Unsplash images (Hero + About sections) -->
     <link rel="preconnect" href="https://images.unsplash.com" />
-    
+
     <!-- Primary Meta Tags -->
     <title>{title}</title>
     <meta name="title" content={title} />
@@ -40,14 +43,14 @@ const {
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    
+
     <style>
       /* Hide scrollbar for clean presentation but allow scrolling */
       html {
         scrollbar-width: thin;
         scrollbar-color: #313131 #131313;
       }
-      
+
       /* Promote smooth-wrapper/content to compositor layers */
       #smooth-wrapper,
       #smooth-content {
@@ -70,7 +73,9 @@ const {
       }
     </style>
   </head>
-  <body class="bg-canvas-black text-hazard-white selection:bg-brand-mint selection:text-canvas-black font-sans antialiased overflow-x-hidden">
+  <body
+    class="bg-canvas-black text-hazard-white selection:bg-brand-mint selection:text-canvas-black font-sans antialiased overflow-x-hidden"
+  >
     <LoadingScreen />
     <Navbar />
     <div id="smooth-wrapper">

@@ -1,35 +1,77 @@
 ---
 const currentYear = new Date().getFullYear();
 ---
-<footer class="relative w-full bg-canvas-black border-t border-white/10 pt-20 pb-8 overflow-hidden z-10">
+
+<footer
+  class="relative w-full bg-canvas-black border-t border-white/10 pt-20 pb-8 overflow-hidden z-10"
+>
   <div class="max-w-7xl mx-auto px-6 md:px-12 flex flex-col gap-16">
-    
     <!-- Top Footer Columns -->
     <div class="grid grid-cols-1 md:grid-cols-12 gap-12">
       <!-- Description col -->
       <div class="md:col-span-5 flex flex-col gap-4">
-        <span class="logo-icon w-8 h-8 rounded-lg bg-brand-mint flex items-center justify-center font-display text-canvas-black text-xl font-black">B</span>
+        <span
+          class="logo-icon w-8 h-8 rounded-lg bg-brand-mint flex items-center justify-center font-display text-canvas-black text-xl font-black"
+          >B</span
+        >
         <p class="font-serif italic text-base text-hazard-white/70 leading-relaxed max-w-sm">
-          "Indian coal, clay ovens, and raw cooking mastery. Crafting premium tandoori, kebabs, and slow-steamed biryanis daily in the heart of the city."
+          "Indian coal, clay ovens, and raw cooking mastery. Crafting premium tandoori, kebabs, and
+          slow-steamed biryanis daily in the heart of the city."
         </p>
       </div>
 
       <!-- Links col 1 -->
       <div class="md:col-span-2 flex flex-col gap-4">
-        <span class="font-mono text-[10px] uppercase tracking-[2px] text-brand-mint font-semibold">NAVIGATION</span>
+        <span class="font-mono text-[10px] uppercase tracking-[2px] text-brand-mint font-semibold"
+          >NAVIGATION</span
+        >
         <ul class="flex flex-col gap-2 text-xs font-mono uppercase tracking-[1px]">
-          <li><a href="#hero" class="footer-nav-link text-hazard-white hover:text-link-blue transition-colors duration-150">Top</a></li>
-          <li><a href="#about" class="footer-nav-link text-hazard-white hover:text-link-blue transition-colors duration-150">Timeline</a></li>
-          <li><a href="#dishes" class="footer-nav-link text-hazard-white hover:text-link-blue transition-colors duration-150">Menu</a></li>
-          <li><a href="#gallery" class="footer-nav-link text-hazard-white hover:text-link-blue transition-colors duration-150">Atmosphere</a></li>
-          <li><a href="#reserve" class="footer-nav-link text-hazard-white hover:text-link-blue transition-colors duration-150">Reservations</a></li>
+          <li>
+            <a
+              href="#hero"
+              class="footer-nav-link text-hazard-white hover:text-link-blue transition-colors duration-150"
+              >Top</a
+            >
+          </li>
+          <li>
+            <a
+              href="#about"
+              class="footer-nav-link text-hazard-white hover:text-link-blue transition-colors duration-150"
+              >Timeline</a
+            >
+          </li>
+          <li>
+            <a
+              href="#dishes"
+              class="footer-nav-link text-hazard-white hover:text-link-blue transition-colors duration-150"
+              >Menu</a
+            >
+          </li>
+          <li>
+            <a
+              href="#gallery"
+              class="footer-nav-link text-hazard-white hover:text-link-blue transition-colors duration-150"
+              >Atmosphere</a
+            >
+          </li>
+          <li>
+            <a
+              href="#reserve"
+              class="footer-nav-link text-hazard-white hover:text-link-blue transition-colors duration-150"
+              >Reservations</a
+            >
+          </li>
         </ul>
       </div>
 
       <!-- Links col 2 (Location / Contact) -->
       <div class="md:col-span-3 flex flex-col gap-4">
-        <span class="font-mono text-[10px] uppercase tracking-[2px] text-brand-mint font-semibold">THE HEARTH</span>
-        <address class="not-italic flex flex-col gap-2 font-mono text-[11px] text-secondary-text uppercase tracking-[1px] leading-relaxed">
+        <span class="font-mono text-[10px] uppercase tracking-[2px] text-brand-mint font-semibold"
+          >THE HEARTH</span
+        >
+        <address
+          class="not-italic flex flex-col gap-2 font-mono text-[11px] text-secondary-text uppercase tracking-[1px] leading-relaxed"
+        >
           <p>108 Tandoor Way, Austin, TX</p>
           <p>Phone: (512) 555-FIRE</p>
           <p>Email: hello@bonfiregrill.com</p>
@@ -38,8 +80,12 @@ const currentYear = new Date().getFullYear();
 
       <!-- Links col 3 (Hours) -->
       <div class="md:col-span-2 flex flex-col gap-4">
-        <span class="font-mono text-[10px] uppercase tracking-[2px] text-brand-mint font-semibold">SERVICE HOURS</span>
-        <div class="flex flex-col gap-2 font-mono text-[11px] text-secondary-text uppercase tracking-[1px]">
+        <span class="font-mono text-[10px] uppercase tracking-[2px] text-brand-mint font-semibold"
+          >SERVICE HOURS</span
+        >
+        <div
+          class="flex flex-col gap-2 font-mono text-[11px] text-secondary-text uppercase tracking-[1px]"
+        >
           <p>Wed – Sun: 4pm – Late</p>
           <p>Mon – Tue: Pit Closed</p>
         </div>
@@ -47,14 +93,20 @@ const currentYear = new Date().getFullYear();
     </div>
 
     <!-- Massive Editorial Wordmark -->
-    <div class="border-t border-white/5 pt-10 select-none overflow-hidden flex justify-center items-center">
-      <span class="font-display text-[min(24vw,280px)] text-center leading-[0.75] font-black text-white/5 tracking-tighter w-full block">
+    <div
+      class="border-t border-white/5 pt-10 select-none overflow-hidden flex justify-center items-center"
+    >
+      <span
+        class="font-display text-[min(24vw,280px)] text-center leading-[0.75] font-black text-white/5 tracking-tighter w-full block"
+      >
         BONFIRE
       </span>
     </div>
 
     <!-- Bottom Copyright -->
-    <div class="flex flex-col sm:flex-row justify-between items-center gap-4 text-center font-mono text-[9px] text-secondary-text uppercase tracking-[1.5px] border-t border-white/5 pt-8">
+    <div
+      class="flex flex-col sm:flex-row justify-between items-center gap-4 text-center font-mono text-[9px] text-secondary-text uppercase tracking-[1.5px] border-t border-white/5 pt-8"
+    >
       <div>
         <span>&copy; {currentYear} BONFIRE BARBECUE. ALL HEARTHS RESERVED.</span>
       </div>
@@ -63,7 +115,6 @@ const currentYear = new Date().getFullYear();
         <a href="#" class="hover:text-link-blue transition-colors">Terms of Service</a>
       </div>
     </div>
-
   </div>
 </footer>
 
@@ -82,7 +133,7 @@ const currentYear = new Date().getFullYear();
       smoother.scrollTo(smoother.scrollTop() + rect.top - 80, false);
     };
 
-    navLinks.forEach(link => {
+    navLinks.forEach((link) => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
         const href = link.getAttribute('href');

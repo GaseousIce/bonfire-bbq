@@ -3,7 +3,11 @@ import Button from './Button.astro';
 import { Image } from 'astro:assets';
 import { heroTandoor } from '../assets/images';
 ---
-<section id="hero" class="relative w-full min-h-screen flex flex-col justify-center items-center overflow-hidden bg-canvas-black select-none">
+
+<section
+  id="hero"
+  class="relative w-full min-h-screen flex flex-col justify-center items-center overflow-hidden bg-canvas-black select-none"
+>
   <!-- Background Image with Parallax wrapper -->
   <div class="absolute inset-0 w-full h-full scale-[1.12] hero-bg-wrap">
     <Image
@@ -18,27 +22,45 @@ import { heroTandoor } from '../assets/images';
       format="webp"
       quality={82}
     />
-    <div class="absolute inset-0 bg-gradient-to-t from-canvas-black via-transparent to-canvas-black/80"></div>
+    <div
+      class="absolute inset-0 bg-gradient-to-t from-canvas-black via-transparent to-canvas-black/80"
+    >
+    </div>
   </div>
 
   <!-- Drifting Smoke Layers -->
   <div class="absolute inset-0 pointer-events-none z-10 opacity-30 select-none">
-    <div class="smoke-layer smoke-1 absolute -inset-[10%] bg-[url('https://images.unsplash.com/photo-1608897013039-887f21d8c804?auto=format&fit=crop&w=1000&q=80')] bg-cover mix-blend-screen opacity-20 filter blur-lg"></div>
-    <div class="smoke-layer smoke-2 absolute -inset-[10%] bg-[url('https://images.unsplash.com/photo-1546964124-0cce460f38ef?auto=format&fit=crop&w=1000&q=80')] bg-cover mix-blend-screen opacity-15 filter blur-2xl"></div>
+    <div
+      class="smoke-layer smoke-1 absolute -inset-[10%] bg-[url('https://images.unsplash.com/photo-1608897013039-887f21d8c804?auto=format&fit=crop&w=1000&q=80')] bg-cover mix-blend-screen opacity-20 filter blur-lg"
+    >
+    </div>
+    <div
+      class="smoke-layer smoke-2 absolute -inset-[10%] bg-[url('https://images.unsplash.com/photo-1546964124-0cce460f38ef?auto=format&fit=crop&w=1000&q=80')] bg-cover mix-blend-screen opacity-15 filter blur-2xl"
+    >
+    </div>
   </div>
 
   <!-- Content Container -->
-  <div class="hero-content relative z-20 max-w-5xl mx-auto px-6 text-center flex flex-col items-center gap-6 pointer-events-auto">
+  <div
+    class="hero-content relative z-20 max-w-5xl mx-auto px-6 text-center flex flex-col items-center gap-6 pointer-events-auto"
+  >
     <!-- Eyebrow Capitalized Label -->
-    <span class="hero-eyebrow text-xs md:text-sm font-mono uppercase tracking-[3px] text-brand-mint translate-y-8 opacity-0">
+    <span
+      class="hero-eyebrow text-xs md:text-sm font-mono uppercase tracking-[3px] text-brand-mint translate-y-8 opacity-0"
+    >
       Est. 2026 / Indian Coal & Clay Oven Craft
     </span>
 
     <!-- Headline: Staggered Characters -->
-    <h1 class="hero-title font-display uppercase leading-[0.85] text-hazard-white text-[min(18vw,160px)] font-black tracking-tighter select-none flex flex-wrap justify-center overflow-hidden py-2">
+    <h1
+      class="hero-title font-display uppercase leading-[0.85] text-hazard-white text-[min(18vw,160px)] font-black tracking-tighter select-none flex flex-wrap justify-center overflow-hidden py-2"
+    >
       {
-        Array.from("BONFIRE").map((char, index) => (
-          <span class="hero-char inline-block translate-y-[110%] rotate-6 transform" style={`transform-origin: bottom center;`}>
+        Array.from('BONFIRE').map((char, index) => (
+          <span
+            class="hero-char inline-block translate-y-[110%] rotate-6 transform"
+            style={`transform-origin: bottom center;`}
+          >
             {char}
           </span>
         ))
@@ -46,12 +68,17 @@ import { heroTandoor } from '../assets/images';
     </h1>
 
     <!-- Supporting deck -->
-    <p class="hero-deck max-w-xl text-sm md:text-base font-serif italic text-hazard-white/70 translate-y-8 opacity-0 leading-relaxed">
-      A sensory feast carved by Indian spices, tandoor clay ovens, and open-flame cooking. Where ancient spice routes meet modern charcoal craft.
+    <p
+      class="hero-deck max-w-xl text-sm md:text-base font-serif italic text-hazard-white/70 translate-y-8 opacity-0 leading-relaxed"
+    >
+      A sensory feast carved by Indian spices, tandoor clay ovens, and open-flame cooking. Where
+      ancient spice routes meet modern charcoal craft.
     </p>
 
     <!-- CTAs -->
-    <div class="hero-cta flex flex-wrap gap-12 justify-center items-center mt-6 translate-y-8 opacity-0">
+    <div
+      class="hero-cta flex flex-wrap gap-12 justify-center items-center mt-6 translate-y-8 opacity-0"
+    >
       <Button href="#reserve" variant="primary" class="text-[11px] tracking-[1.5px] px-8 py-3.5">
         Reserve A Hearth
       </Button>
@@ -62,8 +89,12 @@ import { heroTandoor } from '../assets/images';
   </div>
 
   <!-- Scroll Down Indicator -->
-  <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 pointer-events-none opacity-0 hero-scroll-down">
-    <span class="text-[9px] font-mono uppercase tracking-[2px] text-hazard-white/40">Scroll to ignite</span>
+  <div
+    class="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 pointer-events-none opacity-0 hero-scroll-down"
+  >
+    <span class="text-[9px] font-mono uppercase tracking-[2px] text-hazard-white/40"
+      >Scroll to ignite</span
+    >
     <div class="w-[1px] h-12 bg-white/20 relative overflow-hidden">
       <div class="absolute top-0 left-0 w-full h-1/2 bg-brand-mint"></div>
     </div>
@@ -87,7 +118,7 @@ import { heroTandoor } from '../assets/images';
     const deck = document.querySelector('.hero-deck');
     const cta = document.querySelector('.hero-cta');
     const scrollDown = document.querySelector('.hero-scroll-down');
-    
+
     // ----------------------------------------------------
     // 1. Cinematic Opening sequence (deferred until loading screen completes)
     // ----------------------------------------------------
@@ -95,50 +126,66 @@ import { heroTandoor } from '../assets/images';
       const masterTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
       // Background settles: zoom/scale reduction from 1.15 to 1
-      masterTl.fromTo(bgWrap, 
-        { scale: 1.15 }, 
-        { scale: 1, duration: 2.2, ease: 'power2.out' }
-      );
+      masterTl.fromTo(bgWrap, { scale: 1.15 }, { scale: 1, duration: 2.2, ease: 'power2.out' });
 
       // Characters stagger upwards with slight rotation overshoot
-      masterTl.to(chars, {
-        y: '0%',
-        rotation: 0,
-        stagger: 0.08,
-        duration: 1.2,
-        ease: 'back.out(1.5)',
-      }, '-=1.6');
+      masterTl.to(
+        chars,
+        {
+          y: '0%',
+          rotation: 0,
+          stagger: 0.08,
+          duration: 1.2,
+          ease: 'back.out(1.5)',
+        },
+        '-=1.6',
+      );
 
       // Eyebrow and supporting content follow
-      masterTl.to(eyebrow, {
-        y: 0,
-        opacity: 1,
-        duration: 0.8
-      }, '-=0.8');
+      masterTl.to(
+        eyebrow,
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+        },
+        '-=0.8',
+      );
 
-      masterTl.to(deck, {
-        y: 0,
-        opacity: 1,
-        duration: 0.8
-      }, '-=0.6');
+      masterTl.to(
+        deck,
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+        },
+        '-=0.6',
+      );
 
       // CTA enters with spring overshoot
-      masterTl.to(cta, {
-        y: 0,
-        opacity: 1,
-        duration: 0.9,
-        ease: 'back.out(1.8)'
-      }, '-=0.4');
+      masterTl.to(
+        cta,
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.9,
+          ease: 'back.out(1.8)',
+        },
+        '-=0.4',
+      );
 
       // Scroll Down Indicator enters
-      masterTl.to(scrollDown, {
-        opacity: 1,
-        duration: 0.6
-      }, '-=0.2');
+      masterTl.to(
+        scrollDown,
+        {
+          opacity: 1,
+          duration: 0.6,
+        },
+        '-=0.2',
+      );
     };
 
     document.addEventListener('loading-complete', startCinematic, { once: true });
-
 
     // ----------------------------------------------------
     // 2. Mouse Parallax (Gentle Depth Movement)
@@ -159,28 +206,28 @@ import { heroTandoor } from '../assets/images';
         x: -xDiff * 0.025,
         y: -yDiff * 0.025,
         duration: 1.2,
-        ease: 'power2.out'
+        ease: 'power2.out',
       });
 
       gsap.to('.hero-content', {
         x: xDiff * 0.015,
         y: yDiff * 0.015,
         duration: 1.0,
-        ease: 'power2.out'
+        ease: 'power2.out',
       });
 
       gsap.to('.smoke-1', {
         x: xDiff * 0.04,
         y: yDiff * 0.04,
         duration: 1.5,
-        ease: 'power1.out'
+        ease: 'power1.out',
       });
 
       gsap.to('.smoke-2', {
         x: -xDiff * 0.03,
         y: -yDiff * 0.03,
         duration: 1.8,
-        ease: 'power1.out'
+        ease: 'power1.out',
       });
 
       rafId = null;
@@ -206,10 +253,9 @@ import { heroTandoor } from '../assets/images';
         y: 0,
         scale: 1,
         duration: 1.5,
-        ease: 'power2.out'
+        ease: 'power2.out',
       });
     });
-
 
     // 3. Slow smoke drift animation
     gsap.to('.smoke-1', {
@@ -218,16 +264,16 @@ import { heroTandoor } from '../assets/images';
       duration: 25,
       repeat: -1,
       yoyo: true,
-      ease: 'sine.inOut'
+      ease: 'sine.inOut',
     });
-    
+
     gsap.to('.smoke-2', {
       xPercent: -8,
       yPercent: 12,
       duration: 30,
       repeat: -1,
       yoyo: true,
-      ease: 'sine.inOut'
+      ease: 'sine.inOut',
     });
   });
 </script>

@@ -1,10 +1,10 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
-  --font-display: "Bebas Neue", Impact, sans-serif;
-  --font-sans: "Space Grotesk", Helvetica, Arial, sans-serif;
-  --font-mono: "Space Mono", Courier New, monospace;
-  --font-serif: "Newsreader", Georgia, serif;
+  --font-display: 'Bebas Neue', Impact, sans-serif;
+  --font-sans: 'Space Grotesk', Helvetica, Arial, sans-serif;
+  --font-mono: 'Space Mono', Courier New, monospace;
+  --font-serif: 'Newsreader', Georgia, serif;
 
   --color-canvas-black: #131313;
   --color-surface-slate: #2d2d2d;
@@ -23,7 +23,7 @@
   body {
     background-color: #131313;
     color: #ffffff;
-    font-family: "Space Grotesk", Helvetica, Arial, sans-serif;
+    font-family: 'Space Grotesk', Helvetica, Arial, sans-serif;
     margin: 0;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
