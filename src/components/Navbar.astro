@@ -54,7 +54,7 @@ import Button from './Button.astro';
       <Button
         href="#reserve"
         variant="primary"
-        class="hidden sm:inline-block text-[11px] font-semibold tracking-[1.5px] px-6 py-2.5"
+        class="nav-cta hidden sm:inline-block text-[11px] font-semibold tracking-[1.5px] px-6 py-2.5"
       >
         Book Table
       </Button>
@@ -157,6 +157,7 @@ import Button from './Button.astro';
     const container = document.querySelector('.navbar-container');
     const logo = document.querySelector('.brand-logo');
     const navLinks = document.querySelectorAll('.nav-link');
+    const navCtas = document.querySelectorAll('.nav-cta');
     const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
     const mobileToggle = document.querySelector('.mobile-toggle');
     const mobileClose = document.querySelector('.mobile-close');
@@ -232,7 +233,7 @@ import Button from './Button.astro';
       mobileDrawer?.classList.add('translate-x-full');
     });
 
-    // 5. Nav link clicks via smoother (fixes ScrollSmoother conflict)
+    // 5. Nav link & CTA clicks via smoother (fixes ScrollSmoother conflict)
     const smoother = window.__smoother;
 
     const scrollToSection = (href: string) => {
@@ -254,6 +255,14 @@ import Button from './Button.astro';
       link.addEventListener('click', (e) => {
         e.preventDefault();
         const href = link.getAttribute('href');
+        if (href) scrollToSection(href);
+      });
+    });
+
+    navCtas.forEach((cta) => {
+      cta.addEventListener('click', (e) => {
+        e.preventDefault();
+        const href = cta.getAttribute('href');
         if (href) scrollToSection(href);
       });
     });
