@@ -398,9 +398,9 @@ import Button from './Button.astro';
   document.addEventListener('DOMContentLoaded', () => {
     const section = document.querySelector('.reserve-section') as HTMLElement;
     const reserveInfo = document.querySelector('.reserve-info') as HTMLElement;
-    const cardWrap = document.querySelector('.reserve-card-wrap') as HTMLElement;
-    const glow = document.querySelector('.hearth-glow') as HTMLElement;
-    const glowSec = document.querySelector('.hearth-glow-secondary') as HTMLElement;
+    const reservationCardWrapper = document.querySelector('.reserve-card-wrap') as HTMLElement;
+    const primaryHearthGlow = document.querySelector('.hearth-glow') as HTMLElement;
+    const secondaryHearthGlow = document.querySelector('.hearth-glow-secondary') as HTMLElement;
 
     if (!section) return;
 
@@ -419,7 +419,7 @@ import Button from './Button.astro';
       },
     });
 
-    gsap.from(cardWrap, {
+    gsap.from(reservationCardWrapper, {
       y: 60,
       scale: 0.96,
       opacity: 0,
@@ -434,7 +434,7 @@ import Button from './Button.astro';
 
     // Backlighting glow softly expands on entry
     gsap.fromTo(
-      [glow, glowSec],
+      [primaryHearthGlow, secondaryHearthGlow],
       { scale: 0.7, opacity: 0 },
       {
         scale: 1.25,
@@ -450,23 +450,23 @@ import Button from './Button.astro';
     );
 
     // Custom GSAP dropdowns
-    const dropdowns = document.querySelectorAll('.custom-select') as NodeListOf<HTMLElement>;
+    const dropdownContainers = document.querySelectorAll('.custom-select') as NodeListOf<HTMLElement>;
 
-    dropdowns.forEach((dropdown) => {
-      const trigger = dropdown.querySelector('.custom-select-trigger') as HTMLElement;
-      const options = dropdown.querySelector('.custom-select-options') as HTMLElement;
-      const label = dropdown.querySelector('.custom-select-label') as HTMLElement;
-      const arrow = dropdown.querySelector('.custom-select-arrow') as HTMLElement;
-      const hiddenInput = dropdown.querySelector('input[type="hidden"]') as HTMLInputElement;
-      const optionEls = dropdown.querySelectorAll(
+    dropdownContainers.forEach((dropdownContainer) => {
+      const dropdownTriggerButton = dropdownContainer.querySelector('.custom-select-trigger') as HTMLElement;
+      const dropdownOptionsPanel = dropdownContainer.querySelector('.custom-select-options') as HTMLElement;
+      const dropdownLabelElement = dropdownContainer.querySelector('.custom-select-label') as HTMLElement;
+      const dropdownArrowIcon = dropdownContainer.querySelector('.custom-select-arrow') as HTMLElement;
+      const hiddenInput = dropdownContainer.querySelector('input[type="hidden"]') as HTMLInputElement;
+      const optionElements = dropdownContainer.querySelectorAll(
         '.custom-select-option',
       ) as NodeListOf<HTMLElement>;
 
-      let isOpen = false;
+      let isDropdownOpen = false;
 
       // GSAP tween for dropdown opening (opacity + y, NO scale)
       const openTween = gsap.fromTo(
-        options,
+        dropdownOptionsPanel,
         { opacity: 0, y: -6 },
         {
           opacity: 1,
@@ -476,13 +476,13 @@ import Button from './Button.astro';
           easeReverse: 'power2.in',
           paused: true,
           onReverseComplete: () => {
-            options.style.display = 'none';
+            dropdownOptionsPanel.style.display = 'none';
           },
         },
       );
 
       // Arrow rotation tween
-      const arrowTween = gsap.to(arrow, {
+      const arrowTween = gsap.to(dropdownArrowIcon, {
         rotation: 180,
         duration: 0.3,
         ease: 'power2.out',
@@ -490,63 +490,63 @@ import Button from './Button.astro';
       });
 
       function openDropdown() {
-        if (isOpen) return;
-        isOpen = true;
-        trigger.setAttribute('aria-expanded', 'true');
-        options.style.display = 'block';
+        if (isDropdownOpen) return;
+        isDropdownOpen = true;
+        dropdownTriggerButton.setAttribute('aria-expanded', 'true');
+        dropdownOptionsPanel.style.display = 'block';
         openTween.restart();
         arrowTween.play();
       }
 
       function closeDropdown() {
-        if (!isOpen) return;
-        isOpen = false;
-        trigger.setAttribute('aria-expanded', 'false');
+        if (!isDropdownOpen) return;
+        isDropdownOpen = false;
+        dropdownTriggerButton.setAttribute('aria-expanded', 'false');
         openTween.timeScale(2).reverse();
         arrowTween.timeScale(2).reverse();
       }
 
-      trigger.addEventListener('click', (e) => {
-        e.stopPropagation();
-        isOpen ? closeDropdown() : openDropdown();
+      dropdownTriggerButton.addEventListener('click', (clickEvent) => {
+        clickEvent.stopPropagation();
+        isDropdownOpen ? closeDropdown() : openDropdown();
       });
 
-      optionEls.forEach((opt) => {
-        opt.addEventListener('click', () => {
-          const value = opt.dataset.value;
-          const text = opt.textContent;
-          label.textContent = text;
-          label.classList.remove('text-secondary-text');
+      optionElements.forEach((optionElement) => {
+        optionElement.addEventListener('click', () => {
+          const value = optionElement.dataset.value;
+          const selectedOptionText = optionElement.textContent;
+          dropdownLabelElement.textContent = selectedOptionText;
+          dropdownLabelElement.classList.remove('text-secondary-text');
           if (hiddenInput) hiddenInput.value = value || '';
-          dropdown.dataset.value = value || '';
+          dropdownContainer.dataset.value = value || '';
           closeDropdown();
         });
       });
 
-      document.addEventListener('click', (e) => {
-        if (!dropdown.contains(e.target as Node) && isOpen) {
+      document.addEventListener('click', (clickEvent) => {
+        if (!dropdownContainer.contains(clickEvent.target as Node) && isDropdownOpen) {
           closeDropdown();
         }
       });
     });
 
     // Custom GSAP date picker
-    const dtEl = document.querySelector('.custom-datetime');
-    if (dtEl) {
-      const trigger = dtEl.querySelector('.custom-dt-trigger') as HTMLElement;
-      const panel = dtEl.querySelector('.custom-dt-panel') as HTMLElement;
-      const label = dtEl.querySelector('.custom-dt-label') as HTMLElement;
-      const hiddenInput = dtEl.querySelector('input[type="hidden"]') as HTMLInputElement;
-      const monthLabel = dtEl.querySelector('.dt-month-label') as HTMLElement;
-      const daysGrid = dtEl.querySelector('.dt-days') as HTMLElement;
-      const prevBtn = dtEl.querySelector('.dt-month-prev') as HTMLElement;
-      const nextBtn = dtEl.querySelector('.dt-month-next') as HTMLElement;
-      const hourSelect = dtEl.querySelector('.dt-hour') as HTMLSelectElement;
-      const minuteSelect = dtEl.querySelector('.dt-minute') as HTMLSelectElement;
-      const ampmBtn = dtEl.querySelector('.dt-ampm') as HTMLElement;
-      const doneBtn = dtEl.querySelector('.dt-done') as HTMLElement;
+    const dateTimeContainer = document.querySelector('.custom-datetime');
+    if (dateTimeContainer) {
+      const dateTimeTriggerButton = dateTimeContainer.querySelector('.custom-dt-trigger') as HTMLElement;
+      const calendarPanelElement = dateTimeContainer.querySelector('.custom-dt-panel') as HTMLElement;
+      const dateTimeLabelElement = dateTimeContainer.querySelector('.custom-dt-label') as HTMLElement;
+      const hiddenInput = dateTimeContainer.querySelector('input[type="hidden"]') as HTMLInputElement;
+      const calendarMonthLabel = dateTimeContainer.querySelector('.dt-month-label') as HTMLElement;
+      const calendarDaysGrid = dateTimeContainer.querySelector('.dt-days') as HTMLElement;
+      const previousMonthButton = dateTimeContainer.querySelector('.dt-month-prev') as HTMLElement;
+      const nextMonthButton = dateTimeContainer.querySelector('.dt-month-next') as HTMLElement;
+      const hourSelectElement = dateTimeContainer.querySelector('.dt-hour') as HTMLSelectElement;
+      const minuteSelectElement = dateTimeContainer.querySelector('.dt-minute') as HTMLSelectElement;
+      const amPmToggleButton = dateTimeContainer.querySelector('.dt-ampm') as HTMLElement;
+      const confirmSelectionButton = dateTimeContainer.querySelector('.dt-done') as HTMLElement;
 
-      let dtOpen = false;
+      let isCalendarOpen = false;
       let viewedMonth = new Date().getMonth();
       let viewedYear = new Date().getFullYear();
       let selectedDate: Date | null = null;
@@ -555,20 +555,20 @@ import Button from './Button.astro';
       let selectedAmPm = 'PM';
 
       // Populate time selects
-      for (let h = 1; h <= 12; h++) {
-        const opt = document.createElement('option');
-        opt.value = String(h);
-        opt.textContent = h.toString().padStart(2, '0');
-        if (h === selectedHour) opt.selected = true;
-        hourSelect.appendChild(opt);
+      for (let hourNumber = 1; hourNumber <= 12; hourNumber++) {
+        const optionElement = document.createElement('option');
+        optionElement.value = String(hourNumber);
+        optionElement.textContent = hourNumber.toString().padStart(2, '0');
+        if (hourNumber === selectedHour) optionElement.selected = true;
+        hourSelectElement.appendChild(optionElement);
       }
 
-      for (let m = 0; m < 60; m += 15) {
-        const opt = document.createElement('option');
-        opt.value = String(m);
-        opt.textContent = m.toString().padStart(2, '0');
-        if (m === selectedMinute) opt.selected = true;
-        minuteSelect.appendChild(opt);
+      for (let minuteNumber = 0; minuteNumber < 60; minuteNumber += 15) {
+        const optionElement = document.createElement('option');
+        optionElement.value = String(minuteNumber);
+        optionElement.textContent = minuteNumber.toString().padStart(2, '0');
+        if (minuteNumber === selectedMinute) optionElement.selected = true;
+        minuteSelectElement.appendChild(optionElement);
       }
 
       const monthNames = [
@@ -587,55 +587,55 @@ import Button from './Button.astro';
       ];
 
       function renderCalendar() {
-        monthLabel.textContent = `${monthNames[viewedMonth]} ${viewedYear}`;
+        calendarMonthLabel.textContent = `${monthNames[viewedMonth]} ${viewedYear}`;
 
         const firstDay = new Date(viewedYear, viewedMonth, 1).getDay();
         const daysInMonth = new Date(viewedYear, viewedMonth + 1, 0).getDate();
         const today = new Date();
 
-        daysGrid.innerHTML = '';
+        calendarDaysGrid.innerHTML = '';
 
         for (let i = 0; i < firstDay; i++) {
           const empty = document.createElement('div');
-          daysGrid.appendChild(empty);
+          calendarDaysGrid.appendChild(empty);
         }
 
-        for (let d = 1; d <= daysInMonth; d++) {
-          const dayEl = document.createElement('button');
-          dayEl.type = 'button';
-          dayEl.className =
+        for (let dayOfMonth = 1; dayOfMonth <= daysInMonth; dayOfMonth++) {
+          const dayButtonElement = document.createElement('button');
+          dayButtonElement.type = 'button';
+          dayButtonElement.className =
             'dt-day text-center font-sans text-sm w-full aspect-square rounded-[8px] flex items-center justify-center cursor-pointer transition-colors duration-150';
-          dayEl.textContent = String(d);
+          dayButtonElement.textContent = String(dayOfMonth);
 
-          const dateObj = new Date(viewedYear, viewedMonth, d);
+          const dateObj = new Date(viewedYear, viewedMonth, dayOfMonth);
           const isCurrentDay = dateObj.toDateString() === today.toDateString();
-          const isSel = selectedDate && dateObj.toDateString() === selectedDate.toDateString();
+          const isSelectedDate = selectedDate && dateObj.toDateString() === selectedDate.toDateString();
 
-          if (isSel) {
-            dayEl.classList.add('bg-brand-mint', 'text-canvas-black', 'font-semibold');
+          if (isSelectedDate) {
+            dayButtonElement.classList.add('bg-brand-mint', 'text-canvas-black', 'font-semibold');
           } else if (isCurrentDay) {
-            dayEl.classList.add('border', 'border-brand-mint/40', 'text-brand-mint');
+            dayButtonElement.classList.add('border', 'border-brand-mint/40', 'text-brand-mint');
           } else {
-            dayEl.classList.add(
+            dayButtonElement.classList.add(
               'text-hazard-white/80',
               'hover:bg-white/5',
               'hover:text-brand-mint',
             );
           }
 
-          dayEl.addEventListener('click', (e) => {
-            e.stopPropagation();
+          dayButtonElement.addEventListener('click', (clickEvent) => {
+            clickEvent.stopPropagation();
             selectedDate = dateObj;
             renderCalendar();
           });
 
-          daysGrid.appendChild(dayEl);
+          calendarDaysGrid.appendChild(dayButtonElement);
         }
       }
 
       // Panel open/close tween
       const dtPanelTween = gsap.fromTo(
-        panel,
+        calendarPanelElement,
         { opacity: 0, y: -6 },
         {
           opacity: 1,
@@ -645,13 +645,13 @@ import Button from './Button.astro';
           easeReverse: 'power2.in',
           paused: true,
           onReverseComplete: () => {
-            panel.style.display = 'none';
+            calendarPanelElement.style.display = 'none';
           },
         },
       );
 
       function staggerDayCells() {
-        const cells = daysGrid.querySelectorAll('.dt-day');
+        const cells = calendarDaysGrid.querySelectorAll('.dt-day');
         if (cells.length) {
           gsap.fromTo(
             cells,
@@ -670,29 +670,29 @@ import Button from './Button.astro';
       }
 
       function openDtPanel() {
-        if (dtOpen) return;
-        dtOpen = true;
-        trigger.setAttribute('aria-expanded', 'true');
+        if (isCalendarOpen) return;
+        isCalendarOpen = true;
+        dateTimeTriggerButton.setAttribute('aria-expanded', 'true');
         renderCalendar();
-        panel.style.display = 'block';
+        calendarPanelElement.style.display = 'block';
         dtPanelTween.restart();
         staggerDayCells();
       }
 
       function closeDtPanel() {
-        if (!dtOpen) return;
-        dtOpen = false;
-        trigger.setAttribute('aria-expanded', 'false');
+        if (!isCalendarOpen) return;
+        isCalendarOpen = false;
+        dateTimeTriggerButton.setAttribute('aria-expanded', 'false');
         dtPanelTween.timeScale(2).reverse();
       }
 
-      trigger.addEventListener('click', (e) => {
-        e.stopPropagation();
-        dtOpen ? closeDtPanel() : openDtPanel();
+      dateTimeTriggerButton.addEventListener('click', (clickEvent) => {
+        clickEvent.stopPropagation();
+        isCalendarOpen ? closeDtPanel() : openDtPanel();
       });
 
-      prevBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
+      previousMonthButton.addEventListener('click', (clickEvent) => {
+        clickEvent.stopPropagation();
         viewedMonth--;
         if (viewedMonth < 0) {
           viewedMonth = 11;
@@ -700,14 +700,14 @@ import Button from './Button.astro';
         }
         renderCalendar();
         gsap.fromTo(
-          daysGrid.querySelectorAll('.dt-day'),
+          calendarDaysGrid.querySelectorAll('.dt-day'),
           { opacity: 0, x: -10 },
           { opacity: 1, x: 0, duration: 0.3, stagger: 0.015, ease: 'power2.out', clearProps: 'x' },
         );
       });
 
-      nextBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
+      nextMonthButton.addEventListener('click', (clickEvent) => {
+        clickEvent.stopPropagation();
         viewedMonth++;
         if (viewedMonth > 11) {
           viewedMonth = 0;
@@ -715,42 +715,42 @@ import Button from './Button.astro';
         }
         renderCalendar();
         gsap.fromTo(
-          daysGrid.querySelectorAll('.dt-day'),
+          calendarDaysGrid.querySelectorAll('.dt-day'),
           { opacity: 0, x: 10 },
           { opacity: 1, x: 0, duration: 0.3, stagger: 0.015, ease: 'power2.out', clearProps: 'x' },
         );
       });
 
-      ampmBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
+      amPmToggleButton.addEventListener('click', (clickEvent) => {
+        clickEvent.stopPropagation();
         selectedAmPm = selectedAmPm === 'PM' ? 'AM' : 'PM';
-        ampmBtn.textContent = selectedAmPm;
+        amPmToggleButton.textContent = selectedAmPm;
       });
 
-      doneBtn.addEventListener('click', () => {
+      confirmSelectionButton.addEventListener('click', () => {
         if (!selectedDate) return;
 
-        const hour = parseInt(hourSelect.value);
-        const minute = parseInt(minuteSelect.value);
+        const hour = parseInt(hourSelectElement.value);
+        const minute = parseInt(minuteSelectElement.value);
         const hour24 =
           selectedAmPm === 'PM' ? (hour === 12 ? 12 : hour + 12) : hour === 12 ? 0 : hour;
 
-        const dt = new Date(selectedDate);
-        dt.setHours(hour24, minute, 0, 0);
+        const selectedDateTimeObject = new Date(selectedDate);
+        selectedDateTimeObject.setHours(hour24, minute, 0, 0);
 
-        const monthShort = dt.toLocaleString('default', { month: 'short' });
-        const day = dt.getDate();
+        const monthShort = selectedDateTimeObject.toLocaleString('default', { month: 'short' });
+        const day = selectedDateTimeObject.getDate();
         const hDisplay = hour.toString().padStart(2, '0');
         const mDisplay = minute.toString().padStart(2, '0');
-        label.textContent = `${monthShort} ${day}, ${hDisplay}:${mDisplay} ${selectedAmPm}`;
-        label.classList.remove('text-secondary-text');
-        hiddenInput.value = dt.toISOString();
+        dateTimeLabelElement.textContent = `${monthShort} ${day}, ${hDisplay}:${mDisplay} ${selectedAmPm}`;
+        dateTimeLabelElement.classList.remove('text-secondary-text');
+        hiddenInput.value = selectedDateTimeObject.toISOString();
 
         closeDtPanel();
       });
 
-      document.addEventListener('click', (e) => {
-        if (!dtEl.contains(e.target as Node) && dtOpen) {
+      document.addEventListener('click', (clickEvent) => {
+        if (!dateTimeContainer.contains(clickEvent.target as Node) && isCalendarOpen) {
           closeDtPanel();
         }
       });

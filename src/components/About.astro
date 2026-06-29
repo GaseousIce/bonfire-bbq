@@ -81,23 +81,23 @@ const timelineEvents = [
         <!-- Timeline Cards -->
         <div class="flex flex-col gap-8 w-full z-10">
           {
-            timelineEvents.map((event) => (
+            timelineEvents.map((timelineEvent) => (
               <div class="relative flex flex-col md:flex-row gap-4 md:gap-8 items-start timeline-item">
                 {/* Spine Dot (centered on the spine line) */}
                 <div class="absolute left-[-6px] md:left-[-30px] top-2.5 w-3 h-3 rounded-full border border-brand-purple/60 bg-canvas-black z-20 timeline-dot" />
 
                 {/* Left Rail Timestamp */}
                 <div class="flex items-center gap-3 md:w-20 md:flex-shrink-0 md:justify-end text-left md:text-right font-mono text-[11px] font-bold text-brand-mint tracking-[1.5px] uppercase pt-1 timeline-time">
-                  <span>{event.time}</span>
+                  <span>{timelineEvent.time}</span>
                 </div>
 
                 {/* Content Card */}
                 <div
                   class={`timeline-card w-full p-6 md:p-8 rounded-[20px] border transition-[border-color] duration-300 group cursor-default relative overflow-hidden
                 ${
-                  event.type === 'mint'
+                  timelineEvent.type === 'mint'
                     ? 'bg-brand-mint text-canvas-black border-transparent'
-                    : event.type === 'purple'
+                    : timelineEvent.type === 'purple'
                       ? 'bg-brand-purple text-hazard-white border-transparent'
                       : 'bg-surface-slate text-hazard-white border-white/10 hover:border-white/20'
                 }`}
@@ -105,28 +105,28 @@ const timelineEvents = [
                   <div class="flex items-baseline justify-between mb-3">
                     <span
                       class={`font-mono text-[10px] uppercase tracking-[1.5px] font-semibold 
-                    ${event.type === 'mint' ? 'text-canvas-black/70' : 'text-brand-mint'}`}
+                    ${timelineEvent.type === 'mint' ? 'text-canvas-black/70' : 'text-brand-mint'}`}
                     >
-                      {event.tag}
+                      {timelineEvent.tag}
                     </span>
                   </div>
                   <h3
                     class={`font-sans text-xl md:text-2xl font-bold tracking-tight mb-2 group-hover:text-link-blue transition-colors duration-180
-                  ${event.type === 'mint' ? 'text-canvas-black' : 'text-hazard-white'}`}
+                  ${timelineEvent.type === 'mint' ? 'text-canvas-black' : 'text-hazard-white'}`}
                   >
-                    {event.title}
+                    {timelineEvent.title}
                   </h3>
                   <p
                     class={`text-xs md:text-sm font-sans leading-relaxed
                   ${
-                    event.type === 'mint'
+                    timelineEvent.type === 'mint'
                       ? 'text-canvas-black/80'
-                      : event.type === 'purple'
+                      : timelineEvent.type === 'purple'
                         ? 'text-white/80'
                         : 'text-hazard-white/70'
                   }`}
                   >
-                    {event.desc}
+                    {timelineEvent.desc}
                   </p>
                 </div>
               </div>
@@ -231,10 +231,10 @@ const timelineEvents = [
       );
 
       // 2. Interactive Scroll-Driven Reveal for Cards, Timestamps, and Dots
-      timelineItems.forEach((item) => {
-        const card = item.querySelector('.timeline-card');
-        const dot = item.querySelector('.timeline-dot');
-        const time = item.querySelector('.timeline-time');
+      timelineItems.forEach((timelineItemElement) => {
+        const cardElement = timelineItemElement.querySelector('.timeline-card');
+        const dotElement = timelineItemElement.querySelector('.timeline-dot');
+        const timestampElement = timelineItemElement.querySelector('.timeline-time');
 
         // Responsive horizontal slide offset based on window size
         const isDesktop = window.innerWidth >= 768;
@@ -242,7 +242,7 @@ const timelineEvents = [
 
         const itemTimeline = gsap.timeline({
           scrollTrigger: {
-            trigger: item,
+            trigger: timelineItemElement,
             start: 'top 90%',
             end: 'top 55%',
             scrub: 1,
@@ -250,18 +250,18 @@ const timelineEvents = [
           },
         });
 
-        if (card) {
+        if (cardElement) {
           itemTimeline.fromTo(
-            card,
+            cardElement,
             { opacity: 0, x: startX, scale: 0.9 },
             { opacity: 1, x: 0, scale: 1, ease: 'none', duration: 1 },
             0,
           );
         }
 
-        if (dot) {
+        if (dotElement) {
           itemTimeline.fromTo(
-            dot,
+            dotElement,
             {
               backgroundColor: '#131313',
               borderColor: 'rgba(82, 0, 255, 0.6)',
@@ -278,8 +278,8 @@ const timelineEvents = [
           );
         }
 
-        if (time) {
-          itemTimeline.fromTo(time, { opacity: 0.3 }, { opacity: 1, ease: 'none', duration: 1 }, 0);
+        if (timestampElement) {
+          itemTimeline.fromTo(timestampElement, { opacity: 0.3 }, { opacity: 1, ease: 'none', duration: 1 }, 0);
         }
       });
     }

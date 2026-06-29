@@ -180,8 +180,8 @@ const currentYear = new Date().getFullYear();
     };
 
     navLinks.forEach((link) => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
+      link.addEventListener('click', (clickEvent) => {
+        clickEvent.preventDefault();
         const href = link.getAttribute('href');
         if (href) scrollToSection(href);
       });
@@ -230,12 +230,12 @@ const currentYear = new Date().getFullYear();
       }
     };
 
-    const openModal = (type: string) => {
-      const data = legalTexts[type];
-      if (!data || !legalModal || !legalModalTitle || !legalModalContent || !legalModalCard) return;
+    const openModal = (policyType: string) => {
+      const policyDetails = legalTexts[policyType];
+      if (!policyDetails || !legalModal || !legalModalTitle || !legalModalContent || !legalModalCard) return;
       
-      legalModalTitle.textContent = data.title;
-      legalModalContent.innerHTML = data.html;
+      legalModalTitle.textContent = policyDetails.title;
+      legalModalContent.innerHTML = policyDetails.html;
       
       legalModal.classList.remove('opacity-0', 'pointer-events-none');
       legalModal.classList.add('opacity-100', 'pointer-events-auto');
@@ -265,10 +265,10 @@ const currentYear = new Date().getFullYear();
       if (smoother) smoother.paused(false);
     };
 
-    modalTriggers.forEach((btn) => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const modalType = (btn as HTMLElement).getAttribute('data-modal');
+    modalTriggers.forEach((triggerButton) => {
+      triggerButton.addEventListener('click', (clickEvent) => {
+        clickEvent.preventDefault();
+        const modalType = (triggerButton as HTMLElement).getAttribute('data-modal');
         if (modalType) openModal(modalType);
       });
     });
@@ -277,13 +277,13 @@ const currentYear = new Date().getFullYear();
     if (legalModalDone) legalModalDone.addEventListener('click', closeModal);
 
     if (legalModal) {
-      legalModal.addEventListener('click', (e) => {
-        if (e.target === legalModal) closeModal();
+      legalModal.addEventListener('click', (clickEvent) => {
+        if (clickEvent.target === legalModal) closeModal();
       });
     }
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && legalModal?.classList.contains('opacity-100')) {
+    document.addEventListener('keydown', (keyboardEvent) => {
+      if (keyboardEvent.key === 'Escape' && legalModal?.classList.contains('opacity-100')) {
         closeModal();
       }
     });

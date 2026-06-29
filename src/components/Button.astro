@@ -14,7 +14,7 @@ interface Props {
 
 const { as = 'a', href, type, variant = 'primary', class: className = '' } = Astro.props;
 
-const Tag = as;
+const ButtonTag = as;
 
 const baseClasses =
   'hover-button font-mono font-bold uppercase rounded-full border transition-colors duration-300 inline-flex items-center justify-center cursor-pointer';
@@ -27,13 +27,13 @@ const variantClasses =
 const allClasses = `${baseClasses} ${variantClasses} ${className}`.trim();
 ---
 
-<Tag
+<ButtonTag
   href={as === 'a' ? href : undefined}
   type={as === 'button' ? type || 'button' : undefined}
   class={allClasses}
 >
   <slot />
-</Tag>
+</ButtonTag>
 
 <script>
   import { gsap } from 'gsap';
@@ -41,10 +41,10 @@ const allClasses = `${baseClasses} ${variantClasses} ${className}`.trim();
   document.addEventListener('DOMContentLoaded', () => {
     const buttons = document.querySelectorAll('.hover-button');
 
-    buttons.forEach((button) => {
-      const btnElement = button as HTMLElement;
+    buttons.forEach((buttonNode) => {
+      const buttonElement = buttonNode as HTMLElement;
 
-      const hoverTween = gsap.to(btnElement, {
+      const hoverTween = gsap.to(buttonElement, {
         scale: 1.2,
         duration: 0.6,
         ease: 'elastic.out(1, 0.5)',
@@ -52,10 +52,10 @@ const allClasses = `${baseClasses} ${variantClasses} ${className}`.trim();
         paused: true,
       });
 
-      btnElement.addEventListener('mouseenter', () => {
+      buttonElement.addEventListener('mouseenter', () => {
         hoverTween.timeScale(1).play();
       });
-      btnElement.addEventListener('mouseleave', () => {
+      buttonElement.addEventListener('mouseleave', () => {
         hoverTween.timeScale(1.8).reverse();
       });
     });
