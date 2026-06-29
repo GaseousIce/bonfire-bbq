@@ -115,15 +115,16 @@ const galleryItems = [
 <script>
   import { gsap } from 'gsap';
 
+  let mediaMatcher = gsap.matchMedia();
+
   document.addEventListener('DOMContentLoaded', () => {
+    mediaMatcher.revert();
     const pinContainer = document.querySelector('.gallery-pin-container') as HTMLElement;
     const galleryCards = gsap.utils.toArray('.gallery-card') as HTMLElement[];
 
     if (!pinContainer || galleryCards.length === 0) return;
 
-    let mm = gsap.matchMedia();
-
-    mm.add(
+    mediaMatcher.add(
       {
         isDesktop: '(min-width: 768px)',
         isMobile: '(max-width: 767px)',

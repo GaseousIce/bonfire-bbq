@@ -203,7 +203,10 @@ const timelineEvents = [
 <script>
   import { gsap } from 'gsap';
 
+  let mediaMatcher = gsap.matchMedia();
+
   document.addEventListener('DOMContentLoaded', () => {
+    mediaMatcher.revert();
     const timelineItems = gsap.utils.toArray('.timeline-item') as HTMLElement[];
 
     if (timelineItems.length > 0) {
@@ -286,9 +289,7 @@ const timelineEvents = [
     const frontImage = document.querySelector('.image-layer-front');
     const textCard = document.querySelector('.parallax-text');
 
-    let mm = gsap.matchMedia();
-
-    mm.add('(min-width: 1024px)', () => {
+    mediaMatcher.add('(min-width: 1024px)', () => {
       // Back image scrolls slower upwards
       gsap.fromTo(
         backImage,

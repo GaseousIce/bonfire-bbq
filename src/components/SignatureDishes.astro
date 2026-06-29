@@ -190,7 +190,10 @@ const dishes = [
 <script>
   import { gsap } from 'gsap';
 
+  let mediaMatcher = gsap.matchMedia();
+
   document.addEventListener('DOMContentLoaded', () => {
+    mediaMatcher.revert();
     const pinSection = document.querySelector('.dishes-pin-container') as HTMLElement;
     const scrollTrack = document.querySelector('.dishes-scroll-track') as HTMLElement;
     const dishCards = gsap.utils.toArray('.dish-card') as HTMLElement[];
@@ -199,9 +202,8 @@ const dishes = [
 
     // We only execute horizontal scroll pin on desktop screen sizes (> 768px)
     // On mobile we let it behave as a standard swipeable container
-    let mm = gsap.matchMedia();
 
-    mm.add(
+    mediaMatcher.add(
       {
         isDesktop: '(min-width: 768px)',
         isMobile: '(max-width: 767px)',
