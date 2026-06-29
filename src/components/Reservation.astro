@@ -691,6 +691,8 @@ import Button from './Button.astro';
         isCalendarOpen ? closeCalendarPanel() : openCalendarPanel();
       });
 
+      let monthNavTween: GSAPTween | null = null;
+
       previousMonthButton.addEventListener('click', (clickEvent) => {
         clickEvent.stopPropagation();
         viewedMonth--;
@@ -699,7 +701,8 @@ import Button from './Button.astro';
           viewedYear--;
         }
         renderCalendar();
-        gsap.fromTo(
+        if (monthNavTween) monthNavTween.kill();
+        monthNavTween = gsap.fromTo(
           calendarDaysGrid.querySelectorAll('.dt-day'),
           { opacity: 0, x: -10 },
           { opacity: 1, x: 0, duration: 0.3, stagger: 0.015, ease: 'power2.out', clearProps: 'x' },
@@ -714,7 +717,8 @@ import Button from './Button.astro';
           viewedYear++;
         }
         renderCalendar();
-        gsap.fromTo(
+        if (monthNavTween) monthNavTween.kill();
+        monthNavTween = gsap.fromTo(
           calendarDaysGrid.querySelectorAll('.dt-day'),
           { opacity: 0, x: 10 },
           { opacity: 1, x: 0, duration: 0.3, stagger: 0.015, ease: 'power2.out', clearProps: 'x' },
