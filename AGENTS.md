@@ -24,6 +24,11 @@ Before writing, modifying, or auditing code, read the instructions in the projec
 
 ## 4. Git Commits and Branches
 - Use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) for commit messages and use conventional names for branches.
+- Write **meaningful, descriptive, and technically precise commit messages** that accurately capture the exact intent, scope, and impact of the changes. Avoid generic or vague summaries.
+  - Good examples:
+    - `fix(scroll): defer ScrollTrigger.refresh after smoother init to fix trigger positions`
+    - `refactor(components): deduplicate ScrollTrigger plugins and throttle logo hover animations`
+    - `feat(reservation): replace native selects with custom GSAP animated dropdowns`
 - **NEVER** create or run commit commands on your own; write/make commits ONLY when explicitly asked by the user. Under no circumstances should you commit code unless specifically instructed.
 
 ## 5. Token Savings (RTK)
