@@ -692,7 +692,7 @@ import Button from './Button.astro';
         isCalendarOpen ? closeCalendarPanel() : openCalendarPanel();
       });
 
-      let monthNavTween: GSAPTween | null = null;
+      let monthNavTween: gsap.core.Tween | null = null;
 
       previousMonthButton.addEventListener('click', (clickEvent) => {
         clickEvent.stopPropagation();

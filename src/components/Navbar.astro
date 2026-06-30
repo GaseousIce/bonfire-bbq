@@ -155,7 +155,7 @@ import Button from './Button.astro';
   document.addEventListener('DOMContentLoaded', () => {
     const navbarWrapper = document.querySelector('.navbar-wrapper');
     const navbarContainer = document.querySelector('.navbar-container');
-    const logo = document.querySelector('.brand-logo');
+    const logo = document.querySelector('.brand-logo') as HTMLElement | null;
     const navLinkElements = document.querySelectorAll('.nav-link');
     const navCtaButtons = document.querySelectorAll('.nav-cta');
     const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
