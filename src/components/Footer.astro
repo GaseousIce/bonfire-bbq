@@ -170,31 +170,11 @@ const currentYear = new Date().getFullYear();
     const footerCtrl = new AbortController();
     const navLinks = document.querySelectorAll('.footer-nav-link');
 
-    const scrollToSection = (href: string) => {
-      const smoother = window.__smoother;
-      if (href === '#hero') {
-        if (smoother) {
-          smoother.scrollTo(0, false);
-        } else {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-        return;
-      }
-      const targetSection = document.querySelector(href);
-      if (!targetSection) return;
-      if (smoother) {
-        const rect = targetSection.getBoundingClientRect();
-        smoother.scrollTo(smoother.scrollTop() + rect.top - 80, false);
-      } else {
-        targetSection.scrollIntoView({ behavior: 'smooth' });
-      }
-    };
-
     navLinks.forEach((footerNavLink) => {
       footerNavLink.addEventListener('click', (clickEvent) => {
         clickEvent.preventDefault();
         const href = footerNavLink.getAttribute('href');
-        if (href) scrollToSection(href);
+        if (href && window.__pageTransition) window.__pageTransition(href);
       });
     });
 

@@ -232,54 +232,20 @@ import Button from './Button.astro';
       mobileDrawer?.classList.add('translate-x-full');
     });
 
-    // 5. Nav link & CTA clicks via smoother (fixes ScrollSmoother conflict)
-    const scrollToSection = (href: string) => {
-      const smoother = window.__smoother;
-      if (href === '#hero') {
-        if (smoother) {
-          smoother.scrollTo(0, false);
-        } else {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-        return;
-      }
-      const targetSection = document.querySelector(href);
-      if (!targetSection) return;
-      if (smoother) {
-        const rect = targetSection.getBoundingClientRect();
-        smoother.scrollTo(smoother.scrollTop() + rect.top - 80, false);
-      } else {
-        targetSection.scrollIntoView({ behavior: 'smooth' });
-      }
+    // 5. Nav link & CTA clicks via page transition
+    const onNavClick = (clickEvent: Event) => {
+      clickEvent.preventDefault();
+      const el = clickEvent.currentTarget as HTMLElement | null;
+      const href = el?.getAttribute('href');
+      if (href && window.__pageTransition) window.__pageTransition(href);
     };
 
-    logo?.addEventListener('click', (clickEvent) => {
-      clickEvent.preventDefault();
-      const href = logo.getAttribute('href');
-      if (href) scrollToSection(href);
-    });
-
-    navLinkElements.forEach((navLinkElement) => {
-      navLinkElement.addEventListener('click', (clickEvent) => {
-        clickEvent.preventDefault();
-        const href = navLinkElement.getAttribute('href');
-        if (href) scrollToSection(href);
-      });
-    });
-
-    navCtaButtons.forEach((navCtaButton) => {
-      navCtaButton.addEventListener('click', (clickEvent) => {
-        clickEvent.preventDefault();
-        const href = navCtaButton.getAttribute('href');
-        if (href) scrollToSection(href);
-      });
-    });
-
-    mobileNavLinks.forEach((mobileNavLink) => {
-      mobileNavLink.addEventListener('click', (clickEvent) => {
-        clickEvent.preventDefault();
-        const href = mobileNavLink.getAttribute('href');
-        if (href) scrollToSection(href);
+    logo?.addEventListener('click', onNavClick);
+    navLinkElements.forEach((el) => el.addEventListener('click', onNavClick));
+    navCtaButtons.forEach((el) => el.addEventListener('click', onNavClick));
+    mobileNavLinks.forEach((el) => {
+      el.addEventListener('click', (e) => {
+        onNavClick(e);
         mobileDrawer?.classList.add('translate-x-full');
       });
     });

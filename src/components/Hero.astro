@@ -313,34 +313,14 @@ import { heroTandoor } from '../assets/images';
       },
     );
 
-    // 4. Smooth scrolling for Hero CTA buttons
+    // 4. Hero CTA buttons via page transition
     const heroCtaButtons = document.querySelectorAll('.hero-cta-btn');
-
-    const scrollToSection = (href: string) => {
-      const smoother = window.__smoother;
-      if (href === '#hero') {
-        if (smoother) {
-          smoother.scrollTo(0, false);
-        } else {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-        return;
-      }
-      const targetSection = document.querySelector(href);
-      if (!targetSection) return;
-      if (smoother) {
-        const rect = targetSection.getBoundingClientRect();
-        smoother.scrollTo(smoother.scrollTop() + rect.top - 80, false);
-      } else {
-        targetSection.scrollIntoView({ behavior: 'smooth' });
-      }
-    };
 
     heroCtaButtons.forEach((ctaButton) => {
       ctaButton.addEventListener('click', (clickEvent) => {
         clickEvent.preventDefault();
         const href = ctaButton.getAttribute('href');
-        if (href) scrollToSection(href);
+        if (href && window.__pageTransition) window.__pageTransition(href);
       });
     });
   });

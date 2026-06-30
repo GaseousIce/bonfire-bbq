@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import LoadingScreen from '../components/LoadingScreen.astro';
 import Navbar from '../components/Navbar.astro';
+import PageTransition from '../components/PageTransition.astro';
 import { getImage } from 'astro:assets';
 import { heroTandoor } from '../assets/images';
 
@@ -95,15 +96,17 @@ const heroImage = await getImage({
         <slot />
       </div>
     </div>
+    <PageTransition />
     <script>
       import { gsap } from 'gsap';
       import { ScrollTrigger } from 'gsap/ScrollTrigger';
       import { ScrollSmoother } from 'gsap/ScrollSmoother';
 
-      // Extend Window so TypeScript recognises window.__smoother
+      // Extend Window so TypeScript recognises global helpers
       declare global {
         interface Window {
           __smoother?: ScrollSmoother;
+          __pageTransition?: (href: string) => void;
         }
       }
 
@@ -111,16 +114,68 @@ const heroImage = await getImage({
 
       ScrollTrigger.normalizeScroll(true);
 
-      // Only run ScrollSmoother on desktop — reduces jank on low-end mobile devices
-      const mediaMatcher = gsap.matchMedia();
-      mediaMatcher.add('(min-width: 768px)', () => {
-        window.__smoother = ScrollSmoother.create({
-          wrapper: '#smooth-wrapper',
-          content: '#smooth-content',
-          smooth: 0.6,
-        });
-        requestAnimationFrame(() => ScrollTrigger.refresh());
+      window.__smoother = ScrollSmoother.create({
+        wrapper: '#smooth-wrapper',
+        content: '#smooth-content',
+        smooth: 0.6,
       });
+      requestAnimationFrame(() => ScrollTrigger.refresh());
+
+      // ── Page transition orchestration ──────────────────────────────
+      let _transitionActive = false;
+
+      window.__pageTransition = (href: string): void => {
+        if (_transitionActive) return;
+        _transitionActive = true;
+
+        const wipePath = document.getElementById('wipe-path') as SVGPathElement | null;
+        const smoother = window.__smoother;
+        if (!wipePath) {
+          _transitionActive = false;
+          return;
+        }
+
+        const HIDDEN = 'M 0,0 L 0,0 Q 0,50 0,100 L 0,100 Z';
+        const COVER = 'M 0,0 L 100,0 Q 108,50 100,100 L 0,100 Z';
+
+        // Phase 1 — curve swipe covers the screen
+        gsap.to(wipePath, {
+          attr: { d: COVER },
+          duration: 0.6,
+          ease: 'power4.inOut',
+          onComplete: () => {
+            // Instant-jump to the target section while hidden
+            if (href === '#hero') {
+              if (smoother) smoother.scrollTo(0, false);
+              else window.scrollTo({ top: 0 });
+            } else {
+              const target = document.querySelector(href);
+              if (target) {
+                if (smoother) {
+                  const rect = target.getBoundingClientRect();
+                  smoother.scrollTo(smoother.scrollTop() + rect.top - 80, false);
+                } else {
+                  target.scrollIntoView();
+                }
+              }
+            }
+
+            ScrollTrigger.refresh();
+
+            // Phase 2 — settle, then reveal
+            gsap.delayedCall(0.15, () => {
+              gsap.to(wipePath, {
+                attr: { d: HIDDEN },
+                duration: 0.6,
+                ease: 'power4.inOut',
+                onComplete: () => {
+                  _transitionActive = false;
+                },
+              });
+            });
+          },
+        });
+      };
     </script>
   </body>
 </html>
