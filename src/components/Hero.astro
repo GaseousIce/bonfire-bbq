@@ -112,55 +112,73 @@ import { heroTandoor } from '../assets/images';
   import { gsap } from 'gsap';
 
   document.addEventListener('DOMContentLoaded', () => {
-    const heroBackgroundWrapper = document.querySelector('.hero-bg-wrap');
+    const heroBackgroundWrapper = document.querySelector('.hero-bg-wrap') as HTMLElement | null;
+    const heroContent = document.querySelector('.hero-content') as HTMLElement | null;
+    const smoke1 = document.querySelector('.smoke-1') as HTMLElement | null;
+    const smoke2 = document.querySelector('.smoke-2') as HTMLElement | null;
+
+    if (!heroBackgroundWrapper || !heroContent || !smoke1 || !smoke2) return;
 
     // ----------------------------------------------------
     // 2. Mouse Parallax (Gentle Depth Movement)
     // ----------------------------------------------------
     const heroSection = document.getElementById('hero');
+    if (!heroSection) return;
+
+    // Cache dimensions to avoid layout thrashing (getBoundingClientRect) on every mousemove
+    let heroWidth = heroSection.offsetWidth;
+    let heroHeight = heroSection.offsetHeight;
+
+    window.addEventListener('resize', () => {
+      heroWidth = heroSection.offsetWidth;
+      heroHeight = heroSection.offsetHeight;
+    });
+
     let mouseX = 0;
     let mouseY = 0;
     let animationFrameId: number | null = null;
 
     const updateParallax = () => {
-      if (!heroSection) return;
-      const { width, height } = heroSection.getBoundingClientRect();
-      const xOffset = mouseX - width / 2;
-      const yOffset = mouseY - height / 2;
+      const xOffset = mouseX - heroWidth / 2;
+      const yOffset = mouseY - heroHeight / 2;
 
-      // Parallax values
+      // Animating x and y together in a single tween prevents transform-string synchronization jitter
       gsap.to(heroBackgroundWrapper, {
         x: -xOffset * 0.025,
         y: -yOffset * 0.025,
         duration: 1.2,
         ease: 'power2.out',
+        overwrite: 'auto',
       });
 
-      gsap.to('.hero-content', {
+      gsap.to(heroContent, {
         x: xOffset * 0.015,
         y: yOffset * 0.015,
         duration: 1.0,
         ease: 'power2.out',
+        overwrite: 'auto',
       });
 
-      gsap.to('.smoke-1', {
+      gsap.to(smoke1, {
         x: xOffset * 0.04,
         y: yOffset * 0.04,
         duration: 1.5,
         ease: 'power1.out',
+        overwrite: 'auto',
       });
 
-      gsap.to('.smoke-2', {
+      gsap.to(smoke2, {
         x: -xOffset * 0.03,
         y: -yOffset * 0.03,
         duration: 1.8,
         ease: 'power1.out',
+        overwrite: 'auto',
       });
 
       animationFrameId = null;
     };
 
-    heroSection?.addEventListener('mousemove', (mouseEvent: MouseEvent) => {
+    heroSection.addEventListener('mousemove', (mouseEvent: MouseEvent) => {
       mouseX = mouseEvent.clientX;
       mouseY = mouseEvent.clientY;
 
@@ -169,18 +187,19 @@ import { heroTandoor } from '../assets/images';
       }
     });
 
-    heroSection?.addEventListener('mouseleave', () => {
+    heroSection.addEventListener('mouseleave', () => {
       if (animationFrameId !== null) {
         cancelAnimationFrame(animationFrameId);
         animationFrameId = null;
       }
 
-      gsap.to([heroBackgroundWrapper, '.hero-content', '.smoke-1', '.smoke-2'], {
+      gsap.to([heroBackgroundWrapper, heroContent, smoke1, smoke2], {
         x: 0,
         y: 0,
         scale: 1,
         duration: 1.5,
         ease: 'power2.out',
+        overwrite: 'auto',
       });
     });
 
