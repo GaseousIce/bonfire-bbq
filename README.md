@@ -23,6 +23,33 @@ Refer to the full specifications in [DESIGN.md](./DESIGN.md) for color palettes,
 
 ---
 
+## ✨ Features & Technical Highlights
+
+This project has been thoroughly audited and polished, achieving high-performance interactions, modern styling, and clean state lifecycles:
+
+### ⚡ Performance & Asset Optimization
+
+- **Dynamic Asset Pipeline**: Harnesses Astro's dynamic asset optimizer (`<Image />`) for multi-width WebP generation and layout shift prevention.
+- **GSAP Vendor Splitting**: Configured Vite's `manualChunks` to split GSAP core and plugins into a dedicated vendor file, promoting stable browser caching.
+- **Layout Thrashing Prevention**: Utilizes `will-change` CSS hints, hardware-accelerated transforms, and `requestAnimationFrame` (RAF) throttling for mousemove parallax animations.
+- **Network Optimization**: Built-in preconnect links for Google Fonts and Unsplash images to reduce DNS lookup latency.
+
+### 🎭 Animation & Interactive UI
+
+- **Cinematic Hero**: Staggered character reveal text, radial vignetted smoke layer (preventing hard edge clipping), and mouse-parallax depth with hearth glow backdrops.
+- **StoryStream (Timeline)**: Vertical feed documenting Bonfire's journey with ScrollTrigger-reactive animations.
+- **Atmosphere Gallery**: Responsive stack reveal gallery (pins and stacks cards on desktop, adapts to a robust grid on mobile devices).
+- **Hearth Reservation**: Interactive booking form powered by custom GSAP-animated calendar date/time pickers and custom dropdown selects that replace standard native controls.
+- **Global Smooth Scroll**: ScrollSmoother integration covering the entire layout, intercepting anchor links (nav, footer, brand, and CTA buttons) for cinematic scroll transitions.
+
+### 🛡️ Engineering & Accessibility
+
+- **Strict Cleanups**: Automated cleanup of global event listeners using `AbortController` in persistent components.
+- **Memory Leak Prevention**: Destruction and garbage collection of orphan GSAP tweens during calendar navigation.
+- **Type Safety**: Strictly typed event parameters and explicit TypeScript casts across all components.
+
+---
+
 ## 🚀 Project Structure
 
 Inside this Astro project, you will find:
@@ -32,22 +59,13 @@ Inside this Astro project, you will find:
 ├── .agents/skills/    # Installed developer skill files (Tailwind, GSAP, etc.)
 ├── public/            # Static assets (images, icons)
 ├── src/
-│   ├── pages/         # Routes (e.g., index.astro)
-│   └── components/    # Reusable components (Button, About, Gallery, Hero, Navbar, Reservation, SignatureDishes, Footer)
+│   ├── assets/        # Local media, images, and brand assets
+│   ├── components/    # Reusable Astro components (Hero, Navbar, About, SignatureDishes, Gallery, Reservation, Footer, Button)
+│   ├── layouts/       # Site shell & head metadata configuration
+│   └── styles/        # Global style sheets (Tailwind imports and custom overrides)
 ├── AGENTS.md          # Coding guidelines and safety rules for AI agents
 └── DESIGN.md          # Full design system specifications & tokens
 ```
-
----
-
-## 🍽️ Web Sections
-
-The single-page experience is structured into the following sections:
-- **Hero**: High-impact entrance with staggered text animations, floating ember canvas, smoke layers, and interactive mouse parallax depth.
-- **StoryStream (About/Timeline)**: Vertical feed documenting Bonfire's charcoal-craft and clay oven journey.
-- **Signature Dishes**: Visual display showcasing our clay-oven and woodfire specialties.
-- **Atmosphere (Gallery)**: A curated visual gallery highlighting Indian culinary and design themes.
-- **Hearth Reservation**: Responsive booking form with time/date pickers and seating preference options, powered by smooth GSAP entrance animations.
 
 ---
 
@@ -55,14 +73,16 @@ The single-page experience is structured into the following sections:
 
 All commands are run from the root of the project:
 
-| Command             | Action                                                |
-| :------------------ | :---------------------------------------------------- |
-| `npm install`       | Installs project dependencies                         |
-| `npm run dev`       | Starts the local dev server at `localhost:4321`       |
-| `npm run build`     | Builds your production-ready site to `./dist/`        |
-| `npm run preview`   | Previews your local production build before deploying |
-| `npm run astro ...` | Runs Astro CLI commands (e.g. `astro add`)            |
-| `graphify update .` | Rebuilds the codebase knowledge graph                 |
+| Command                | Action                                                |
+| :--------------------- | :---------------------------------------------------- |
+| `npm install`          | Installs project dependencies                         |
+| `npm run dev`          | Starts the local dev server at `localhost:4321`       |
+| `npm run build`        | Builds your production-ready site to `./dist/`        |
+| `npm run preview`      | Previews your local production build before deploying |
+| `npm run format`       | Runs Prettier to auto-format src/ components          |
+| `npm run format:check` | Verifies code styling formatting                      |
+| `npm run astro ...`    | Runs Astro CLI commands (e.g. `astro add`)            |
+| `graphify update .`    | Rebuilds the codebase knowledge graph                 |
 
 ---
 
