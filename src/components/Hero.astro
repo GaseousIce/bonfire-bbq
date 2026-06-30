@@ -28,8 +28,11 @@ import { heroTandoor } from '../assets/images';
     </div>
   </div>
 
-  <!-- Drifting Smoke Layers -->
-  <div class="absolute inset-0 pointer-events-none z-10 opacity-20 mix-blend-plus-lighter select-none">
+  <!-- Drifting Smoke Layers (Vignette Boundary Mask) -->
+  <div
+    class="absolute inset-0 pointer-events-none z-10 opacity-20 mix-blend-plus-lighter select-none"
+    style="mask-image: radial-gradient(circle, black 40%, transparent 90%); -webkit-mask-image: radial-gradient(circle, black 40%, transparent 90%);"
+  >
     <div
       class="smoke-layer smoke-1 absolute -inset-[10%] bg-[url('https://images.unsplash.com/photo-1556388275-bb5585725aca?auto=format&fit=crop&w=1200&q=80')] bg-cover"
     >
