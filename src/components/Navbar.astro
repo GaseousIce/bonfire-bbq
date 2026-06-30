@@ -51,13 +51,15 @@ import Button from './Button.astro';
 
     <!-- Right Side CTA -->
     <div class="flex items-center gap-4">
-      <Button
-        href="#reserve"
-        variant="primary"
-        class="nav-cta hidden md:inline-block text-[11px] font-semibold tracking-[1.5px] px-6 py-2.5"
-      >
-        Book Table
-      </Button>
+      <div class="hidden md:block">
+        <Button
+          href="#reserve"
+          variant="primary"
+          class="nav-cta text-[11px] font-semibold tracking-[1.5px] px-6 py-2.5"
+        >
+          Book Table
+        </Button>
+      </div>
 
       <!-- Mobile Menu Toggle -->
       <button
