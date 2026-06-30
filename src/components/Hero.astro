@@ -43,15 +43,15 @@ import { heroTandoor } from '../assets/images';
 
   <!-- Drifting Smoke Layers (Vignette Boundary Mask) -->
   <div
-    class="absolute inset-0 pointer-events-none z-10 opacity-20 mix-blend-plus-lighter select-none"
-    style="mask-image: radial-gradient(circle, black 40%, transparent 90%); -webkit-mask-image: radial-gradient(circle, black 40%, transparent 90%);"
+    class="absolute inset-0 pointer-events-none z-10 opacity-30 md:opacity-20 mix-blend-plus-lighter select-none smoke-container"
+    style="mask-image: radial-gradient(circle, black 30%, transparent 80%); -webkit-mask-image: radial-gradient(circle, black 30%, transparent 80%);"
   >
     <div
-      class="smoke-layer smoke-1 absolute -inset-[10%] bg-[url('https://images.unsplash.com/photo-1556388275-bb5585725aca?auto=format&fit=crop&w=1200&q=80')] bg-cover"
+      class="smoke-layer smoke-1 absolute -inset-[20%] sm:-inset-[10%] bg-[url('https://images.unsplash.com/photo-1556388275-bb5585725aca?auto=format&fit=crop&w=1200&q=80')] bg-cover"
     >
     </div>
     <div
-      class="smoke-layer smoke-2 absolute -inset-[10%] bg-[url('https://images.unsplash.com/photo-1602410086232-0cdfb78b434f?auto=format&fit=crop&w=1200&q=80')] bg-cover"
+      class="smoke-layer smoke-2 absolute -inset-[20%] sm:-inset-[10%] bg-[url('https://images.unsplash.com/photo-1602410086232-0cdfb78b434f?auto=format&fit=crop&w=1200&q=80')] bg-cover"
     >
     </div>
   </div>
@@ -258,24 +258,22 @@ import { heroTandoor } from '../assets/images';
       });
     });
 
-    // 3. Slow smoke drift animation
-    gsap.to(smoke1, {
-      xPercent: 12,
-      yPercent: -8,
-      duration: 25,
-      repeat: -1,
-      yoyo: true,
-      ease: 'sine.inOut',
-    });
+    // 3. Smoke drift animation — continuous organic movement
+    const smokeTl = gsap.timeline({ repeat: -1 });
+    smokeTl
+      .to(smoke1, { xPercent: 18, yPercent: -12, duration: 14, ease: 'sine.inOut' })
+      .to(smoke1, { xPercent: -6, yPercent: 4, duration: 18, ease: 'sine.inOut' })
+      .to(smoke1, { xPercent: 0, yPercent: 0, duration: 16, ease: 'sine.inOut' });
 
-    gsap.to(smoke2, {
-      xPercent: -8,
-      yPercent: 12,
-      duration: 30,
-      repeat: -1,
-      yoyo: true,
-      ease: 'sine.inOut',
-    });
+    const smokeTl2 = gsap.timeline({ repeat: -1 });
+    smokeTl2
+      .to(smoke2, { xPercent: -14, yPercent: 10, duration: 16, ease: 'sine.inOut' })
+      .to(smoke2, { xPercent: 8, yPercent: -6, duration: 14, ease: 'sine.inOut' })
+      .to(smoke2, { xPercent: 0, yPercent: 0, duration: 20, ease: 'sine.inOut' });
+
+    // Subtle scale breathing for volumetric feel
+    gsap.to(smoke1, { scale: 1.08, duration: 12, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+    gsap.to(smoke2, { scale: 1.06, duration: 15, repeat: -1, yoyo: true, ease: 'sine.inOut' });
 
     // 3.2 Background glow pulsing animations
     gsap.fromTo(
