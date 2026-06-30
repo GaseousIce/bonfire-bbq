@@ -102,20 +102,23 @@
           },
           onComplete: () => {
             // Run Hero cinematic entrance inline rather than through custom event
-            const heroBackgroundWrapper = document.querySelector('.hero-bg-wrap');
-            const eyebrow = document.querySelector('.hero-eyebrow');
-            const chars = document.querySelectorAll('.hero-char');
-            const deck = document.querySelector('.hero-deck');
-            const heroCta = document.querySelector('.hero-cta');
-            const scrollDown = document.querySelector('.hero-scroll-down');
+             const heroBackgroundWrapper = document.querySelector('.hero-bg-wrap') as HTMLElement | null;
+             const eyebrow = document.querySelector('.hero-eyebrow');
+             const chars = document.querySelectorAll('.hero-char');
+             const deck = document.querySelector('.hero-deck');
+             const heroCta = document.querySelector('.hero-cta');
+             const scrollDown = document.querySelector('.hero-scroll-down');
 
-            const masterTimeline = gsap.timeline({ defaults: { ease: 'power3.out' } });
+             const bgScale = parseFloat(heroBackgroundWrapper?.dataset.parallaxScale || '1.12');
+             const startScale = bgScale + 0.13;
 
-            masterTimeline.fromTo(
-              heroBackgroundWrapper,
-              { scale: 1.15 },
-              { scale: 1, duration: 2.2, ease: 'power2.out' }
-            );
+             const masterTimeline = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+             masterTimeline.fromTo(
+               heroBackgroundWrapper,
+               { scale: startScale },
+               { scale: bgScale, duration: 2.2, ease: 'power2.out' }
+             );
 
             masterTimeline.to(
               chars,
