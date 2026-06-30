@@ -72,9 +72,10 @@ const currentYear = new Date().getFullYear();
         <address
           class="not-italic flex flex-col gap-2 font-mono text-[11px] text-secondary-text uppercase tracking-[1px] leading-relaxed"
         >
-          <p>108 Tandoor Way, Austin, TX</p>
-          <p>Phone: (512) 555-FIRE</p>
-          <p>Email: hello@bonfiregrill.com</p>
+          <p>O.T. Road, Police Line</p>
+          <p>Balasore, Odisha, 756001</p>
+          <p>Phone: +91 99990 39220</p>
+          <p>Email: hello@bonfire-bbq.com</p>
         </address>
       </div>
 
@@ -111,8 +112,16 @@ const currentYear = new Date().getFullYear();
         <span>&copy; {currentYear} BONFIRE BARBECUE. ALL HEARTHS RESERVED.</span>
       </div>
       <div class="flex gap-6">
-        <button type="button" class="legal-modal-trigger hover:text-link-blue transition-colors cursor-pointer" data-modal="privacy">Privacy Policy</button>
-        <button type="button" class="legal-modal-trigger hover:text-link-blue transition-colors cursor-pointer" data-modal="terms">Terms of Service</button>
+        <button
+          type="button"
+          class="legal-modal-trigger hover:text-link-blue transition-colors cursor-pointer"
+          data-modal="privacy">Privacy Policy</button
+        >
+        <button
+          type="button"
+          class="legal-modal-trigger hover:text-link-blue transition-colors cursor-pointer"
+          data-modal="terms">Terms of Service</button
+        >
       </div>
     </div>
   </div>
@@ -131,10 +140,15 @@ const currentYear = new Date().getFullYear();
     id="legal-modal-card"
   >
     <!-- Modal Header -->
-    <div class="flex items-center justify-between px-6 py-5 border-b border-white/10 bg-white/[0.02]">
+    <div
+      class="flex items-center justify-between px-6 py-5 border-b border-white/10 bg-white/[0.02]"
+    >
       <div class="flex items-center gap-3">
         <span class="w-2 h-2 rounded-full bg-brand-mint"></span>
-        <h3 id="legal-modal-title" class="font-mono text-xs uppercase tracking-[2px] text-brand-mint font-bold">
+        <h3
+          id="legal-modal-title"
+          class="font-mono text-xs uppercase tracking-[2px] text-brand-mint font-bold"
+        >
           HEARTH CHARTER
         </h3>
       </div>
@@ -149,7 +163,10 @@ const currentYear = new Date().getFullYear();
     </div>
 
     <!-- Modal Body -->
-    <div id="legal-modal-content" class="p-6 overflow-y-auto space-y-4 font-sans text-xs text-hazard-white/80 leading-relaxed max-h-[60vh]">
+    <div
+      id="legal-modal-content"
+      class="p-6 overflow-y-auto space-y-4 font-sans text-xs text-hazard-white/80 leading-relaxed max-h-[60vh]"
+    >
     </div>
 
     <!-- Modal Footer -->
@@ -204,7 +221,7 @@ const currentYear = new Date().getFullYear();
           <p>We analyze anonymized visit metrics to optimize seasonal menu rotation and maintain kitchen pacing during peak dining hours.</p>
           <p class="text-hazard-white font-semibold pt-2">4. Data Protection</p>
           <p>Your details are securely encrypted. We strictly never sell, rent, or trade your personal information to third parties.</p>
-        `
+        `,
       },
       terms: {
         title: 'TERMS OF SERVICE — DINING PROTOCOL',
@@ -217,21 +234,28 @@ const currentYear = new Date().getFullYear();
           <p>For parties of 6 or more, we kindly request 24 hours advance cancellation notice to assist our culinary team with fresh daily sourcing.</p>
           <p class="text-hazard-white font-semibold pt-2">4. Atmosphere & Conduct</p>
           <p>Bonfire Barbecue preserves a cinematic, immersive hearth environment. Guests are asked to observe courteous dining etiquette near live charcoal stations.</p>
-        `
-      }
+        `,
+      },
     };
 
     const openModal = (policyType: string) => {
       const policyDetails = legalTexts[policyType];
-      if (!policyDetails || !legalModal || !legalModalTitle || !legalModalContent || !legalModalCard) return;
-      
+      if (
+        !policyDetails ||
+        !legalModal ||
+        !legalModalTitle ||
+        !legalModalContent ||
+        !legalModalCard
+      )
+        return;
+
       legalModalTitle.textContent = policyDetails.title;
       legalModalContent.innerHTML = policyDetails.html;
-      
+
       legalModal.classList.remove('opacity-0', 'pointer-events-none');
       legalModal.classList.add('opacity-100', 'pointer-events-auto');
       legalModal.setAttribute('aria-hidden', 'false');
-      
+
       legalModalCard.classList.remove('scale-95');
       legalModalCard.classList.add('scale-100');
 
@@ -246,7 +270,7 @@ const currentYear = new Date().getFullYear();
       legalModal.classList.remove('opacity-100', 'pointer-events-auto');
       legalModal.classList.add('opacity-0', 'pointer-events-none');
       legalModal.setAttribute('aria-hidden', 'true');
-      
+
       legalModalCard.classList.remove('scale-100');
       legalModalCard.classList.add('scale-95');
 
@@ -273,10 +297,14 @@ const currentYear = new Date().getFullYear();
       });
     }
 
-    document.addEventListener('keydown', (keyboardEvent) => {
-      if (keyboardEvent.key === 'Escape' && legalModal?.classList.contains('opacity-100')) {
-        closeModal();
-      }
-    }, { signal: footerCtrl.signal });
+    document.addEventListener(
+      'keydown',
+      (keyboardEvent) => {
+        if (keyboardEvent.key === 'Escape' && legalModal?.classList.contains('opacity-100')) {
+          closeModal();
+        }
+      },
+      { signal: footerCtrl.signal },
+    );
   });
 </script>
