@@ -83,7 +83,7 @@ import Button from './Button.astro';
 
   <!-- Mobile Drawer Menu -->
   <div
-    class="mobile-drawer fixed inset-y-0 right-0 w-64 bg-canvas-black border-l border-white/10 p-8 transform translate-x-full transition-transform duration-300 z-50 flex flex-col gap-8 shadow-2xl"
+    class="mobile-drawer fixed inset-y-0 right-0 w-64 bg-canvas-black/95 backdrop-blur-lg border-l border-white/10 p-8 transform translate-x-full transition-transform duration-300 z-50 flex flex-col gap-8 shadow-2xl"
   >
     <div class="flex justify-between items-center">
       <span class="font-display text-xl tracking-wider text-hazard-white">BONFIRE</span>
@@ -109,22 +109,22 @@ import Button from './Button.astro';
     <nav class="flex flex-col gap-6 mt-8">
       <a
         href="#about"
-        class="mobile-nav-link text-lg font-mono uppercase tracking-[2px] text-hazard-white hover:text-link-blue transition-colors"
+        class="mobile-nav-link text-lg font-mono uppercase tracking-[2px] text-hazard-white hover:text-link-blue transition-colors py-3"
         >Timeline</a
       >
       <a
         href="#dishes"
-        class="mobile-nav-link text-lg font-mono uppercase tracking-[2px] text-hazard-white hover:text-link-blue transition-colors"
+        class="mobile-nav-link text-lg font-mono uppercase tracking-[2px] text-hazard-white hover:text-link-blue transition-colors py-3"
         >Menu</a
       >
       <a
         href="#gallery"
-        class="mobile-nav-link text-lg font-mono uppercase tracking-[2px] text-hazard-white hover:text-link-blue transition-colors"
+        class="mobile-nav-link text-lg font-mono uppercase tracking-[2px] text-hazard-white hover:text-link-blue transition-colors py-3"
         >Atmosphere</a
       >
       <a
         href="#reserve"
-        class="mobile-nav-link text-lg font-mono uppercase tracking-[2px] text-brand-mint hover:text-link-blue transition-colors"
+        class="mobile-nav-link text-lg font-mono uppercase tracking-[2px] text-brand-mint hover:text-link-blue transition-colors py-3"
         >Book Table</a
       >
     </nav>
@@ -163,67 +163,7 @@ import Button from './Button.astro';
     const mobileClose = document.querySelector('.mobile-close');
     const mobileDrawer = document.querySelector('.mobile-drawer');
 
-    // 1. Logo Tilt micro-interaction
-    let logoMouseX = 0;
-    let logoMouseY = 0;
-    let logoAnimationFrameId: number | null = null;
-
-    const updateLogoTilt = () => {
-      if (!logo) return;
-      const rect = logo.getBoundingClientRect();
-      const offsetX = logoMouseX - rect.left - rect.width / 2;
-      const tilt = (offsetX / rect.width) * 20; // max 10 degrees tilt
-
-      gsap.to(logo, {
-        rotation: tilt,
-        scale: 1.05,
-        duration: 0.3,
-        ease: 'power2.out',
-      });
-
-      logoAnimationFrameId = null;
-    };
-
-    if (logo) {
-      logo.addEventListener('mousemove', (mouseEvent: MouseEvent) => {
-        logoMouseX = mouseEvent.clientX;
-        logoMouseY = mouseEvent.clientY;
-
-        if (logoAnimationFrameId === null) {
-          logoAnimationFrameId = requestAnimationFrame(updateLogoTilt);
-        }
-      });
-
-      logo.addEventListener('mouseleave', () => {
-        if (logoAnimationFrameId !== null) {
-          cancelAnimationFrame(logoAnimationFrameId);
-          logoAnimationFrameId = null;
-        }
-
-        gsap.to(logo, {
-          rotation: 0,
-          scale: 1,
-          duration: 0.6,
-          ease: 'elastic.out(1.2, 0.4)',
-        });
-      });
-    }
-
-    // 3. Nav link hover interactions
-    navLinkElements.forEach((navLinkElement) => {
-      const hoverTween = gsap.to(navLinkElement, {
-        scale: 1.08,
-        duration: 0.35,
-        ease: 'back.out(1.4)',
-        easeReverse: 'power2.in',
-        paused: true,
-      });
-
-      navLinkElement.addEventListener('mouseenter', () => hoverTween.play());
-      navLinkElement.addEventListener('mouseleave', () => hoverTween.reverse());
-    });
-
-    // 4. Mobile drawer open/close
+    // 3. Mobile drawer open/close
     mobileToggle?.addEventListener('click', () => {
       mobileDrawer?.classList.remove('translate-x-full');
     });
