@@ -7,26 +7,11 @@
   class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-canvas-black select-none"
 >
   <div class="flex flex-col items-center gap-6">
-    <h1
-      class="loading-title font-display uppercase text-hazard-white text-[clamp(64px,18vw,140px)] font-black tracking-tighter leading-[0.85] flex overflow-hidden py-2"
-    >
-      {
-        Array.from('BONFIRE').map((char) => (
-          <span
-            class="loading-char inline-block translate-y-[110%] rotate-6"
-            style="transform-origin: bottom center;"
-          >
-            {char}
-          </span>
-        ))
-      }
-    </h1>
-
-    <p
-      class="loading-tagline font-mono text-[10px] md:text-xs uppercase tracking-[3px] text-brand-mint opacity-0"
-    >
-      Indian Coal & Clay Oven Craft
-    </p>
+    <!-- Dual-ring spinner -->
+    <div class="loading-spinner relative w-12 h-12 opacity-0">
+      <div class="loading-ring-a absolute inset-0 rounded-full border-[1.5px] border-transparent border-t-brand-mint border-r-brand-mint"></div>
+      <div class="loading-ring-b absolute inset-[4px] rounded-full border-[1.5px] border-transparent border-b-brand-purple border-l-brand-purple"></div>
+    </div>
 
     <div
       class="loading-progress-wrap w-40 md:w-56 h-[2px] bg-white/10 mt-8 overflow-hidden rounded-full opacity-0"
@@ -45,13 +30,14 @@
 
   document.addEventListener('DOMContentLoaded', () => {
     const screen = document.getElementById('loading-screen');
-    const chars = gsap.utils.toArray('.loading-char');
-    const tagline = document.querySelector('.loading-tagline');
     const progressWrap = document.querySelector('.loading-progress-wrap');
     const progressBar = document.querySelector('.loading-progress-bar') as HTMLElement | null;
     const percentDisplay = document.querySelector('.loading-pct') as HTMLElement | null;
+    const spinner = document.querySelector('.loading-spinner');
+    const ringA = document.querySelector('.loading-ring-a');
+    const ringB = document.querySelector('.loading-ring-b');
 
-    if (!screen || !progressBar || !percentDisplay) return;
+    if (!screen || !progressBar || !percentDisplay || !spinner || !ringA || !ringB) return;
 
     const startTime = Date.now();
     const MIN_DURATION = 800;
@@ -59,16 +45,17 @@
     // Entrance timeline
     const revealTimeline = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
-    revealTimeline.to(chars, {
-      y: '0%',
-      rotation: 0,
-      stagger: 0.08,
-      duration: 1.2,
-      ease: 'back.out(1.5)',
-    })
-      .to(tagline, { autoAlpha: 1, duration: 0.6 }, '-=0.4')
-      .to(progressWrap, { autoAlpha: 1, duration: 0.4 }, '-=0.2')
-      .to(percentDisplay, { autoAlpha: 1, duration: 0.2 }, '<');
+    revealTimeline
+      .to(spinner, { autoAlpha: 1, duration: 0.6 })
+      .to(progressWrap, { autoAlpha: 1, duration: 0.5 }, '-=0.1')
+      .to(percentDisplay, { autoAlpha: 1, duration: 0.3 }, '<');
+
+    // Continuous rotation
+    gsap.to(ringA, { rotation: 360, duration: 2.5, repeat: -1, ease: 'none' });
+    gsap.to(ringB, { rotation: -360, duration: 3.5, repeat: -1, ease: 'none' });
+
+    // Gentle pulse
+    gsap.to(spinner, { scale: 1.08, duration: 2, yoyo: true, repeat: -1, ease: 'sine.inOut' });
 
     // Fake progress fill (stops at 80%, waiting for real load)
     const progress = { currentPercent: 0 };
