@@ -33,25 +33,25 @@ import { heroTandoor } from '../assets/images';
 
   <!-- Glowing tandoor hearth backdrop (expanding fire glow) -->
   <div
-    class="absolute w-[600px] h-[600px] rounded-full bg-brand-purple/10 filter blur-[130px] pointer-events-none z-10 hero-glow"
+    class="absolute w-[300px] h-[300px] sm:w-[400px] sm:h-[400px] lg:w-[600px] lg:h-[600px] rounded-full bg-brand-purple/10 filter blur-[80px] sm:blur-[100px] lg:blur-[130px] pointer-events-none z-10 hero-glow"
   >
   </div>
   <div
-    class="absolute w-[400px] h-[400px] rounded-full bg-brand-mint/3 filter blur-[90px] pointer-events-none z-10 hero-glow-secondary"
+    class="absolute w-[200px] h-[200px] sm:w-[300px] sm:h-[300px] lg:w-[400px] lg:h-[400px] rounded-full bg-brand-mint/3 filter blur-[50px] sm:blur-[70px] lg:blur-[90px] pointer-events-none z-10 hero-glow-secondary"
   >
   </div>
 
   <!-- Drifting Smoke Layers (Vignette Boundary Mask) -->
   <div
-    class="absolute inset-0 pointer-events-none z-10 opacity-20 mix-blend-plus-lighter select-none"
-    style="mask-image: radial-gradient(circle, black 40%, transparent 90%); -webkit-mask-image: radial-gradient(circle, black 40%, transparent 90%);"
+    class="absolute inset-0 pointer-events-none z-10 opacity-30 md:opacity-20 mix-blend-plus-lighter select-none smoke-container"
+    style="mask-image: radial-gradient(circle, black 30%, transparent 80%); -webkit-mask-image: radial-gradient(circle, black 30%, transparent 80%);"
   >
     <div
-      class="smoke-layer smoke-1 absolute -inset-[10%] bg-[url('https://images.unsplash.com/photo-1556388275-bb5585725aca?auto=format&fit=crop&w=1200&q=80')] bg-cover"
+      class="smoke-layer smoke-1 absolute -inset-[20%] sm:-inset-[10%] bg-[url('https://images.unsplash.com/photo-1556388275-bb5585725aca?auto=format&fit=crop&w=1200&q=80')] bg-cover"
     >
     </div>
     <div
-      class="smoke-layer smoke-2 absolute -inset-[10%] bg-[url('https://images.unsplash.com/photo-1602410086232-0cdfb78b434f?auto=format&fit=crop&w=1200&q=80')] bg-cover"
+      class="smoke-layer smoke-2 absolute -inset-[20%] sm:-inset-[10%] bg-[url('https://images.unsplash.com/photo-1602410086232-0cdfb78b434f?auto=format&fit=crop&w=1200&q=80')] bg-cover"
     >
     </div>
   </div>
@@ -70,7 +70,7 @@ import { heroTandoor } from '../assets/images';
 
     <!-- Headline: Staggered Characters -->
     <h1
-      class="hero-title font-display uppercase leading-[0.85] text-hazard-white text-[min(18vw,160px)] font-black tracking-tighter select-none flex flex-wrap justify-center overflow-hidden py-2"
+      class="hero-title font-display uppercase leading-[0.85] text-hazard-white text-[clamp(48px,18vw,160px)] font-black tracking-tighter select-none flex flex-wrap justify-center overflow-hidden py-2"
     >
       {
         Array.from('BONFIRE').map((char, index) => (
@@ -94,7 +94,7 @@ import { heroTandoor } from '../assets/images';
 
     <!-- CTAs -->
     <div
-      class="hero-cta flex flex-wrap gap-12 justify-center items-center mt-6 translate-y-8 opacity-0"
+      class="hero-cta flex flex-wrap gap-6 md:gap-12 justify-center items-center mt-6 translate-y-8 opacity-0"
     >
       <Button href="#reserve" variant="primary" class="hero-cta-btn text-[11px] tracking-[1.5px] px-8 py-3.5">
         Reserve A Hearth
@@ -140,15 +140,7 @@ import { heroTandoor } from '../assets/images';
     const heroGlow = document.querySelector('.hero-glow') as HTMLElement | null;
     const heroGlowSecondary = document.querySelector('.hero-glow-secondary') as HTMLElement | null;
 
-    if (
-      !heroBackgroundWrapper ||
-      !heroContent ||
-      !smoke1 ||
-      !smoke2 ||
-      !heroGlow ||
-      !heroGlowSecondary
-    )
-      return;
+    if (!heroBackgroundWrapper || !heroContent || !smoke1 || !smoke2) return;
 
     // Read target scale dynamically from HTML attribute (single source of truth)
     const bgScale = parseFloat(heroBackgroundWrapper.dataset.parallaxScale || '1.12');
@@ -157,134 +149,131 @@ import { heroTandoor } from '../assets/images';
     gsap.set(heroBackgroundWrapper, { scale: bgScale });
 
     // ----------------------------------------------------
-    // 2. Mouse Parallax (Gentle Depth Movement)
+    // 2. Mouse Parallax — only on hover-capable devices
     // ----------------------------------------------------
-    const heroSection = document.getElementById('hero');
-    if (!heroSection) return;
+    const heroMm = gsap.matchMedia();
+    heroMm.add('(hover: hover)', () => {
+      const heroSection = document.getElementById('hero');
+      if (!heroSection) return;
 
-    // Cache dimensions to avoid layout thrashing (getBoundingClientRect) on every mousemove
-    let heroWidth = heroSection.offsetWidth;
-    let heroHeight = heroSection.offsetHeight;
+      let heroWidth = heroSection.offsetWidth;
+      let heroHeight = heroSection.offsetHeight;
 
-    window.addEventListener('resize', () => {
-      heroWidth = heroSection.offsetWidth;
-      heroHeight = heroSection.offsetHeight;
-    });
-
-    let mouseX = 0;
-    let mouseY = 0;
-    let animationFrameId: number | null = null;
-
-    const updateParallax = () => {
-      const xOffset = mouseX - heroWidth / 2;
-      const yOffset = mouseY - heroHeight / 2;
-
-      // Enforce scale dynamically to prevent resetting CSS transform scale
-      gsap.to(heroBackgroundWrapper, {
-        x: -xOffset * 0.025,
-        y: -yOffset * 0.025,
-        scale: bgScale,
-        duration: 1.2,
-        ease: 'power2.out',
-        overwrite: 'auto',
+      window.addEventListener('resize', () => {
+        heroWidth = heroSection.offsetWidth;
+        heroHeight = heroSection.offsetHeight;
       });
 
-      gsap.to(heroContent, {
-        x: xOffset * 0.015,
-        y: yOffset * 0.015,
-        duration: 1.0,
-        ease: 'power2.out',
-        overwrite: 'auto',
-      });
+      let mouseX = 0;
+      let mouseY = 0;
+      let animationFrameId: number | null = null;
 
-      gsap.to(smoke1, {
-        x: xOffset * 0.04,
-        y: yOffset * 0.04,
-        duration: 1.5,
-        ease: 'power1.out',
-        overwrite: 'auto',
-      });
+      const updateParallax = () => {
+        const xOffset = mouseX - heroWidth / 2;
+        const yOffset = mouseY - heroHeight / 2;
 
-      gsap.to(smoke2, {
-        x: -xOffset * 0.03,
-        y: -yOffset * 0.03,
-        duration: 1.8,
-        ease: 'power1.out',
-        overwrite: 'auto',
-      });
+        gsap.to(heroBackgroundWrapper, {
+          x: -xOffset * 0.025,
+          y: -yOffset * 0.025,
+          scale: bgScale,
+          duration: 1.2,
+          ease: 'power2.out',
+          overwrite: 'auto',
+        });
 
-      gsap.to([heroGlow, heroGlowSecondary], {
-        x: xOffset * 0.01,
-        y: yOffset * 0.01,
-        duration: 1.3,
-        overwrite: 'auto',
-      });
+        gsap.to(heroContent, {
+          x: xOffset * 0.015,
+          y: yOffset * 0.015,
+          duration: 1.0,
+          ease: 'power2.out',
+          overwrite: 'auto',
+        });
 
-      animationFrameId = null;
-    };
+        gsap.to(smoke1, {
+          x: xOffset * 0.04,
+          y: yOffset * 0.04,
+          duration: 1.5,
+          ease: 'power1.out',
+          overwrite: 'auto',
+        });
 
-    heroSection.addEventListener('mousemove', (mouseEvent: MouseEvent) => {
-      mouseX = mouseEvent.clientX;
-      mouseY = mouseEvent.clientY;
+        gsap.to(smoke2, {
+          x: -xOffset * 0.03,
+          y: -yOffset * 0.03,
+          duration: 1.8,
+          ease: 'power1.out',
+          overwrite: 'auto',
+        });
 
-      if (animationFrameId === null) {
-        animationFrameId = requestAnimationFrame(updateParallax);
-      }
-    });
+        gsap.to([heroGlow, heroGlowSecondary], {
+          x: xOffset * 0.01,
+          y: yOffset * 0.01,
+          duration: 1.3,
+          overwrite: 'auto',
+        });
 
-    heroSection.addEventListener('mouseleave', () => {
-      if (animationFrameId !== null) {
-        cancelAnimationFrame(animationFrameId);
         animationFrameId = null;
-      }
+      };
 
-      // Reset background back to target scaled state
-      gsap.to(heroBackgroundWrapper, {
-        x: 0,
-        y: 0,
-        scale: bgScale,
-        duration: 1.5,
-        ease: 'power2.out',
-        overwrite: 'auto',
+      heroSection.addEventListener('mousemove', (mouseEvent: MouseEvent) => {
+        mouseX = mouseEvent.clientX;
+        mouseY = mouseEvent.clientY;
+
+        if (animationFrameId === null) {
+          animationFrameId = requestAnimationFrame(updateParallax);
+        }
       });
 
-      gsap.to([heroContent, smoke1, smoke2], {
-        x: 0,
-        y: 0,
-        scale: 1,
-        duration: 1.5,
-        ease: 'power2.out',
-        overwrite: 'auto',
-      });
+      heroSection.addEventListener('mouseleave', () => {
+        if (animationFrameId !== null) {
+          cancelAnimationFrame(animationFrameId);
+          animationFrameId = null;
+        }
 
-      // Avoid overwriting scale loops on glows
-      gsap.to([heroGlow, heroGlowSecondary], {
-        x: 0,
-        y: 0,
-        duration: 1.5,
-        ease: 'power2.out',
-        overwrite: 'auto',
+        gsap.to(heroBackgroundWrapper, {
+          x: 0,
+          y: 0,
+          scale: bgScale,
+          duration: 1.5,
+          ease: 'power2.out',
+          overwrite: 'auto',
+        });
+
+        gsap.to([heroContent, smoke1, smoke2], {
+          x: 0,
+          y: 0,
+          scale: 1,
+          duration: 1.5,
+          ease: 'power2.out',
+          overwrite: 'auto',
+        });
+
+        gsap.to([heroGlow, heroGlowSecondary], {
+          x: 0,
+          y: 0,
+          duration: 1.5,
+          ease: 'power2.out',
+          overwrite: 'auto',
+        });
       });
     });
 
-    // 3. Slow smoke drift animation
-    gsap.to(smoke1, {
-      xPercent: 12,
-      yPercent: -8,
-      duration: 25,
-      repeat: -1,
-      yoyo: true,
-      ease: 'sine.inOut',
-    });
+    // 3. Smoke drift animation — continuous organic movement
+    const smokeTl = gsap.timeline({ repeat: -1 });
+    smokeTl
+      .to(smoke1, { xPercent: 18, yPercent: -12, duration: 14, ease: 'sine.inOut' })
+      .to(smoke1, { xPercent: -6, yPercent: 4, duration: 18, ease: 'sine.inOut' })
+      .to(smoke1, { xPercent: 0, yPercent: 0, duration: 16, ease: 'sine.inOut' });
 
-    gsap.to(smoke2, {
-      xPercent: -8,
-      yPercent: 12,
-      duration: 30,
-      repeat: -1,
-      yoyo: true,
-      ease: 'sine.inOut',
-    });
+    const smokeTl2 = gsap.timeline({ repeat: -1 });
+    smokeTl2
+      .to(smoke2, { xPercent: -14, yPercent: 10, duration: 16, ease: 'sine.inOut' })
+      .to(smoke2, { xPercent: 8, yPercent: -6, duration: 14, ease: 'sine.inOut' })
+      .to(smoke2, { xPercent: 0, yPercent: 0, duration: 20, ease: 'sine.inOut' });
+
+    // Subtle scale breathing for volumetric feel
+    gsap.to(smoke1, { scale: 1.08, duration: 12, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+    gsap.to(smoke2, { scale: 1.06, duration: 15, repeat: -1, yoyo: true, ease: 'sine.inOut' });
 
     // 3.2 Background glow pulsing animations
     gsap.fromTo(

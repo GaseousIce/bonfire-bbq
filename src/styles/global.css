@@ -17,6 +17,8 @@
   --color-hazard-white: #ffffff;
   --color-dim-gray: #8c8c8c;
   --color-image-frame: #313131;
+
+  --breakpoint-xs: 400px;
 }
 
 @layer base {
@@ -27,5 +29,26 @@
     margin: 0;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
+  }
+}
+
+@layer utilities {
+  @media (width < 400px) {
+    .section-padding {
+      padding-top: 2.5rem;
+      padding-bottom: 2.5rem;
+    }
+  }
+  @media (width >= 400px) and (width < 768px) {
+    .section-padding {
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+    }
+  }
+  @media (width >= 768px) {
+    .section-padding {
+      padding-top: 6rem;
+      padding-bottom: 6rem;
+    }
   }
 }
