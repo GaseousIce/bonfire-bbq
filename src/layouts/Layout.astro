@@ -113,14 +113,16 @@ const heroImage = await getImage({
 
       gsap.registerPlugin(ScrollTrigger, ScrollSmoother, MorphSVGPlugin);
 
-      ScrollTrigger.normalizeScroll(true);
-
       const isMobile = window.innerWidth < 768;
-      window.__smoother = ScrollSmoother.create({
-        wrapper: '#smooth-wrapper',
-        content: '#smooth-content',
-        smooth: isMobile ? 0.2 : 0.6,
-      });
+
+      if (!isMobile) {
+        ScrollTrigger.normalizeScroll(true);
+        window.__smoother = ScrollSmoother.create({
+          wrapper: '#smooth-wrapper',
+          content: '#smooth-content',
+          smooth: 0.6,
+        });
+      }
       requestAnimationFrame(() => ScrollTrigger.refresh());
 
       // ── Page transition orchestration ──────────────────────────────

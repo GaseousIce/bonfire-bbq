@@ -192,14 +192,6 @@ const timelineEvents = [
   </div>
 </section>
 
-<style>
-  /* Defer off-screen rendering — browser skips paint/layout until near viewport */
-  .about-section {
-    content-visibility: auto;
-    contain-intrinsic-size: 0 100vh;
-  }
-</style>
-
 <script>
   import { gsap } from 'gsap';
 
@@ -210,76 +202,85 @@ const timelineEvents = [
     const timelineItems = gsap.utils.toArray('.timeline-item') as HTMLElement[];
 
     if (timelineItems.length > 0) {
-      // 1. Spine Progress Line Animation
       const firstItem = timelineItems[0];
       const lastItem = timelineItems[timelineItems.length - 1];
 
-      gsap.fromTo(
-        '.timeline-progress-line',
-        { height: '0%' },
+      mediaMatcher.add(
         {
-          height: '100%',
-          ease: 'none',
-          scrollTrigger: {
-            trigger: '.timeline-container',
-            start: () => `top+=${firstItem.offsetTop} 90%`,
-            end: () => `top+=${lastItem.offsetTop} 55%`,
-            scrub: true,
-          },
+          isDesktop: '(min-width: 768px)',
+          isMobile: '(max-width: 767px)',
+        },
+        (context) => {
+          const { isDesktop } = context.conditions as { isDesktop: boolean };
+          const scrubVal = isDesktop ? true : 0.2;
+
+          // 1. Spine Progress Line Animation
+          gsap.fromTo(
+            '.timeline-progress-line',
+            { height: '0%' },
+            {
+              height: '100%',
+              ease: 'none',
+              scrollTrigger: {
+                trigger: '.timeline-container',
+                start: () => `top+=${firstItem.offsetTop} 90%`,
+                end: () => `top+=${lastItem.offsetTop} 55%`,
+                scrub: scrubVal,
+              },
+            },
+          );
+
+          // 2. Interactive Scroll-Driven Reveal for Cards, Timestamps, and Dots
+          timelineItems.forEach((timelineItemElement) => {
+            const cardElement = timelineItemElement.querySelector('.timeline-card');
+            const dotElement = timelineItemElement.querySelector('.timeline-dot');
+            const timestampElement = timelineItemElement.querySelector('.timeline-time');
+
+            const startX = isDesktop ? -100 : -40;
+
+            const itemTimeline = gsap.timeline({
+              scrollTrigger: {
+                trigger: timelineItemElement,
+                start: 'top 90%',
+                end: 'top 55%',
+                scrub: isDesktop ? 1 : 0.2,
+              },
+            });
+
+            if (cardElement) {
+              itemTimeline.fromTo(
+                cardElement,
+                { opacity: 0, x: startX, scale: 0.9 },
+                { opacity: 1, x: 0, scale: 1, ease: 'none', duration: 1 },
+                0,
+              );
+            }
+
+            if (dotElement) {
+              itemTimeline.fromTo(
+                dotElement,
+                {
+                  backgroundColor: '#131313',
+                  borderColor: 'rgba(82, 0, 255, 0.6)',
+                  boxShadow: '0 0 0px rgba(60, 255, 208, 0)',
+                },
+                {
+                  backgroundColor: '#3cffd0',
+                  borderColor: '#3cffd0',
+                  boxShadow: '0 0 10px rgba(60, 255, 208, 0.8)',
+                  ease: 'none',
+                  duration: 1,
+                },
+                0,
+              );
+            }
+
+            if (timestampElement) {
+              itemTimeline.fromTo(timestampElement, { opacity: 0.3 }, { opacity: 1, ease: 'none', duration: 1 }, 0);
+            }
+          });
         },
       );
-
-      // 2. Interactive Scroll-Driven Reveal for Cards, Timestamps, and Dots
-      timelineItems.forEach((timelineItemElement) => {
-        const cardElement = timelineItemElement.querySelector('.timeline-card');
-        const dotElement = timelineItemElement.querySelector('.timeline-dot');
-        const timestampElement = timelineItemElement.querySelector('.timeline-time');
-
-        // Responsive horizontal slide offset based on window size
-        const isDesktop = window.innerWidth >= 768;
-        const startX = isDesktop ? -100 : -40;
-
-        const itemTimeline = gsap.timeline({
-          scrollTrigger: {
-            trigger: timelineItemElement,
-            start: 'top 90%',
-            end: 'top 55%',
-            scrub: 1,
-          },
-        });
-
-        if (cardElement) {
-          itemTimeline.fromTo(
-            cardElement,
-            { opacity: 0, x: startX, scale: 0.9 },
-            { opacity: 1, x: 0, scale: 1, ease: 'none', duration: 1 },
-            0,
-          );
-        }
-
-        if (dotElement) {
-          itemTimeline.fromTo(
-            dotElement,
-            {
-              backgroundColor: '#131313',
-              borderColor: 'rgba(82, 0, 255, 0.6)',
-              boxShadow: '0 0 0px rgba(60, 255, 208, 0)',
-            },
-            {
-              backgroundColor: '#3cffd0',
-              borderColor: '#3cffd0',
-              boxShadow: '0 0 10px rgba(60, 255, 208, 0.8)',
-              ease: 'none',
-              duration: 1,
-            },
-            0,
-          );
-        }
-
-        if (timestampElement) {
-          itemTimeline.fromTo(timestampElement, { opacity: 0.3 }, { opacity: 1, ease: 'none', duration: 1 }, 0);
-        }
-      });
     }
 
     // 3. Parallax Image Scrolling — only on hover-capable desktop
