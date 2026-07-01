@@ -29,3 +29,5 @@ graphify-out/
 # opencode session data
 .omo/
 
+# playwright MCP cache
+.playwright-mcp/
