@@ -6,20 +6,12 @@
   class="fixed inset-0 z-[97] pointer-events-none"
   aria-hidden="true"
 >
-  <svg
-    class="block w-full h-full"
-    viewBox="0 0 100 100"
-    preserveAspectRatio="none"
-  >
-    <defs>
-      <clipPath id="wipe-clip-uv">
-        <path id="wipe-path-uv" d="M 100,0 L 100,0 Q 100,50 100,100 L 100,100 Z" />
-      </clipPath>
-      <clipPath id="wipe-clip-mint">
-        <path id="wipe-path-mint" d="M 100,0 L 100,0 Q 100,50 100,100 L 100,100 Z" />
-      </clipPath>
-    </defs>
-    <rect width="100" height="100" fill="#3d00bf" clip-path="url(#wipe-clip-uv)" />
-    <rect width="100" height="100" fill="#309875" clip-path="url(#wipe-clip-mint)" />
-  </svg>
+  <div id="pt-wipe"
+       class="absolute inset-0"
+       style="background: #131313;
+              clip-path: circle(0px at 50vw 50vh);">
+  </div>
+  <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+    <span id="pt-brand" class="font-display text-hazard-white text-[min(20vw,180px)] tracking-[0.08em] select-none opacity-0">BONFIRE</span>
+  </div>
 </div>

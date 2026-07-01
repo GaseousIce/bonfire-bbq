@@ -177,9 +177,18 @@ import Button from './Button.astro';
     // 5. Nav link & CTA clicks via page transition
     const onNavClick = (clickEvent: Event) => {
       clickEvent.preventDefault();
+      const mouseEvent = clickEvent as MouseEvent;
       const el = clickEvent.currentTarget as HTMLElement | null;
       const href = el?.getAttribute('href');
-      if (href && window.__pageTransition) window.__pageTransition(href);
+      let cx = mouseEvent.clientX;
+      let cy = mouseEvent.clientY;
+      // Keyboard clicks produce (0,0) with detail=0 — use element centre instead
+      if (cx === 0 && cy === 0 && (clickEvent as MouseEvent).detail === 0 && el) {
+        const rect = el.getBoundingClientRect();
+        cx = rect.left + rect.width / 2;
+        cy = rect.top + rect.height / 2;
+      }
+      if (href && window.__pageTransition) window.__pageTransition(href, cx, cy);
     };
 
     logo?.addEventListener('click', onNavClick);
