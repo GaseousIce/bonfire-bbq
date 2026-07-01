@@ -26,3 +26,6 @@ pnpm-debug.log*
 # graphify cache and temp files
 graphify-out/
 
+# opencode session data
+.omo/
+
