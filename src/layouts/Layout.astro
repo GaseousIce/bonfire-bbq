@@ -64,10 +64,12 @@ const heroImage = await getImage({
         scrollbar-color: #313131 #131313;
       }
 
-      /* Promote smooth-wrapper/content to compositor layers */
-      #smooth-wrapper,
-      #smooth-content {
-        will-change: transform;
+      /* Promote smooth-wrapper/content to compositor layers on desktop where ScrollSmoother is active */
+      @media (min-width: 768px) {
+        #smooth-wrapper,
+        #smooth-content {
+          will-change: transform;
+        }
       }
 
       /* Webkit scrollbar customization */

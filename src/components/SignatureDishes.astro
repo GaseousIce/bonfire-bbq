@@ -263,22 +263,63 @@ const dishes = [
             );
           });
         } else {
-          // Mobile layout: add native swiping overlay and standard animations
-          gsap.set(dishesScrollTrack, { clearProps: 'all' });
-          gsap.set(dishCardElements, { clearProps: 'all' });
+          // Promote scroll track and cards to compositor layers on mobile
+          gsap.set(dishesScrollTrack, { willChange: 'transform' });
+          gsap.set(dishCardElements, { willChange: 'transform' });
 
-          // Scroll entry animations for cards in vertical layout
+          // 1. Horizontal Scroll Pin & Tween for Mobile
+          const scrollTween = gsap.to(dishesScrollTrack, {
+            x: () => -(dishesScrollTrack.scrollWidth - window.innerWidth),
+            ease: 'none',
+            scrollTrigger: {
+              trigger: dishesPinSection,
+              pin: true,
+              scrub: 0.8,
+              start: 'top top',
+              end: () => `+=${dishesScrollTrack.scrollWidth - window.innerWidth}`,
+            },
+          });
+
+          // 2. Card Scaling & Image Parallax using containerAnimation for Mobile
           dishCardElements.forEach((dishCardElement) => {
-            gsap.from(dishCardElement, {
-              y: 50,
-              opacity: 0,
-              duration: 0.6,
+            const dishImageElement = dishCardElement.querySelector('.dish-img');
+
+            // Card scale prominence (active card grows in the center, shrinks on sides)
+            const cardTimeline = gsap.timeline({
               scrollTrigger: {
                 trigger: dishCardElement,
-                start: 'top 85%',
-                toggleActions: 'play none none none',
+                containerAnimation: scrollTween,
+                start: 'left right',
+                end: 'right left',
+                scrub: 1,
               },
             });
+
+            cardTimeline
+              .fromTo(
+                dishCardElement,
+                { scale: 0.92, opacity: 0.5 },
+                { scale: 1.03, opacity: 1, ease: 'power1.inOut', duration: 0.5 },
+              )
+              .to(dishCardElement, { scale: 0.92, opacity: 0.5, ease: 'power1.inOut', duration: 0.5 });
+
+            // Subtle Image Zoom Parallax within card
+            gsap.fromTo(
+              dishImageElement,
+              { scale: 1.02, xPercent: -3 },
+              {
+                scale: 1.15,
+                xPercent: 3,
+                ease: 'none',
+                scrollTrigger: {
+                  trigger: dishCardElement,
+                  containerAnimation: scrollTween,
+                  start: 'left right',
+                  end: 'right left',
+                  scrub: 1,
+                },
+              },
+            );
           });
         }
       },
