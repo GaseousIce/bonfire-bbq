@@ -154,7 +154,9 @@ const timelineEvents = [
         </div>
 
         <!-- Overlapping Parallax Images Container -->
-        <div class="relative w-full aspect-[4/5] max-w-[300px] sm:max-w-[400px] mx-auto z-10">
+        <div
+          class="relative w-full aspect-[4/5] max-w-[300px] sm:max-w-[400px] mx-auto z-10 parallax-images-container"
+        >
           <!-- Back layer image (Log pile) -->
           <div
             class="absolute top-[10%] left-0 w-[70%] aspect-square rounded-[20px] overflow-hidden border border-image-frame bg-canvas-black image-layer-back"
@@ -291,48 +293,101 @@ const timelineEvents = [
     const frontImage = document.querySelector('.image-layer-front');
     const textCard = document.querySelector('.parallax-text');
 
-    mediaMatcher.add('(min-width: 1024px) and (hover: hover)', () => {
-      gsap.fromTo(
-        backImage,
-        { y: -30 },
-        {
-          y: 60,
-          scrollTrigger: {
-            trigger: '.about-section',
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: 0.8,
-          },
-        },
-      );
+    mediaMatcher.add(
+      {
+        isDesktop: '(min-width: 1024px)',
+        isMobile: '(max-width: 1023px)',
+      },
+      (context) => {
+        const { isDesktop } = context.conditions as { isDesktop: boolean };
 
-      gsap.fromTo(
-        frontImage,
-        { y: 50 },
-        {
-          y: -80,
-          scrollTrigger: {
-            trigger: '.about-section',
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: 0.3,
-          },
-        },
-      );
+        if (isDesktop) {
+          gsap.fromTo(
+            backImage,
+            { y: -30 },
+            {
+              y: 60,
+              scrollTrigger: {
+                trigger: '.about-section',
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: 0.8,
+              },
+            },
+          );
 
-      gsap.fromTo(
-        textCard,
-        { y: 10 },
-        {
-          y: -40,
-          scrollTrigger: {
-            trigger: '.about-section',
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: 0.4,
-          },
-        },
-      );
-    });
+          gsap.fromTo(
+            frontImage,
+            { y: 50 },
+            {
+              y: -80,
+              scrollTrigger: {
+                trigger: '.about-section',
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: 0.3,
+              },
+            },
+          );
+
+          gsap.fromTo(
+            textCard,
+            { y: 10 },
+            {
+              y: -40,
+              scrollTrigger: {
+                trigger: '.about-section',
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: 0.4,
+              },
+            },
+          );
+        } else {
+          // Mobile/tablet stacked layout: trigger parallax as individual cards enter viewport
+          gsap.fromTo(
+            backImage,
+            { y: -15 },
+            {
+              y: 30,
+              scrollTrigger: {
+                trigger: '.parallax-images-container',
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: 0.8,
+              },
+            },
+          );
+
+          gsap.fromTo(
+            frontImage,
+            { y: 25 },
+            {
+              y: -40,
+              scrollTrigger: {
+                trigger: '.parallax-images-container',
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: 0.3,
+              },
+            },
+          );
+
+          gsap.fromTo(
+            textCard,
+            { y: 10 },
+            {
+              y: -20,
+              scrollTrigger: {
+                trigger: '.parallax-text',
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: 0.4,
+              },
+            },
+          );
+        }
+      }
+    );
   });
 </script>
