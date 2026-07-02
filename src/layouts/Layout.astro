@@ -105,13 +105,10 @@ const heroImage = await getImage({
       import { ScrollSmoother } from 'gsap/ScrollSmoother';
       import { SplitText } from 'gsap/SplitText';
 
-      // Extend Window so TypeScript recognises global helpers
       declare global {
         interface Window {
           __smoother?: ScrollSmoother;
           __pageTransition?: (href: string, originX?: number, originY?: number) => void;
-          __ptSplit?: any;
-          __ptCharsTween?: any;
         }
       }
 
@@ -129,7 +126,34 @@ const heroImage = await getImage({
       }
       requestAnimationFrame(() => ScrollTrigger.refresh());
 
-      // ── Page transition orchestration ──────────────────────────────
+      // ── Page transition SplitText initialization (once, not on every click) ──
+      let __ptCharsTween: gsap.core.Tween | null = null;
+      {
+        const splitEl = document.querySelector('.split');
+        if (splitEl) {
+          try {
+            SplitText.create('.split', {
+              type: 'chars',
+              autoSplit: true,
+              mask: 'chars',
+              onSplit: (self: any) => {
+                __ptCharsTween = gsap.from(self.chars, {
+                  duration: 0.28,
+                  yPercent: 40,
+                  opacity: 0,
+                  stagger: 0.04,
+                  ease: 'elastic.out(1,0.5)',
+                });
+              },
+            });
+            // Pause the tween at start — we replay it on each nav click
+            if (__ptCharsTween) __ptCharsTween.pause(0);
+          } catch (e) {
+            console.warn('[PageTransition] SplitText init error:', e);
+          }
+        }
+      }
+
       let _transitionActive = false;
 
       window.__pageTransition = (href: string, originX?: number, originY?: number): void => {
@@ -145,17 +169,16 @@ const heroImage = await getImage({
           return;
         }
 
-        // Default to centre if no coordinates
         const cx = originX !== undefined ? originX : window.innerWidth / 2;
         const cy = originY !== undefined ? originY : window.innerHeight / 2;
 
         // Max radius to cover full viewport from any click point (viewport diagonal)
-        const maxRadius = Math.sqrt(window.innerWidth * window.innerWidth + window.innerHeight * window.innerHeight);
+        const maxRadius = Math.sqrt(
+          window.innerWidth * window.innerWidth + window.innerHeight * window.innerHeight,
+        );
 
-        // Position string for clip-path (shared between start and end states)
         const pos = `${cx}px ${cy}px`;
 
-        // Reset wipe: tiny circle at click point
         gsap.set(ptWipe, { clipPath: `circle(0px at ${pos})` });
 
         const tl = gsap.timeline({
@@ -163,81 +186,76 @@ const heroImage = await getImage({
             tl.kill();
             _transitionActive = false;
           },
-          onInterrupt: () => { _transitionActive = false; }
+          onInterrupt: () => {
+            _transitionActive = false;
+          },
         });
 
-        // Phase 1: Show overlay + expand circle
-        tl.set(ptOverlay, { pointerEvents: 'auto' });
-        tl.to(ptOverlay, { autoAlpha: 1, duration: 0.1 }, 0);
-        tl.to(ptWipe, {
-          clipPath: `circle(${maxRadius}px at ${pos})`,
-          duration: 1.0,
-          ease: 'power2.inOut',
-        }, 0);
+        // Phase 1: Circle expand (0s start, 0.5s duration — slower to match text reveal)
+        tl.set(ptOverlay, { autoAlpha: 1, pointerEvents: 'auto' });
+        tl.to(
+          ptWipe,
+          {
+            clipPath: `circle(${maxRadius}px at ${pos})`,
+            duration: 0.5,
+            ease: 'power2.inOut',
+          },
+          0,
+        );
 
-        // Phase 3: SplitText char masking via GSAP mask property
-        // (brand text becomes visible only after SplitText chars are ready — avoids unsplit flash)
-        tl.call(() => {
-          try {
-            const split = new SplitText(ptBrand!, { type: 'chars', mask: 'chars' });
-            (window as any).__ptSplit = split;
-            (window as any).__ptCharsTween = gsap.from(split.chars, {
-              yPercent: 100,
-              duration: 0.6,
-              stagger: 0.05,
-              ease: 'power3.out',
-            });
-            // Make text visible now that SplitText chars are in place
+        // Phase 2: Text reveal via pre-initialized SplitText (offset +250ms after swipe)
+        tl.call(
+          () => {
             gsap.set(ptBrand, { autoAlpha: 1 });
-          } catch (e) {
-            console.warn('[PageTransition] SplitText error:', e);
-          }
-        }, null, null, 0.85);
+            if (__ptCharsTween) {
+              __ptCharsTween.restart();
+            }
+          },
+          null,
+          null,
+          0.25,
+        );
 
-        // Phase 4: Navigate + revert SplitText
-        tl.call(() => {
-          try {
-            if (href === '#hero') {
-              if (smoother) smoother.scrollTo(0, false);
-              else window.scrollTo({ top: 0 });
-            } else {
-              const target = document.querySelector(href);
-              if (target) {
-                if (smoother) {
-                  smoother.scrollTo(target, false);
-                } else {
-                  target.scrollIntoView();
+        // Phase 3: Navigate + cleanup (scroll while overlay is fully dark)
+        tl.call(
+          () => {
+            try {
+              if (href === '#hero') {
+                if (smoother) smoother.scrollTo(0, false);
+                else window.scrollTo({ top: 0 });
+              } else {
+                const target = document.querySelector(href);
+                if (target) {
+                  if (smoother) smoother.scrollTo(target, false);
+                  else target.scrollIntoView();
                 }
               }
+              ScrollTrigger.refresh();
+            } catch (e) {
+              console.warn('[PageTransition] callback error:', e);
             }
-            ScrollTrigger.refresh();
+          },
+          null,
+          null,
+          0.7,
+        );
 
-            const charsTween = (window as any).__ptCharsTween;
-            if (typeof charsTween?.kill === 'function') charsTween.kill();
-            (window as any).__ptCharsTween = null;
+        // Phase 4: Circle collapse (starts after text animation finishes at 1.25s)
+        tl.to(
+          ptWipe,
+          {
+            clipPath: `circle(0px at ${pos})`,
+            duration: 0.3,
+            ease: 'power2.inOut',
+          },
+          1.25,
+        );
 
-            const split = (window as any).__ptSplit;
-            if (split) {
-              split.revert();
-              (window as any).__ptSplit = null;
-            }
-          } catch (e) {
-            console.warn('[PageTransition] callback error:', e);
-          }
-        }, null, null, 2.0);
+        // Phase 5: Text fade out (starts after text animation finishes)
+        tl.to(ptBrand, { autoAlpha: 0, duration: 0.2 }, 1.25);
 
-        // Phase 5: Text fade out
-        tl.to(ptBrand, { autoAlpha: 0, duration: 0.2 }, 2.2);
-
-        // Phase 6: Circle collapses back to click position
-        tl.to(ptWipe, {
-          clipPath: `circle(0px at ${pos})`,
-          duration: 0.5,
-          ease: 'power2.inOut',
-        }, 2.5);
-
-        // Phase 7: Hide overlay + disable pointer events
-        tl.set(ptOverlay, { autoAlpha: 0, pointerEvents: 'none' }, 3.5);
+        // Phase 6: Hide overlay after out animations
+        tl.set(ptOverlay, { autoAlpha: 0, pointerEvents: 'none' }, 1.55);
       };
     </script>
   </body>
