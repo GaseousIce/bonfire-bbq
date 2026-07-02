@@ -26,3 +26,8 @@ pnpm-debug.log*
 # graphify cache and temp files
 graphify-out/
 
+# opencode session data
+.omo/
+
+# playwright MCP cache
+.playwright-mcp/

@@ -190,8 +190,18 @@ const currentYear = new Date().getFullYear();
     navLinks.forEach((footerNavLink) => {
       footerNavLink.addEventListener('click', (clickEvent) => {
         clickEvent.preventDefault();
+        const mouseEvent = clickEvent as MouseEvent;
+        let cx = mouseEvent.clientX;
+        let cy = mouseEvent.clientY;
+        const el = clickEvent.currentTarget as HTMLElement | null;
+        // Keyboard clicks produce (0,0) with detail=0 — use element centre instead
+        if (cx === 0 && cy === 0 && (clickEvent as MouseEvent).detail === 0 && el) {
+          const rect = el.getBoundingClientRect();
+          cx = rect.left + rect.width / 2;
+          cy = rect.top + rect.height / 2;
+        }
         const href = footerNavLink.getAttribute('href');
-        if (href && window.__pageTransition) window.__pageTransition(href);
+        if (href && window.__pageTransition) window.__pageTransition(href, cx, cy);
       });
     });
 

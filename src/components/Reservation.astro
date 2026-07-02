@@ -451,14 +451,26 @@ import Button from './Button.astro';
     );
 
     // Custom GSAP dropdowns
-    const dropdownContainers = document.querySelectorAll('.custom-select') as NodeListOf<HTMLElement>;
+    const dropdownContainers = document.querySelectorAll(
+      '.custom-select',
+    ) as NodeListOf<HTMLElement>;
 
     dropdownContainers.forEach((dropdownContainer) => {
-      const dropdownTriggerButton = dropdownContainer.querySelector('.custom-select-trigger') as HTMLElement;
-      const dropdownOptionsPanel = dropdownContainer.querySelector('.custom-select-options') as HTMLElement;
-      const dropdownLabelElement = dropdownContainer.querySelector('.custom-select-label') as HTMLElement;
-      const dropdownArrowIcon = dropdownContainer.querySelector('.custom-select-arrow') as HTMLElement;
-      const hiddenInput = dropdownContainer.querySelector('input[type="hidden"]') as HTMLInputElement;
+      const dropdownTriggerButton = dropdownContainer.querySelector(
+        '.custom-select-trigger',
+      ) as HTMLElement;
+      const dropdownOptionsPanel = dropdownContainer.querySelector(
+        '.custom-select-options',
+      ) as HTMLElement;
+      const dropdownLabelElement = dropdownContainer.querySelector(
+        '.custom-select-label',
+      ) as HTMLElement;
+      const dropdownArrowIcon = dropdownContainer.querySelector(
+        '.custom-select-arrow',
+      ) as HTMLElement;
+      const hiddenInput = dropdownContainer.querySelector(
+        'input[type="hidden"]',
+      ) as HTMLInputElement;
       const optionElements = dropdownContainer.querySelectorAll(
         '.custom-select-option',
       ) as NodeListOf<HTMLElement>;
@@ -524,26 +536,40 @@ import Button from './Button.astro';
         });
       });
 
-      document.addEventListener('click', (clickEvent) => {
-        if (!dropdownContainer.contains(clickEvent.target as Node) && isDropdownOpen) {
-          closeDropdown();
-        }
-      }, { signal: resCtrl.signal });
+      document.addEventListener(
+        'click',
+        (clickEvent) => {
+          if (!dropdownContainer.contains(clickEvent.target as Node) && isDropdownOpen) {
+            closeDropdown();
+          }
+        },
+        { signal: resCtrl.signal },
+      );
     });
 
     // Custom GSAP date picker
     const dateTimeContainer = document.querySelector('.custom-datetime');
     if (dateTimeContainer) {
-      const dateTimeTriggerButton = dateTimeContainer.querySelector('.custom-dt-trigger') as HTMLElement;
-      const calendarPanelElement = dateTimeContainer.querySelector('.custom-dt-panel') as HTMLElement;
-      const dateTimeLabelElement = dateTimeContainer.querySelector('.custom-dt-label') as HTMLElement;
-      const hiddenInput = dateTimeContainer.querySelector('input[type="hidden"]') as HTMLInputElement;
+      const dateTimeTriggerButton = dateTimeContainer.querySelector(
+        '.custom-dt-trigger',
+      ) as HTMLElement;
+      const calendarPanelElement = dateTimeContainer.querySelector(
+        '.custom-dt-panel',
+      ) as HTMLElement;
+      const dateTimeLabelElement = dateTimeContainer.querySelector(
+        '.custom-dt-label',
+      ) as HTMLElement;
+      const hiddenInput = dateTimeContainer.querySelector(
+        'input[type="hidden"]',
+      ) as HTMLInputElement;
       const calendarMonthLabel = dateTimeContainer.querySelector('.dt-month-label') as HTMLElement;
       const calendarDaysGrid = dateTimeContainer.querySelector('.dt-days') as HTMLElement;
       const previousMonthButton = dateTimeContainer.querySelector('.dt-month-prev') as HTMLElement;
       const nextMonthButton = dateTimeContainer.querySelector('.dt-month-next') as HTMLElement;
       const hourSelectElement = dateTimeContainer.querySelector('.dt-hour') as HTMLSelectElement;
-      const minuteSelectElement = dateTimeContainer.querySelector('.dt-minute') as HTMLSelectElement;
+      const minuteSelectElement = dateTimeContainer.querySelector(
+        '.dt-minute',
+      ) as HTMLSelectElement;
       const amPmToggleButton = dateTimeContainer.querySelector('.dt-ampm') as HTMLElement;
       const confirmSelectionButton = dateTimeContainer.querySelector('.dt-done') as HTMLElement;
 
@@ -610,7 +636,8 @@ import Button from './Button.astro';
 
           const dateObj = new Date(viewedYear, viewedMonth, dayOfMonth);
           const isCurrentDay = dateObj.toDateString() === today.toDateString();
-          const isSelectedDate = selectedDate && dateObj.toDateString() === selectedDate.toDateString();
+          const isSelectedDate =
+            selectedDate && dateObj.toDateString() === selectedDate.toDateString();
 
           if (isSelectedDate) {
             dayButtonElement.classList.add('bg-brand-mint', 'text-canvas-black', 'font-semibold');
@@ -754,11 +781,15 @@ import Button from './Button.astro';
         closeCalendarPanel();
       });
 
-      document.addEventListener('click', (clickEvent) => {
-        if (!dateTimeContainer.contains(clickEvent.target as Node) && isCalendarOpen) {
-          closeCalendarPanel();
-        }
-      }, { signal: resCtrl.signal });
+      document.addEventListener(
+        'click',
+        (clickEvent) => {
+          if (!dateTimeContainer.contains(clickEvent.target as Node) && isCalendarOpen) {
+            closeCalendarPanel();
+          }
+        },
+        { signal: resCtrl.signal },
+      );
 
       renderCalendar();
     }

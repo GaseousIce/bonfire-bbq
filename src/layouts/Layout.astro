@@ -64,10 +64,12 @@ const heroImage = await getImage({
         scrollbar-color: #313131 #131313;
       }
 
-      /* Promote smooth-wrapper/content to compositor layers */
-      #smooth-wrapper,
-      #smooth-content {
-        will-change: transform;
+      /* Promote smooth-wrapper/content to compositor layers on desktop where ScrollSmoother is active */
+      @media (min-width: 768px) {
+        #smooth-wrapper,
+        #smooth-content {
+          will-change: transform;
+        }
       }
 
       /* Webkit scrollbar customization */
@@ -101,95 +103,159 @@ const heroImage = await getImage({
       import { gsap } from 'gsap';
       import { ScrollTrigger } from 'gsap/ScrollTrigger';
       import { ScrollSmoother } from 'gsap/ScrollSmoother';
-      import { MorphSVGPlugin } from 'gsap/MorphSVGPlugin';
+      import { SplitText } from 'gsap/SplitText';
 
-      // Extend Window so TypeScript recognises global helpers
       declare global {
         interface Window {
           __smoother?: ScrollSmoother;
-          __pageTransition?: (href: string) => void;
+          __pageTransition?: (href: string, originX?: number, originY?: number) => void;
         }
       }
 
-      gsap.registerPlugin(ScrollTrigger, ScrollSmoother, MorphSVGPlugin);
-
-      ScrollTrigger.normalizeScroll(true);
+      gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
 
       const isMobile = window.innerWidth < 768;
-      window.__smoother = ScrollSmoother.create({
-        wrapper: '#smooth-wrapper',
-        content: '#smooth-content',
-        smooth: isMobile ? 0.2 : 0.6,
-      });
+
+      if (!isMobile) {
+        ScrollTrigger.normalizeScroll(true);
+        window.__smoother = ScrollSmoother.create({
+          wrapper: '#smooth-wrapper',
+          content: '#smooth-content',
+          smooth: 0.6,
+        });
+      }
       requestAnimationFrame(() => ScrollTrigger.refresh());
 
-      // ── Page transition orchestration ──────────────────────────────
+      // ── Page transition SplitText initialization (once, not on every click) ──
+      let __ptCharsTween: gsap.core.Tween | null = null;
+      {
+        const splitEl = document.querySelector('.split');
+        if (splitEl) {
+          try {
+            SplitText.create('.split', {
+              type: 'chars',
+              autoSplit: true,
+              mask: 'chars',
+              onSplit: (self: any) => {
+                __ptCharsTween = gsap.from(self.chars, {
+                  duration: 0.28,
+                  yPercent: 40,
+                  opacity: 0,
+                  stagger: 0.04,
+                  ease: 'elastic.out(1,0.5)',
+                });
+              },
+            });
+            // Pause the tween at start — we replay it on each nav click
+            if (__ptCharsTween) __ptCharsTween.pause(0);
+          } catch (e) {
+            console.warn('[PageTransition] SplitText init error:', e);
+          }
+        }
+      }
+
       let _transitionActive = false;
 
-      window.__pageTransition = (href: string): void => {
+      window.__pageTransition = (href: string, originX?: number, originY?: number): void => {
         if (_transitionActive) return;
         _transitionActive = true;
 
-        const wipePathUV = document.getElementById('wipe-path-uv') as SVGPathElement | null;
-        const wipePathMint = document.getElementById('wipe-path-mint') as SVGPathElement | null;
+        const ptOverlay = document.getElementById('page-transition') as HTMLElement | null;
+        const ptWipe = document.getElementById('pt-wipe') as HTMLElement | null;
+        const ptBrand = document.getElementById('pt-brand') as HTMLElement | null;
         const smoother = window.__smoother;
-        if (!wipePathUV || !wipePathMint) {
+        if (!ptOverlay || !ptWipe || !ptBrand) {
           _transitionActive = false;
           return;
         }
 
-        const HIDDEN = 'M 100,0 L 100,0 Q 100,50 100,100 L 100,100 Z';
-        const COVER = 'M 100,0 L 0,0 Q -8,50 0,100 L 100,100 Z';
+        const cx = originX !== undefined ? originX : window.innerWidth / 2;
+        const cy = originY !== undefined ? originY : window.innerHeight / 2;
 
-        // Phase 1 — UV leads, mint follows
-        gsap.to(wipePathUV, {
-          morphSVG: { shape: COVER },
-          duration: 0.75,
-          ease: 'power2.inOut',
-        });
-        gsap.to(wipePathMint, {
-          morphSVG: { shape: COVER },
-          duration: 0.75,
-          ease: 'power2.inOut',
-          delay: 0.08,
+        // Max radius to cover full viewport from any click point (viewport diagonal)
+        const maxRadius = Math.sqrt(
+          window.innerWidth * window.innerWidth + window.innerHeight * window.innerHeight,
+        );
+
+        const pos = `${cx}px ${cy}px`;
+
+        gsap.set(ptWipe, { clipPath: `circle(0px at ${pos})` });
+
+        const tl = gsap.timeline({
           onComplete: () => {
-            // Instant-jump to the target section while fully covered
-            if (href === '#hero') {
-              if (smoother) smoother.scrollTo(0, false);
-              else window.scrollTo({ top: 0 });
-            } else {
-              const target = document.querySelector(href);
-              if (target) {
-                if (smoother) {
-                  const rect = target.getBoundingClientRect();
-                  smoother.scrollTo(smoother.scrollTop() + rect.top - 80, false);
-                } else {
-                  target.scrollIntoView();
-                }
-              }
-            }
-
-            ScrollTrigger.refresh();
-
-            // Phase 2 — settle, then mint retracts first, UV follows
-            gsap.delayedCall(0.15, () => {
-              gsap.to(wipePathMint, {
-                morphSVG: { shape: HIDDEN },
-                duration: 0.75,
-                ease: 'power2.inOut',
-              });
-              gsap.to(wipePathUV, {
-                morphSVG: { shape: HIDDEN },
-                duration: 0.75,
-                ease: 'power2.inOut',
-                delay: 0.08,
-                onComplete: () => {
-                  _transitionActive = false;
-                },
-              });
-            });
+            tl.kill();
+            _transitionActive = false;
+          },
+          onInterrupt: () => {
+            _transitionActive = false;
           },
         });
+
+        // Phase 1: Circle expand (0s start, 0.5s duration — slower to match text reveal)
+        tl.set(ptOverlay, { autoAlpha: 1, pointerEvents: 'auto' });
+        tl.to(
+          ptWipe,
+          {
+            clipPath: `circle(${maxRadius}px at ${pos})`,
+            duration: 0.5,
+            ease: 'power2.inOut',
+          },
+          0,
+        );
+
+        // Phase 2: Text reveal via pre-initialized SplitText (offset +250ms after swipe)
+        tl.call(
+          () => {
+            gsap.set(ptBrand, { autoAlpha: 1 });
+            if (__ptCharsTween) {
+              __ptCharsTween.restart();
+            }
+          },
+          null,
+          null,
+          0.25,
+        );
+
+        // Phase 3: Navigate + cleanup (scroll while overlay is fully dark)
+        tl.call(
+          () => {
+            try {
+              if (href === '#hero') {
+                if (smoother) smoother.scrollTo(0, false);
+                else window.scrollTo({ top: 0 });
+              } else {
+                const target = document.querySelector(href);
+                if (target) {
+                  if (smoother) smoother.scrollTo(target, false);
+                  else target.scrollIntoView();
+                }
+              }
+              ScrollTrigger.refresh();
+            } catch (e) {
+              console.warn('[PageTransition] callback error:', e);
+            }
+          },
+          null,
+          null,
+          0.7,
+        );
+
+        // Phase 4: Circle collapse (starts after text animation finishes at 1.25s)
+        tl.to(
+          ptWipe,
+          {
+            clipPath: `circle(0px at ${pos})`,
+            duration: 0.3,
+            ease: 'power2.inOut',
+          },
+          1.25,
+        );
+
+        // Phase 5: Text fade out (starts after text animation finishes)
+        tl.to(ptBrand, { autoAlpha: 0, duration: 0.2 }, 1.25);
+
+        // Phase 6: Hide overlay after out animations
+        tl.set(ptOverlay, { autoAlpha: 0, pointerEvents: 'none' }, 1.55);
       };
     </script>
   </body>

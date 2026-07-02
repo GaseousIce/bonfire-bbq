@@ -9,10 +9,7 @@ import { heroTandoor } from '../assets/images';
   class="relative w-full min-h-screen flex flex-col justify-center items-center overflow-hidden bg-canvas-black select-none"
 >
   <!-- Background Image with Parallax wrapper -->
-  <div
-    class="absolute inset-0 w-full h-full scale-[1.12] hero-bg-wrap"
-    data-parallax-scale="1.12"
-  >
+  <div class="absolute inset-0 w-full h-full scale-[1.12] hero-bg-wrap" data-parallax-scale="1.12">
     <Image
       src={heroTandoor}
       alt="Bonfire Indian tandoor cooking"
@@ -56,7 +53,6 @@ import { heroTandoor } from '../assets/images';
     </div>
   </div>
 
-
   <!-- Content Container -->
   <div
     class="hero-content relative z-20 max-w-5xl mx-auto px-6 text-center flex flex-col items-center gap-6 pointer-events-auto"
@@ -96,10 +92,18 @@ import { heroTandoor } from '../assets/images';
     <div
       class="hero-cta flex flex-wrap gap-6 md:gap-12 justify-center items-center mt-6 translate-y-8 opacity-0"
     >
-      <Button href="#reserve" variant="primary" class="hero-cta-btn text-[11px] tracking-[1.5px] px-8 py-3.5">
+      <Button
+        href="#reserve"
+        variant="primary"
+        class="hero-cta-btn text-[11px] tracking-[1.5px] px-8 py-3.5"
+      >
         Reserve A Hearth
       </Button>
-      <Button href="#dishes" variant="outline" class="hero-cta-btn text-[11px] tracking-[1.5px] px-8 py-3.5">
+      <Button
+        href="#dishes"
+        variant="outline"
+        class="hero-cta-btn text-[11px] tracking-[1.5px] px-8 py-3.5"
+      >
         Explore Menu
       </Button>
     </div>
@@ -308,8 +312,18 @@ import { heroTandoor } from '../assets/images';
     heroCtaButtons.forEach((ctaButton) => {
       ctaButton.addEventListener('click', (clickEvent) => {
         clickEvent.preventDefault();
+        const mouseEvent = clickEvent as MouseEvent;
+        let cx = mouseEvent.clientX;
+        let cy = mouseEvent.clientY;
+        const el = clickEvent.currentTarget as HTMLElement | null;
+        // Keyboard clicks produce (0,0) with detail=0 — use element centre instead
+        if (cx === 0 && cy === 0 && (clickEvent as MouseEvent).detail === 0 && el) {
+          const rect = el.getBoundingClientRect();
+          cx = rect.left + rect.width / 2;
+          cy = rect.top + rect.height / 2;
+        }
         const href = ctaButton.getAttribute('href');
-        if (href && window.__pageTransition) window.__pageTransition(href);
+        if (href && window.__pageTransition) window.__pageTransition(href, cx, cy);
       });
     });
   });
