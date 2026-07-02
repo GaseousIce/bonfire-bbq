@@ -11,14 +11,36 @@
     <div class="loading-spinner relative w-32 h-32 opacity-0">
       <div class="loading-ring-a absolute inset-0">
         <svg viewBox="0 0 128 128" class="w-full h-full">
-          <circle cx="64" cy="64" r="60.25" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="7.5"/>
-          <path d="M 64 3.75 A 60.25 60.25 0 0 1 64 124.25" fill="none" stroke="#3cffd0" stroke-width="7.5" stroke-linecap="round"/>
+          <circle
+            cx="64"
+            cy="64"
+            r="60.25"
+            fill="none"
+            stroke="rgba(255,255,255,0.06)"
+            stroke-width="7.5"></circle>
+          <path
+            d="M 64 3.75 A 60.25 60.25 0 0 1 64 124.25"
+            fill="none"
+            stroke="#3cffd0"
+            stroke-width="7.5"
+            stroke-linecap="round"></path>
         </svg>
       </div>
       <div class="loading-ring-b absolute inset-[12px]">
         <svg viewBox="0 0 104 104" class="w-full h-full">
-          <circle cx="52" cy="52" r="48.25" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="7.5"/>
-          <path d="M 52 3.75 A 48.25 48.25 0 0 0 52 100.25" fill="none" stroke="#5200ff" stroke-width="7.5" stroke-linecap="round"/>
+          <circle
+            cx="52"
+            cy="52"
+            r="48.25"
+            fill="none"
+            stroke="rgba(255,255,255,0.06)"
+            stroke-width="7.5"></circle>
+          <path
+            d="M 52 3.75 A 48.25 48.25 0 0 0 52 100.25"
+            fill="none"
+            stroke="#5200ff"
+            stroke-width="7.5"
+            stroke-linecap="round"></path>
         </svg>
       </div>
     </div>
@@ -29,9 +51,7 @@
       <div class="loading-progress-bar h-full w-0 bg-brand-mint rounded-full"></div>
     </div>
 
-    <p class="loading-pct font-mono text-sm tracking-[2px] text-hazard-white/60 opacity-0">
-      0%
-    </p>
+    <p class="loading-pct font-mono text-sm tracking-[2px] text-hazard-white/60 opacity-0">0%</p>
   </div>
 </div>
 
@@ -99,23 +119,25 @@
           },
           onComplete: () => {
             // Run Hero cinematic entrance inline rather than through custom event
-             const heroBackgroundWrapper = document.querySelector('.hero-bg-wrap') as HTMLElement | null;
-             const eyebrow = document.querySelector('.hero-eyebrow');
-             const chars = document.querySelectorAll('.hero-char');
-             const deck = document.querySelector('.hero-deck');
-             const heroCta = document.querySelector('.hero-cta');
-             const scrollDown = document.querySelector('.hero-scroll-down');
+            const heroBackgroundWrapper = document.querySelector(
+              '.hero-bg-wrap',
+            ) as HTMLElement | null;
+            const eyebrow = document.querySelector('.hero-eyebrow');
+            const chars = document.querySelectorAll('.hero-char');
+            const deck = document.querySelector('.hero-deck');
+            const heroCta = document.querySelector('.hero-cta');
+            const scrollDown = document.querySelector('.hero-scroll-down');
 
-             const bgScale = parseFloat(heroBackgroundWrapper?.dataset.parallaxScale || '1.12');
-             const startScale = bgScale + 0.13;
+            const bgScale = parseFloat(heroBackgroundWrapper?.dataset.parallaxScale || '1.12');
+            const startScale = bgScale + 0.13;
 
-             const masterTimeline = gsap.timeline({ defaults: { ease: 'power3.out' } });
+            const masterTimeline = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
-             masterTimeline.fromTo(
-               heroBackgroundWrapper,
-               { scale: startScale },
-               { scale: bgScale, duration: 2.2, ease: 'power2.out' }
-             );
+            masterTimeline.fromTo(
+              heroBackgroundWrapper,
+              { scale: startScale },
+              { scale: bgScale, duration: 2.2, ease: 'power2.out' },
+            );
 
             masterTimeline.to(
               chars,
