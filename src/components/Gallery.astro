@@ -86,7 +86,9 @@ const galleryItems = [
 
               {/* Card Label */}
               <div class="flex justify-between items-center px-2 py-1 border-t border-white/5">
-                <span class="font-sans text-sm font-bold text-hazard-white">{galleryItem.title}</span>
+                <span class="font-sans text-sm font-bold text-hazard-white">
+                  {galleryItem.title}
+                </span>
                 <span class="font-mono text-[10px] text-secondary-text">{galleryItem.id}</span>
               </div>
             </div>
@@ -116,131 +118,83 @@ const galleryItems = [
 
     if (!pinContainer || galleryCards.length === 0) return;
 
-    // Intercept timeline for test environment robustness (preventing type errors in mock fromTo)
-    const originalTimeline = gsap.timeline;
-    gsap.timeline = function (config) {
-      const tl = originalTimeline(config);
-      if (tl && 'tweens' in tl) {
-        const originalFromTo = tl.fromTo;
-        tl.fromTo = function (target, fromProps, toProps, position) {
-          const res = originalFromTo.call(tl, target, fromProps, toProps, position);
-          const lastTween = tl.tweens[tl.tweens.length - 1];
-          if (lastTween) {
-            lastTween.props = {};
-          }
-          return res;
-        };
-      }
-      return tl;
-    };
-
     mediaMatcher.add(
       {
         isDesktop: '(min-width: 768px)',
         isMobile: '(max-width: 767px)',
       },
-      (context) => {
-        const { isDesktop } = context.conditions as { isDesktop: boolean };
-        const isMobile = !isDesktop;
+      () => {
+        gsap.set('.gallery-sticky-panel', { willChange: 'transform' });
 
-        if (isDesktop || isMobile) {
-          // Promote pinned panel and cards to compositor layers
-          gsap.set('.gallery-sticky-panel', { willChange: 'transform' });
-          gsap.set(galleryCards, { willChange: 'transform, opacity' });
+        gsap.set(galleryCards, { willChange: 'transform, opacity' });
 
-          // Set initial stack z-indexes and rotations dynamically
-          galleryCards.forEach((cardElement, cardIndex) => {
-            const rotations = [-2, 3, -1.5, 2];
-            const cardRotation = rotations[cardIndex % rotations.length];
-            gsap.set(cardElement, {
-              rotation: cardRotation,
-              zIndex: 40 - cardIndex,
-              xPercent: 0,
-              yPercent: 0,
-              scale: 1,
-              opacity: 1,
-            });
+        galleryCards.forEach((cardElement, cardIndex) => {
+          const rotations = [-2, 3, -1.5, 2];
+          const cardRotation = rotations[cardIndex % rotations.length];
+          gsap.set(cardElement, {
+            rotation: cardRotation,
+            zIndex: 40 - cardIndex,
+            xPercent: 0,
+            yPercent: 0,
+            scale: 1,
+            opacity: 1,
           });
+        });
 
-          // Create ScrollTrigger timeline pinning the sticky panel inside the container
-          const stackTimeline = gsap.timeline({
-            scrollTrigger: {
-              trigger: '.gallery-pin-container',
-              pin: '.gallery-sticky-panel',
-              scrub: 0.6,
-              start: 'top top',
-              end: 'bottom bottom',
-            },
-          });
+        const stackTimeline = gsap.timeline({
+          scrollTrigger: {
+            trigger: '.gallery-pin-container',
+            pin: '.gallery-sticky-panel',
+            scrub: 0.6,
+            start: 'top top',
+            end: 'bottom bottom',
+          },
+        });
 
-          // We slide out the top cards one by one to reveal the lower ones
-          // Card 0 (top): slides left & rotates
-          stackTimeline.to(galleryCards[0], {
-            xPercent: -130,
-            rotation: -15,
-            opacity: 0,
-            ease: 'power2.inOut',
-          });
+        // We slide out the top cards one by one to reveal the lower ones
+        stackTimeline.to(galleryCards[0], {
+          xPercent: -130,
+          rotation: -15,
+          opacity: 0,
+          ease: 'power2.inOut',
+        });
 
-          // As Card 0 leaves, Card 1 scales up slightly
-          stackTimeline.fromTo(
-            galleryCards[1],
-            { scale: 0.94 },
-            { scale: 1, duration: 0.5, ease: 'power2.out' },
-            '-=0.4',
-          );
+        stackTimeline.fromTo(
+          galleryCards[1],
+          { scale: 0.94 },
+          { scale: 1, duration: 0.5, ease: 'power2.out' },
+          '-=0.4',
+        );
 
-          // Card 1: slides right & rotates
-          stackTimeline.to(galleryCards[1], {
-            xPercent: 130,
-            rotation: 15,
-            opacity: 0,
-            ease: 'power2.inOut',
-          });
+        stackTimeline.to(galleryCards[1], {
+          xPercent: 130,
+          rotation: 15,
+          opacity: 0,
+          ease: 'power2.inOut',
+        });
 
-          // Card 2 scales up
-          stackTimeline.fromTo(
-            galleryCards[2],
-            { scale: 0.94 },
-            { scale: 1, duration: 0.5, ease: 'power2.out' },
-            '-=0.4',
-          );
+        stackTimeline.fromTo(
+          galleryCards[2],
+          { scale: 0.94 },
+          { scale: 1, duration: 0.5, ease: 'power2.out' },
+          '-=0.4',
+        );
 
-          // Card 2: slides upwards
-          stackTimeline.to(galleryCards[2], {
-            yPercent: -130,
-            rotation: -8,
-            opacity: 0,
-            ease: 'power2.inOut',
-          });
+        stackTimeline.to(galleryCards[2], {
+          yPercent: -130,
+          rotation: -8,
+          opacity: 0,
+          ease: 'power2.inOut',
+        });
 
-          // Card 3 (last) scales to 1.05 and rotates to 0
-          stackTimeline.fromTo(
-            galleryCards[3],
-            { scale: 0.94, rotation: 2 },
-            { scale: 1.03, rotation: 0, duration: 0.6, ease: 'back.out(1.5)' },
-            '-=0.4',
-          );
+        stackTimeline.fromTo(
+          galleryCards[3],
+          { scale: 0.94, rotation: 2 },
+          { scale: 1.03, rotation: 0, duration: 0.6, ease: 'back.out(1.5)' },
+          '-=0.4',
+        );
 
-          // Add a small pause at the end of the stack
-          stackTimeline.to({}, { duration: 0.3 });
-
-          // Reset styles immediately in mock environment to satisfy initial state checks
-          if ('tweens' in stackTimeline) {
-            galleryCards.forEach((cardElement, cardIndex) => {
-              const rotations = [-2, 3, -1.5, 2];
-              const cardRotation = rotations[cardIndex % rotations.length];
-              gsap.set(cardElement, {
-                rotation: cardRotation,
-                zIndex: 40 - cardIndex,
-                xPercent: 0,
-                yPercent: 0,
-                scale: 1,
-                opacity: 1,
-              });
-            });
-          }
-        }
+        stackTimeline.to({}, { duration: 0.3 });
       },
     );
   });
