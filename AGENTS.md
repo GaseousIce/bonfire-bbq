@@ -1,13 +1,11 @@
 # Bonfire BBQ — Project Knowledge Base
 
-**Generated:** 2026-07-02
-**Commit:** `5ffe9cb`
-**Branch:** `feat/mobile-responsiveness`
-
 ## OVERVIEW
+
 Single-page restaurant landing site for "Bonfire BBQ" — Astro v7 static site with GSAP v3.15 animations, Tailwind CSS v4 styling, and a Verge-inspired dark editorial design system. Zero React/Vue/Svelte components — all interactivity is via vanilla `<script>` blocks with GSAP inside `.astro` components.
 
 ## STRUCTURE
+
 ```
 bonfire-bbq/
 ├── .agents/          # 10 AI agent skill directories (GSAP, Tailwind, design)
@@ -24,36 +22,39 @@ bonfire-bbq/
 ```
 
 ## WHERE TO LOOK
-| Task | Location | Notes |
-|------|----------|-------|
-| Build/dev commands | `package.json` scripts, `astro.config.mjs` | `npm run dev` (localhost:4321), `npm run build` |
-| Design tokens & rules | `src/styles/global.css`, `DESIGN.md` | Tailwind v4 CSS `@theme` + 339-line design spec |
-| Page composition | `src/pages/index.astro` | Single page — imports all 8 section components |
-| Layout & shell | `src/layouts/Layout.astro` | GSAP plugin registration, ScrollSmoother, page transition |
-| Component animations | Per-component `<script>` block | Every component owns its own GSAP logic |
-| Image assets | `src/assets/images.ts` + `images/` dir | 14 PNGs exported as named ESM imports |
-| GSAP plugin setup | `src/layouts/Layout.astro` `<script>` | ScrollTrigger, ScrollSmoother, SplitText — registered once |
-| AI skill references | `.agents/skills/` | 10 skill files — read before working in that domain |
+
+| Task                  | Location                                   | Notes                                                      |
+| --------------------- | ------------------------------------------ | ---------------------------------------------------------- |
+| Build/dev commands    | `package.json` scripts, `astro.config.mjs` | `npm run dev` (localhost:4321), `npm run build`            |
+| Design tokens & rules | `src/styles/global.css`, `DESIGN.md`       | Tailwind v4 CSS `@theme` + 339-line design spec            |
+| Page composition      | `src/pages/index.astro`                    | Single page — imports all 8 section components             |
+| Layout & shell        | `src/layouts/Layout.astro`                 | GSAP plugin registration, ScrollSmoother, page transition  |
+| Component animations  | Per-component `<script>` block             | Every component owns its own GSAP logic                    |
+| Image assets          | `src/assets/images.ts` + `images/` dir     | 14 PNGs exported as named ESM imports                      |
+| GSAP plugin setup     | `src/layouts/Layout.astro` `<script>`      | ScrollTrigger, ScrollSmoother, SplitText — registered once |
+| AI skill references   | `.agents/skills/`                          | 10 skill files — read before working in that domain        |
 
 ## CODE MAP
-| Symbol | Type | Location | Role |
-|--------|------|----------|------|
-| `index.astro` | Page | `src/pages/` | Single route — composes Hero→About→SignatureDishes→Gallery→Reservation→Footer |
-| `Layout.astro` | Layout | `src/layouts/` | Page shell, GSAP plugin registration, ScrollSmoother, meta, page transition fn |
-| `global.css` | Style | `src/styles/` | Tailwind v4 `@theme`, base resets, responsive section-padding |
-| `images.ts` | Module | `src/assets/` | Barrel file — named re-exports of all 14 PNG imports |
-| `Hero.astro` | Component | `src/components/` | Cinematic hero: staggered char reveal, mouse parallax, smoke, glow pulses |
-| `Navbar.astro` | Component | `src/components/` | Fixed nav + hamburger mobile drawer, clip-path page transition on click |
-| `About.astro` | Component | `src/components/` | StoryStream timeline: spine fill, card reveals, image parallax |
-| `SignatureDishes.astro` | Component | `src/components/` | Pinned horizontal scroll: card deck with scale/parallax per dish |
-| `Gallery.astro` | Component | `src/components/` | Stack reveal: cards slide/rotate/scale on scroll |
-| `Reservation.astro` | Component | `src/components/` | Booking form: GSAP dropdowns, animated calendar/date picker |
-| `Footer.astro` | Component | `src/components/` | Footer nav, legal modal, AbortController cleanup |
-| `LoadingScreen.astro` | Component | `src/components/` | Loading spinner + progress bar — chains into Hero entrance |
-| `Button.astro` | Component | `src/components/` | Reusable atom — `<a>` or `<button>`, primary/outline variants |
-| `PageTransition.astro` | Component | `src/components/` | Clip-path wipe overlay DOM shell (logic in Layout.astro) |
+
+| Symbol                  | Type      | Location          | Role                                                                           |
+| ----------------------- | --------- | ----------------- | ------------------------------------------------------------------------------ |
+| `index.astro`           | Page      | `src/pages/`      | Single route — composes Hero→About→SignatureDishes→Gallery→Reservation→Footer  |
+| `Layout.astro`          | Layout    | `src/layouts/`    | Page shell, GSAP plugin registration, ScrollSmoother, meta, page transition fn |
+| `global.css`            | Style     | `src/styles/`     | Tailwind v4 `@theme`, base resets, responsive section-padding                  |
+| `images.ts`             | Module    | `src/assets/`     | Barrel file — named re-exports of all 14 PNG imports                           |
+| `Hero.astro`            | Component | `src/components/` | Cinematic hero: staggered char reveal, mouse parallax, smoke, glow pulses      |
+| `Navbar.astro`          | Component | `src/components/` | Fixed nav + hamburger mobile drawer, clip-path page transition on click        |
+| `About.astro`           | Component | `src/components/` | StoryStream timeline: spine fill, card reveals, image parallax                 |
+| `SignatureDishes.astro` | Component | `src/components/` | Pinned horizontal scroll: card deck with scale/parallax per dish               |
+| `Gallery.astro`         | Component | `src/components/` | Stack reveal: cards slide/rotate/scale on scroll                               |
+| `Reservation.astro`     | Component | `src/components/` | Booking form: GSAP dropdowns, animated calendar/date picker                    |
+| `Footer.astro`          | Component | `src/components/` | Footer nav, legal modal, AbortController cleanup                               |
+| `LoadingScreen.astro`   | Component | `src/components/` | Loading spinner + progress bar — chains into Hero entrance                     |
+| `Button.astro`          | Component | `src/components/` | Reusable atom — `<a>` or `<button>`, primary/outline variants                  |
+| `PageTransition.astro`  | Component | `src/components/` | Clip-path wipe overlay DOM shell (logic in Layout.astro)                       |
 
 ## CONVENTIONS
+
 - **Prettier**: semicolons, single quotes, trailing commas, 100-char width — `npm run format`
 - **Commits**: Conventional Commits (`fix:`, `feat:`, `refactor:`) — NEVER commit unless explicitly asked
 - **Design**: Verge dark editorial — `#131313` canvas, Jelly Mint `#3cffd0` accents, pill corners (20-40px), no shadows/gradients
@@ -62,6 +63,7 @@ bonfire-bbq/
 - **Shell**: Prefix commands with `rtk` for token savings — NOT for PowerShell-native cmdlets
 
 ## ANTI-PATTERNS (THIS PROJECT)
+
 - **No auto-commit**: NEVER create/run git commits unless explicitly asked
 - **No box-shadow**: Use 1px borders or saturated accent fills for elevation (Verge rule)
 - **No gradients**: Solid color blocks only — no glows, gradients, or atmospheric blurs
@@ -73,6 +75,7 @@ bonfire-bbq/
 - **No mint text <16px on `#131313`**: Contrast vibrates at small sizes
 
 ## COMMANDS
+
 ```bash
 npm run dev            # Dev server at localhost:4321
 npm run build          # Production build to dist/
@@ -82,6 +85,7 @@ npm run format:check   # Check formatting (read-only)
 ```
 
 ## NOTES
+
 - Single-page static site (1 route) — all nav is anchor-based scroll via ScrollSmoother
 - No backend, no API, no database, no form submission (alert-only)
 - Tailwind v4 via CSS `@theme` — no `tailwind.config.*`
@@ -93,7 +97,9 @@ npm run format:check   # Check formatting (read-only)
 ---
 
 ## 1. Using Skills
+
 Before writing, modifying, or auditing code, read the instructions in the project's specialized skill files under `./.agents/skills/` if the task relates to them:
+
 - **Tailwind CSS v4 Docs**: Refer to [tailwind-4-docs/SKILL.md](./.agents/skills/tailwind-4-docs/SKILL.md) for utility classes, configuration, and migration guides.
 - **Web Interface/Design Review**: Refer to [web-design-guidelines/SKILL.md](./.agents/skills/web-design-guidelines/SKILL.md) for styling, accessibility, and UX criteria.
 - **Astro**: Refer to [astro/SKILL.md](./.agents/skills/astro/SKILL.md) for Astro framework components, configuration, adapters, and deployment.
@@ -107,14 +113,17 @@ Before writing, modifying, or auditing code, read the instructions in the projec
 - **GSAP Utilities**: Refer to [gsap-utils/SKILL.md](./.agents/skills/gsap-utils/SKILL.md) for helper utility functions (clamp, mapRange, etc.).
 
 ## 2. Design Aesthetics
+
 - All UI and component designs must strictly follow the Verge-inspired (2024) dark editorial aesthetic defined in [DESIGN.md](./DESIGN.md).
 - Avoid generic, plain, or standard modern layouts. Make designs feel premium, high-impact, and highly customized according to the colors, typography, shapes, and flat depth rules in [DESIGN.md](./DESIGN.md).
 
 ## 3. MCP Configuration
+
 - Local Model Context Protocol (MCP) servers are configured in [.mcp.json](./.mcp.json).
 - Leverage these MCP server tools for AI-assisted debugging, route analysis, and interactive development where supported.
 
 ## 4. Git Commits and Branches
+
 - Use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) for commit messages and use conventional names for branches.
 - Write **meaningful, descriptive, and technically precise commit messages** that accurately capture the exact intent, scope, and impact of the changes. Avoid generic or vague summaries.
   - Good examples:
@@ -124,5 +133,6 @@ Before writing, modifying, or auditing code, read the instructions in the projec
 - **NEVER** create or run commit commands on your own; write/make commits ONLY when explicitly asked by the user. Under no circumstances should you commit code unless specifically instructed.
 
 ## 5. Token Savings (RTK)
+
 - Always prefix shell commands with `rtk` (e.g., `rtk git status`, `rtk git fetch`) to minimize token consumption by filtering and compressing command output before it reaches the context, as detailed in [.agents/rules/antigravity-rtk-rules.md](./.agents/rules/antigravity-rtk-rules.md).
 - **Note:** RTK should only be used for **general commands** (e.g., `git`, `npm`, `dir`, `ls`) and **not** for PowerShell-exclusive cmdlets (e.g., `Get-ChildItem`, `Set-Content`, `Remove-Item`). PowerShell-native commands will be filtered directly without RTK.
