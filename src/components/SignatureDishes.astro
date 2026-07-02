@@ -145,12 +145,12 @@ const dishes = [
                 format="webp"
                 quality={78}
               />
-              <div class="absolute top-4 left-4 bg-canvas-black/80 backdrop-blur-sm border border-white/15 px-3 py-1 rounded-full">
+              <div class="absolute top-4 left-4 bg-canvas-black border border-white/15 px-3 py-1 rounded-full">
                 <span class="text-[10px] font-mono uppercase tracking-[1.5px] text-brand-mint font-semibold">
                   {dishData.tag}
                 </span>
               </div>
-              <div class="absolute bottom-4 right-4 bg-canvas-black/80 backdrop-blur-sm border border-white/15 px-3 py-1 rounded-full">
+              <div class="absolute bottom-4 right-4 bg-canvas-black border border-white/15 px-3 py-1 rounded-full">
                 <span class="text-[10px] font-mono uppercase tracking-[1px] text-hazard-white font-bold">
                   {dishData.price}
                 </span>
@@ -199,7 +199,9 @@ const dishes = [
         isDesktop: '(min-width: 768px)',
         isMobile: '(max-width: 767px)',
       },
-      () => {
+      (context) => {
+        const { isDesktop } = context.conditions as { isDesktop: boolean };
+
         gsap.set(dishesScrollTrack, { willChange: 'transform' });
         gsap.set(dishCardElements, { willChange: 'transform' });
 
@@ -209,45 +211,17 @@ const dishes = [
           scrollTrigger: {
             trigger: dishesPinSection,
             pin: true,
-            scrub: 0.8,
+            scrub: isDesktop ? 0.8 : 0.3,
             start: 'top top',
             end: () => `+=${dishesScrollTrack.scrollWidth - window.innerWidth}`,
           },
         });
 
-        dishCardElements.forEach((dishCardElement) => {
-          const dishImageElement = dishCardElement.querySelector('.dish-img');
+        if (isDesktop) {
+          dishCardElements.forEach((dishCardElement) => {
+            const dishImageElement = dishCardElement.querySelector('.dish-img');
 
-          const cardTimeline = gsap.timeline({
-            scrollTrigger: {
-              trigger: dishCardElement,
-              containerAnimation: scrollTween,
-              start: 'left right',
-              end: 'right left',
-              scrub: 1,
-            },
-          });
-
-          cardTimeline
-            .fromTo(
-              dishCardElement,
-              { scale: 0.92, opacity: 0.5 },
-              { scale: 1.03, opacity: 1, ease: 'power1.inOut', duration: 0.5 },
-            )
-            .to(dishCardElement, {
-              scale: 0.92,
-              opacity: 0.5,
-              ease: 'power1.inOut',
-              duration: 0.5,
-            });
-
-          gsap.fromTo(
-            dishImageElement,
-            { scale: 1.02, xPercent: -3 },
-            {
-              scale: 1.15,
-              xPercent: 3,
-              ease: 'none',
+            const cardTimeline = gsap.timeline({
               scrollTrigger: {
                 trigger: dishCardElement,
                 containerAnimation: scrollTween,
@@ -255,9 +229,46 @@ const dishes = [
                 end: 'right left',
                 scrub: 1,
               },
-            },
-          );
-        });
+            });
+
+            cardTimeline
+              .fromTo(
+                dishCardElement,
+                { scale: 0.92, opacity: 0.5 },
+                { scale: 1.03, opacity: 1, ease: 'power1.inOut', duration: 0.5 },
+              )
+              .to(dishCardElement, {
+                scale: 0.92,
+                opacity: 0.5,
+                ease: 'power1.inOut',
+                duration: 0.5,
+              });
+
+            gsap.fromTo(
+              dishImageElement,
+              { scale: 1.02, xPercent: -3 },
+              {
+                scale: 1.15,
+                xPercent: 3,
+                ease: 'none',
+                scrollTrigger: {
+                  trigger: dishCardElement,
+                  containerAnimation: scrollTween,
+                  start: 'left right',
+                  end: 'right left',
+                  scrub: 1,
+                },
+              },
+            );
+          });
+        } else {
+          // Reset card inline styles on mobile to avoid sticking, and keep them fully visible and normal-scale
+          gsap.killTweensOf(dishCardElements);
+          gsap.set(dishCardElements, { clearProps: 'scale,opacity' });
+          const images = dishesPinSection.querySelectorAll('.dish-img');
+          gsap.killTweensOf(images);
+          gsap.set(images, { clearProps: 'scale,xPercent' });
+        }
       },
     );
   });
