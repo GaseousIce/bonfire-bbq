@@ -17,12 +17,12 @@ const { as = 'a', href, type, variant = 'primary', class: className = '' } = Ast
 const ButtonTag = as;
 
 const baseClasses =
-  'hover-button font-mono font-bold uppercase rounded-full border transition-colors duration-300 inline-flex items-center justify-center cursor-pointer';
+  'hover-button font-mono font-bold uppercase rounded-full border inline-flex items-center justify-center cursor-pointer';
 
 const variantClasses =
   variant === 'primary'
-    ? 'bg-brand-mint text-canvas-black border-transparent hover:bg-white hover:text-canvas-black'
-    : 'bg-transparent text-hazard-white border-white/20 hover:border-brand-mint hover:text-brand-mint';
+    ? 'bg-brand-mint text-canvas-black border-transparent variant-primary'
+    : 'bg-transparent text-hazard-white border-white/20 variant-outline';
 
 const allClasses = `${baseClasses} ${variantClasses} ${className}`.trim();
 ---
@@ -32,5 +32,215 @@ const allClasses = `${baseClasses} ${variantClasses} ${className}`.trim();
   type={as === 'button' ? type || 'button' : undefined}
   class={allClasses}
 >
+  <span class="hover-circle-wrapper">
+    <span class="hover-circle"></span>
+  </span>
   <slot />
 </ButtonTag>
+
+<style>
+  .hover-button {
+    position: relative;
+    overflow: hidden;
+    /* Create a stacking context so z-index: -1 children stay inside the button */
+    isolation: isolate;
+  }
+
+  .hover-circle-wrapper {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border-radius: 9999px;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .hover-circle {
+    position: absolute;
+    border-radius: 50%;
+    width: 0;
+    height: 0;
+    transform: translate(-50%, -50%) scale(0);
+    pointer-events: none;
+  }
+
+  /* Mobile/Tablet Fallback Styling (< 1024px) */
+  @media (max-width: 1023px) {
+    .hover-button {
+      transition:
+        background-color 0.3s ease,
+        border-color 0.3s ease,
+        color 0.3s ease;
+    }
+
+    .hover-button.variant-primary:hover {
+      background-color: #ffffff;
+      color: #131313;
+    }
+
+    .hover-button.variant-outline:hover {
+      border-color: #3cffd0;
+      color: #3cffd0;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+
+  const initHoverButtons = () => {
+    const buttons = document.querySelectorAll('.hover-button');
+    if (buttons.length === 0) return;
+
+    const mm = gsap.matchMedia();
+
+    mm.add('(min-width: 1024px)', () => {
+      const cleanups: (() => void)[] = [];
+
+      buttons.forEach((button) => {
+        const circle = button.querySelector('.hover-circle') as HTMLElement | null;
+        if (!circle) return;
+
+        const isPrimary = button.classList.contains('variant-primary');
+
+        // Set initial background color of hover circle
+        if (isPrimary) {
+          gsap.set(circle, { backgroundColor: '#ffffff' });
+        } else {
+          gsap.set(circle, { backgroundColor: '#3cffd0' });
+        }
+
+        const updateSize = () => {
+          const rect = button.getBoundingClientRect();
+          const diagonal = Math.sqrt(rect.width * rect.width + rect.height * rect.height);
+          // Set circle diameter to double the diagonal to guarantee complete coverage from any corner
+          gsap.set(circle, { width: diagonal * 2, height: diagonal * 2 });
+        };
+
+        updateSize();
+        window.addEventListener('resize', updateSize);
+
+        let hoverTween: gsap.core.Timeline | null = null;
+        let enterDelay: gsap.core.Tween | null = null;
+        let isHovered = false;
+        let startX = 0;
+        let startY = 0;
+
+        const onMouseEnter = (e: MouseEvent) => {
+          isHovered = true;
+          const rect = button.getBoundingClientRect();
+          startX = e.clientX - rect.left;
+          startY = e.clientY - rect.top;
+
+          if (enterDelay) enterDelay.kill();
+          if (hoverTween) hoverTween.kill();
+
+          // 200ms delay to prevent accidental/rapid cursor sweep triggers
+          enterDelay = gsap.delayedCall(0.2, () => {
+            if (!isHovered) return;
+
+            // Place the circle at the latest cursor position and reset scale
+            gsap.set(circle, { left: startX, top: startY, scale: 0 });
+
+            hoverTween = gsap.timeline();
+
+            // Animate circle scale up (0.6s, ease: power3.out)
+            hoverTween.to(
+              circle,
+              {
+                scale: 1,
+                duration: 0.6,
+                ease: 'power3.out',
+              },
+              0,
+            );
+
+            if (!isPrimary) {
+              // For outline variant: text becomes black, border becomes mint
+              hoverTween.to(
+                button,
+                {
+                  color: '#131313',
+                  borderColor: '#3cffd0',
+                  duration: 0.6,
+                  ease: 'power3.out',
+                },
+                0,
+              );
+            }
+          });
+        };
+
+        const onMouseMove = (e: MouseEvent) => {
+          // Update start coordinates if the animation hasn't started/finished yet
+          if (isHovered && (!hoverTween || !hoverTween.isActive())) {
+            const rect = button.getBoundingClientRect();
+            startX = e.clientX - rect.left;
+            startY = e.clientY - rect.top;
+          }
+        };
+
+        const onMouseLeave = (e: MouseEvent) => {
+          isHovered = false;
+          if (enterDelay) enterDelay.kill();
+
+          const rect = button.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+
+          if (hoverTween) hoverTween.kill();
+          hoverTween = gsap.timeline();
+
+          // Animate circle shrinking back to size 0 at the exit coordinate (0.5s, ease: power3.inOut)
+          hoverTween.to(
+            circle,
+            {
+              left: x,
+              top: y,
+              scale: 0,
+              duration: 0.5,
+              ease: 'power3.inOut',
+            },
+            0,
+          );
+
+          if (!isPrimary) {
+            // Revert outline variant styles
+            hoverTween.to(
+              button,
+              {
+                color: '#ffffff',
+                borderColor: 'rgba(255, 255, 255, 0.2)',
+                duration: 0.5,
+                ease: 'power3.inOut',
+              },
+              0,
+            );
+          }
+        };
+
+        button.addEventListener('mouseenter', onMouseEnter as EventListener);
+        button.addEventListener('mousemove', onMouseMove as EventListener);
+        button.addEventListener('mouseleave', onMouseLeave as EventListener);
+
+        cleanups.push(() => {
+          window.removeEventListener('resize', updateSize);
+          button.removeEventListener('mouseenter', onMouseEnter as EventListener);
+          button.removeEventListener('mousemove', onMouseMove as EventListener);
+          button.removeEventListener('mouseleave', onMouseLeave as EventListener);
+          if (enterDelay) enterDelay.kill();
+          if (hoverTween) hoverTween.kill();
+          gsap.set(button, { clearProps: 'color,borderColor' });
+          gsap.set(circle, { clearProps: 'all' });
+        });
+      });
+
+      return () => {
+        cleanups.forEach((cleanup) => cleanup());
+      };
+    });
+  };
+
+  // Run on page load
+  initHoverButtons();
+</script>

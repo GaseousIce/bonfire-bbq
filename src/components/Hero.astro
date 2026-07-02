@@ -43,13 +43,17 @@ import { heroTandoor } from '../assets/images';
     class="absolute inset-0 pointer-events-none z-10 opacity-30 md:opacity-20 mix-blend-plus-lighter select-none smoke-container"
     style="mask-image: radial-gradient(circle, black 30%, transparent 80%); -webkit-mask-image: radial-gradient(circle, black 30%, transparent 80%);"
   >
-    <div
-      class="smoke-layer smoke-1 absolute -inset-[20%] sm:-inset-[10%] bg-[url('https://images.unsplash.com/photo-1556388275-bb5585725aca?auto=format&fit=crop&w=1200&q=80')] bg-cover"
-    >
+    <div class="smoke-parallax-1 absolute inset-0">
+      <div
+        class="smoke-layer smoke-1 absolute -inset-[20%] bg-[url('https://images.unsplash.com/photo-1556388275-bb5585725aca?auto=format&fit=crop&w=1200&q=80')] bg-cover"
+      >
+      </div>
     </div>
-    <div
-      class="smoke-layer smoke-2 absolute -inset-[20%] sm:-inset-[10%] bg-[url('https://images.unsplash.com/photo-1602410086232-0cdfb78b434f?auto=format&fit=crop&w=1200&q=80')] bg-cover"
-    >
+    <div class="smoke-parallax-2 absolute inset-0">
+      <div
+        class="smoke-layer smoke-2 absolute -inset-[20%] bg-[url('https://images.unsplash.com/photo-1602410086232-0cdfb78b434f?auto=format&fit=crop&w=1200&q=80')] bg-cover"
+      >
+      </div>
     </div>
   </div>
 
@@ -141,6 +145,8 @@ import { heroTandoor } from '../assets/images';
     const heroContent = document.querySelector('.hero-content') as HTMLElement | null;
     const smoke1 = document.querySelector('.smoke-1') as HTMLElement | null;
     const smoke2 = document.querySelector('.smoke-2') as HTMLElement | null;
+    const smokeParallax1 = document.querySelector('.smoke-parallax-1') as HTMLElement | null;
+    const smokeParallax2 = document.querySelector('.smoke-parallax-2') as HTMLElement | null;
     const heroGlow = document.querySelector('.hero-glow') as HTMLElement | null;
     const heroGlowSecondary = document.querySelector('.hero-glow-secondary') as HTMLElement | null;
 
@@ -262,7 +268,10 @@ import { heroTandoor } from '../assets/images';
       });
     });
 
-    // 3. Smoke drift animation — continuous organic movement
+    // ----------------------------------------------------
+    // 3. Continuous Smoke & Glow Animations — runs on all devices
+    // ----------------------------------------------------
+    // Smoke drift animation — continuous organic movement
     const smokeTl = gsap.timeline({ repeat: -1 });
     smokeTl
       .to(smoke1, { xPercent: 18, yPercent: -12, duration: 14, ease: 'sine.inOut' })
@@ -279,7 +288,7 @@ import { heroTandoor } from '../assets/images';
     gsap.to(smoke1, { scale: 1.08, duration: 12, repeat: -1, yoyo: true, ease: 'sine.inOut' });
     gsap.to(smoke2, { scale: 1.06, duration: 15, repeat: -1, yoyo: true, ease: 'sine.inOut' });
 
-    // 3.2 Background glow pulsing animations
+    // Background glow pulsing animations
     gsap.fromTo(
       heroGlow,
       { scale: 0.9, opacity: 0.3 },
@@ -305,6 +314,46 @@ import { heroTandoor } from '../assets/images';
         ease: 'sine.inOut',
       },
     );
+
+    // ----------------------------------------------------
+    // 4. Scroll-based Parallax — runs on all devices
+    // ----------------------------------------------------
+    gsap.to(heroBackgroundWrapper, {
+      yPercent: 10,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '#hero',
+        start: 'top top',
+        end: 'bottom top',
+        scrub: 0.5,
+      },
+    });
+
+    if (smokeParallax1) {
+      gsap.to(smokeParallax1, {
+        yPercent: -15,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '#hero',
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 0.5,
+        },
+      });
+    }
+
+    if (smokeParallax2) {
+      gsap.to(smokeParallax2, {
+        yPercent: -12,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '#hero',
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 0.5,
+        },
+      });
+    }
 
     // 4. Hero CTA buttons via page transition
     const heroCtaButtons = document.querySelectorAll('.hero-cta-btn');
