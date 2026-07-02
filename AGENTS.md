@@ -56,7 +56,7 @@ bonfire-bbq/
 ## CONVENTIONS
 
 - **Prettier**: semicolons, single quotes, trailing commas, 100-char width — `npm run format`
-- **Commits**: Conventional Commits (`fix:`, `feat:`, `refactor:`) — NEVER commit unless explicitly asked
+- **Commits**: Conventional/Semantic Commits (e.g., `feat(hero): ...`) — see Section 4 for complete rules; NEVER commit unless explicitly asked
 - **Design**: Verge dark editorial — `#131313` canvas, Jelly Mint `#3cffd0` accents, pill corners (20-40px), no shadows/gradients
 - **Interactivity**: All vanilla JS + GSAP — no React/Vue/Svelte, each component has its own `<script>` block
 - **Skills**: Read `.agents/skills/<domain>/SKILL.md` before modifying code in that domain
@@ -124,13 +124,12 @@ Before writing, modifying, or auditing code, read the instructions in the projec
 
 ## 4. Git Commits and Branches
 
-- Use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) for commit messages and use conventional names for branches.
-- Write **meaningful, descriptive, and technically precise commit messages** that accurately capture the exact intent, scope, and impact of the changes. Avoid generic or vague summaries.
-  - Good examples:
-    - `fix(scroll): defer ScrollTrigger.refresh after smoother init to fix trigger positions`
-    - `refactor(components): deduplicate ScrollTrigger plugins and throttle logo hover animations`
-    - `feat(reservation): replace native selects with custom GSAP animated dropdowns`
-- **NEVER** create or run commit commands on your own; write/make commits ONLY when explicitly asked by the user. Under no circumstances should you commit code unless specifically instructed.
+- **Format**: Conventional Commits: `<type>(<scope>): <description>` (e.g., `feat(hero): add mouse parallax scroll effect`).
+- **Rules**: Lowercase description, imperative mood, no trailing period.
+- **Allowed Types**: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `chore`.
+- **Allowed Scopes**: Component names (`hero`, `about`, etc.) or areas (`scroll`, `styles`, `assets`, `build`, `agents`, `deps`).
+- **NEVER** create or run commit commands on your own; write/make commits ONLY when explicitly asked by the user.
+
 
 ## 5. Token Savings (RTK)
 
