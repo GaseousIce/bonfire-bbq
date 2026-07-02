@@ -1,4 +1,96 @@
-# Agent Guidelines
+# Bonfire BBQ — Project Knowledge Base
+
+**Generated:** 2026-07-02
+**Commit:** `5ffe9cb`
+**Branch:** `feat/mobile-responsiveness`
+
+## OVERVIEW
+Single-page restaurant landing site for "Bonfire BBQ" — Astro v7 static site with GSAP v3.15 animations, Tailwind CSS v4 styling, and a Verge-inspired dark editorial design system. Zero React/Vue/Svelte components — all interactivity is via vanilla `<script>` blocks with GSAP inside `.astro` components.
+
+## STRUCTURE
+```
+bonfire-bbq/
+├── .agents/          # 10 AI agent skill directories (GSAP, Tailwind, design)
+├── .github/          # GitHub Actions (opencode AI trigger, not CI/CD)
+├── public/           # Static favicon files (2 files)
+├── src/              # ALL application source (28 files)
+│   ├── assets/       # Image barrel (images.ts) + 14 PNGs
+│   ├── components/   # 10 Astro components (Hero, About, Gallery, etc.)
+│   ├── layouts/      # Layout.astro (page shell, GSAP init, meta)
+│   ├── pages/        # index.astro — single route, composes all sections
+│   └── styles/       # global.css (Tailwind v4 @theme tokens)
+├── AGENTS.md         # ← You are here
+└── DESIGN.md         # Full Verge-inspired design specification
+```
+
+## WHERE TO LOOK
+| Task | Location | Notes |
+|------|----------|-------|
+| Build/dev commands | `package.json` scripts, `astro.config.mjs` | `npm run dev` (localhost:4321), `npm run build` |
+| Design tokens & rules | `src/styles/global.css`, `DESIGN.md` | Tailwind v4 CSS `@theme` + 339-line design spec |
+| Page composition | `src/pages/index.astro` | Single page — imports all 8 section components |
+| Layout & shell | `src/layouts/Layout.astro` | GSAP plugin registration, ScrollSmoother, page transition |
+| Component animations | Per-component `<script>` block | Every component owns its own GSAP logic |
+| Image assets | `src/assets/images.ts` + `images/` dir | 14 PNGs exported as named ESM imports |
+| GSAP plugin setup | `src/layouts/Layout.astro` `<script>` | ScrollTrigger, ScrollSmoother, SplitText — registered once |
+| AI skill references | `.agents/skills/` | 10 skill files — read before working in that domain |
+
+## CODE MAP
+| Symbol | Type | Location | Role |
+|--------|------|----------|------|
+| `index.astro` | Page | `src/pages/` | Single route — composes Hero→About→SignatureDishes→Gallery→Reservation→Footer |
+| `Layout.astro` | Layout | `src/layouts/` | Page shell, GSAP plugin registration, ScrollSmoother, meta, page transition fn |
+| `global.css` | Style | `src/styles/` | Tailwind v4 `@theme`, base resets, responsive section-padding |
+| `images.ts` | Module | `src/assets/` | Barrel file — named re-exports of all 14 PNG imports |
+| `Hero.astro` | Component | `src/components/` | Cinematic hero: staggered char reveal, mouse parallax, smoke, glow pulses |
+| `Navbar.astro` | Component | `src/components/` | Fixed nav + hamburger mobile drawer, clip-path page transition on click |
+| `About.astro` | Component | `src/components/` | StoryStream timeline: spine fill, card reveals, image parallax |
+| `SignatureDishes.astro` | Component | `src/components/` | Pinned horizontal scroll: card deck with scale/parallax per dish |
+| `Gallery.astro` | Component | `src/components/` | Stack reveal: cards slide/rotate/scale on scroll |
+| `Reservation.astro` | Component | `src/components/` | Booking form: GSAP dropdowns, animated calendar/date picker |
+| `Footer.astro` | Component | `src/components/` | Footer nav, legal modal, AbortController cleanup |
+| `LoadingScreen.astro` | Component | `src/components/` | Loading spinner + progress bar — chains into Hero entrance |
+| `Button.astro` | Component | `src/components/` | Reusable atom — `<a>` or `<button>`, primary/outline variants |
+| `PageTransition.astro` | Component | `src/components/` | Clip-path wipe overlay DOM shell (logic in Layout.astro) |
+
+## CONVENTIONS
+- **Prettier**: semicolons, single quotes, trailing commas, 100-char width — `npm run format`
+- **Commits**: Conventional Commits (`fix:`, `feat:`, `refactor:`) — NEVER commit unless explicitly asked
+- **Design**: Verge dark editorial — `#131313` canvas, Jelly Mint `#3cffd0` accents, pill corners (20-40px), no shadows/gradients
+- **Interactivity**: All vanilla JS + GSAP — no React/Vue/Svelte, each component has its own `<script>` block
+- **Skills**: Read `.agents/skills/<domain>/SKILL.md` before modifying code in that domain
+- **Shell**: Prefix commands with `rtk` for token savings — NOT for PowerShell-native cmdlets
+
+## ANTI-PATTERNS (THIS PROJECT)
+- **No auto-commit**: NEVER create/run git commits unless explicitly asked
+- **No box-shadow**: Use 1px borders or saturated accent fills for elevation (Verge rule)
+- **No gradients**: Solid color blocks only — no glows, gradients, or atmospheric blurs
+- **No square corners**: Every interactive/content container is rounded (2/3/4/20/24/30/40px)
+- **Font roles**: Manuka (Bebas Neue) display-only ≥60px; UPPERCASE mono only; FK Roman (Newsreader) for body-only
+- **No light mode**: `#131313` canvas always — no light backgrounds on homepage
+- **No tests**: Zero test infrastructure exists — add before starting to test
+- **GSAP cleanup**: Never skip `ctx.revert()` or tween kill on unmount
+- **No mint text <16px on `#131313`**: Contrast vibrates at small sizes
+
+## COMMANDS
+```bash
+npm run dev            # Dev server at localhost:4321
+npm run build          # Production build to dist/
+npm run preview        # Preview production build
+npm run format         # Prettier format src/
+npm run format:check   # Check formatting (read-only)
+```
+
+## NOTES
+- Single-page static site (1 route) — all nav is anchor-based scroll via ScrollSmoother
+- No backend, no API, no database, no form submission (alert-only)
+- Tailwind v4 via CSS `@theme` — no `tailwind.config.*`
+- Astro `<Image />` converts all 14 PNGs to multi-width WebP at build
+- No CI/CD pipeline — `.github/workflows/` only has opencode AI agent trigger
+- No ESLint, no linter beyond Prettier
+- Node >= 22.12.0 required (defined in `package.json.engines`)
+
+---
 
 ## 1. Using Skills
 Before writing, modifying, or auditing code, read the instructions in the project's specialized skill files under `./.agents/skills/` if the task relates to them:
