@@ -128,7 +128,7 @@
             const heroCta = document.querySelector('.hero-cta');
             const scrollDown = document.querySelector('.hero-scroll-down');
 
-            const bgScale = parseFloat(heroBackgroundWrapper?.dataset.parallaxScale || '1.12');
+            const bgScale = parseFloat(heroBackgroundWrapper?.dataset.parallaxScale || '1.12') || 1.12;
             const startScale = bgScale + 0.13;
 
             const masterTimeline = gsap.timeline({ defaults: { ease: 'power3.out' } });

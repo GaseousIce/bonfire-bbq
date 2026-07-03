@@ -230,7 +230,7 @@ const heroImage = await getImage({
               if (href === '#hero') {
                 if (smoother) smoother.scrollTo(0, false);
                 else window.scrollTo({ top: 0 });
-              } else {
+              } else if (href?.startsWith('#')) {
                 const target = document.querySelector(href);
                 if (target) {
                   if (smoother) smoother.scrollTo(target, false);
