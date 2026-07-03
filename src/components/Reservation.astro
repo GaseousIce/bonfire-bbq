@@ -66,8 +66,9 @@ import Button from './Button.astro';
 
           <form
             class="flex flex-col gap-5"
-            onsubmit="event.preventDefault(); alert('Your hearth is reserved. Prepare for the smoke.');"
+            onsubmit="return false"
           >
+            <!-- TODO: Add "Booking coming soon" overlay/toast on button click -->
             <!-- Grid row -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <!-- Name Input -->
@@ -371,7 +372,7 @@ import Button from './Button.astro';
             <!-- Submit CTA -->
             <Button
               as="button"
-              type="submit"
+              type="button"
               variant="primary"
               class="mt-4 text-[12px] tracking-[2px] py-4 gap-2 self-center px-8"
             >
