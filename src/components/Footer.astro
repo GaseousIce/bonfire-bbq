@@ -219,34 +219,49 @@ const currentYear = new Date().getFullYear();
       document.body.appendChild(legalModal);
     }
 
-    const legalTexts: Record<string, { title: string; html: string }> = {
+    type LegalParagraph = { text: string; bold: boolean };
+
+    const legalTexts: Record<string, { title: string; paragraphs: LegalParagraph[] }> = {
       privacy: {
         title: 'PRIVACY POLICY — HEARTH DATA CHARTER',
-        html: `
-          <p class="text-hazard-white font-semibold">1. Hearth Commitment</p>
-          <p>At Bonfire Barbecue, we protect your personal information with the same dedication we bring to our open-fire cooking. This charter outlines how we manage your details when reserving seating or contacting our pit masters.</p>
-          <p class="text-hazard-white font-semibold pt-2">2. Information Collection</p>
-          <p>We collect only essential details required to manage reservations and seating preferences, including your name, email address, phone number, party size, and dietary notes.</p>
-          <p class="text-hazard-white font-semibold pt-2">3. Culinary Analytics</p>
-          <p>We analyze anonymized visit metrics to optimize seasonal menu rotation and maintain kitchen pacing during peak dining hours.</p>
-          <p class="text-hazard-white font-semibold pt-2">4. Data Protection</p>
-          <p>Your details are securely encrypted. We strictly never sell, rent, or trade your personal information to third parties.</p>
-        `,
+        paragraphs: [
+          { text: '1. Hearth Commitment', bold: true },
+          { text: 'At Bonfire Barbecue, we protect your personal information with the same dedication we bring to our open-fire cooking. This charter outlines how we manage your details when reserving seating or contacting our pit masters.', bold: false },
+          { text: '2. Information Collection', bold: true },
+          { text: 'We collect only essential details required to manage reservations and seating preferences, including your name, email address, phone number, party size, and dietary notes.', bold: false },
+          { text: '3. Culinary Analytics', bold: true },
+          { text: 'We analyze anonymized visit metrics to optimize seasonal menu rotation and maintain kitchen pacing during peak dining hours.', bold: false },
+          { text: '4. Data Protection', bold: true },
+          { text: 'Your details are securely encrypted. We strictly never sell, rent, or trade your personal information to third parties.', bold: false },
+        ],
       },
       terms: {
         title: 'TERMS OF SERVICE — DINING PROTOCOL',
-        html: `
-          <p class="text-hazard-white font-semibold">1. Reservation Holding Pacing</p>
-          <p>Tables are held for up to 15 minutes past scheduled booking times. Due to live coal kitchen preparation, late arrivals may experience adjusted table seating or staggered dish timing.</p>
-          <p class="text-hazard-white font-semibold pt-2">2. Pitmaster Tasting & Dietary Notes</p>
-          <p>Our dishes highlight traditional tandoori roasting and authentic spice blends. Please inform your server or note during booking of any severe food allergies.</p>
-          <p class="text-hazard-white font-semibold pt-2">3. Party Cancellations</p>
-          <p>For parties of 6 or more, we kindly request 24 hours advance cancellation notice to assist our culinary team with fresh daily sourcing.</p>
-          <p class="text-hazard-white font-semibold pt-2">4. Atmosphere & Conduct</p>
-          <p>Bonfire Barbecue preserves a cinematic, immersive hearth environment. Guests are asked to observe courteous dining etiquette near live charcoal stations.</p>
-        `,
+        paragraphs: [
+          { text: '1. Reservation Holding Pacing', bold: true },
+          { text: 'Tables are held for up to 15 minutes past scheduled booking times. Due to live coal kitchen preparation, late arrivals may experience adjusted table seating or staggered dish timing.', bold: false },
+          { text: '2. Pitmaster Tasting & Dietary Notes', bold: true },
+          { text: 'Our dishes highlight traditional tandoori roasting and authentic spice blends. Please inform your server or note during booking of any severe food allergies.', bold: false },
+          { text: '3. Party Cancellations', bold: true },
+          { text: 'For parties of 6 or more, we kindly request 24 hours advance cancellation notice to assist our culinary team with fresh daily sourcing.', bold: false },
+          { text: '4. Atmosphere & Conduct', bold: true },
+          { text: 'Bonfire Barbecue preserves a cinematic, immersive hearth environment. Guests are asked to observe courteous dining etiquette near live charcoal stations.', bold: false },
+        ],
       },
     };
+
+    function renderLegalContent(container: HTMLElement, paragraphs: LegalParagraph[]): void {
+      container.textContent = '';
+      for (let i = 0; i < paragraphs.length; i++) {
+        const p = document.createElement('p');
+        const classes = ['text-hazard-white'];
+        if (paragraphs[i].bold) classes.push('font-semibold');
+        if (i > 0 && paragraphs[i].bold) classes.push('pt-2');
+        p.className = classes.join(' ');
+        p.textContent = paragraphs[i].text;
+        container.appendChild(p);
+      }
+    }
 
     const openModal = (policyType: string) => {
       const policyDetails = legalTexts[policyType];
@@ -260,7 +275,7 @@ const currentYear = new Date().getFullYear();
         return;
 
       legalModalTitle.textContent = policyDetails.title;
-      legalModalContent.innerHTML = policyDetails.html;
+      renderLegalContent(legalModalContent, policyDetails.paragraphs);
 
       legalModal.classList.remove('opacity-0', 'pointer-events-none');
       legalModal.classList.add('opacity-100', 'pointer-events-auto');
