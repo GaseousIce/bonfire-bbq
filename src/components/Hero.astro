@@ -139,6 +139,7 @@ import { heroTandoor } from '../assets/images';
 
 <script>
   import { gsap } from 'gsap';
+  import { handleNavClick } from '../utils/navigateWithTransition';
 
   document.addEventListener('DOMContentLoaded', () => {
     const heroBackgroundWrapper = document.querySelector('.hero-bg-wrap') as HTMLElement | null;
@@ -355,25 +356,36 @@ import { heroTandoor } from '../assets/images';
       });
     }
 
-    // 4. Hero CTA buttons via page transition
+    // Hero CTA buttons via page transition
     const heroCtaButtons = document.querySelectorAll('.hero-cta-btn');
+    heroCtaButtons.forEach((btn) => btn.addEventListener('click', handleNavClick));
 
-    heroCtaButtons.forEach((ctaButton) => {
-      ctaButton.addEventListener('click', (clickEvent) => {
-        clickEvent.preventDefault();
-        const mouseEvent = clickEvent as MouseEvent;
-        let cx = mouseEvent.clientX;
-        let cy = mouseEvent.clientY;
-        const el = clickEvent.currentTarget as HTMLElement | null;
-        // Keyboard clicks produce (0,0) with detail=0 — use element centre instead
-        if (cx === 0 && cy === 0 && (clickEvent as MouseEvent).detail === 0 && el) {
-          const rect = el.getBoundingClientRect();
-          cx = rect.left + rect.width / 2;
-          cy = rect.top + rect.height / 2;
-        }
-        const href = ctaButton.getAttribute('href');
-        if (href && window.__pageTransition) window.__pageTransition(href, cx, cy);
-      });
+    // Hero entrance timeline (triggered by LoadingScreen)
+    document.addEventListener('bonfire:hero-entrance', () => {
+      const hbw = document.querySelector('.hero-bg-wrap') as HTMLElement | null;
+      const eyebrow = document.querySelector('.hero-eyebrow');
+      const chars = document.querySelectorAll('.hero-char');
+      const deck = document.querySelector('.hero-deck');
+      const cta = document.querySelector('.hero-cta');
+      const scrollDown = document.querySelector('.hero-scroll-down');
+
+      if (!hbw) return;
+
+      const bgScale = parseFloat(hbw.dataset.parallaxScale || '1.12') || 1.12;
+      const startScale = bgScale + 0.13;
+
+      const mt = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+      mt.fromTo(hbw, { scale: startScale }, { scale: bgScale, duration: 2.2, ease: 'power2.out' });
+      mt.to(
+        chars,
+        { y: '0%', rotation: 0, stagger: 0.08, duration: 1.2, ease: 'back.out(1.5)' },
+        '-=1.6',
+      );
+      mt.to(eyebrow, { y: 0, opacity: 1, duration: 0.8 }, '-=0.8');
+      mt.to(deck, { y: 0, opacity: 1, duration: 0.8 }, '-=0.6');
+      mt.to(cta, { y: 0, opacity: 1, duration: 0.9, ease: 'back.out(1.8)' }, '-=0.4');
+      mt.to(scrollDown, { opacity: 1, duration: 0.6 }, '-=0.2');
     });
   });
 </script>
