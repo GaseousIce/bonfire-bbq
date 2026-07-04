@@ -1,5 +1,12 @@
 ---
 import Button from './Button.astro';
+
+const navLinks = [
+  { href: '#about', label: 'Timeline' },
+  { href: '#dishes', label: 'Menu' },
+  { href: '#gallery', label: 'Atmosphere' },
+];
+const mobileOnlyLinks = [{ href: '#reserve', label: 'Book Table' }];
 ---
 
 <header
@@ -20,33 +27,17 @@ import Button from './Button.astro';
 
     <!-- Nav Links (Desktop) -->
     <nav class="hidden md:flex items-center gap-8">
-      <a
-        href="#about"
-        class="nav-link relative py-1 text-xs font-mono uppercase tracking-[1.8px] text-hazard-white hover:text-link-blue transition-colors duration-180"
-      >
-        <span class="block">Timeline</span>
-        <span
-          class="absolute bottom-0 left-0 w-0 h-[1px] bg-brand-mint transition-[width] duration-300 group-hover:w-full"
-        ></span>
-      </a>
-      <a
-        href="#dishes"
-        class="nav-link relative py-1 text-xs font-mono uppercase tracking-[1.8px] text-hazard-white hover:text-link-blue transition-colors duration-180"
-      >
-        <span class="block">Menu</span>
-        <span
-          class="absolute bottom-0 left-0 w-0 h-[1px] bg-brand-mint transition-[width] duration-300 group-hover:w-full"
-        ></span>
-      </a>
-      <a
-        href="#gallery"
-        class="nav-link relative py-1 text-xs font-mono uppercase tracking-[1.8px] text-hazard-white hover:text-link-blue transition-colors duration-180"
-      >
-        <span class="block">Atmosphere</span>
-        <span
-          class="absolute bottom-0 left-0 w-0 h-[1px] bg-brand-mint transition-[width] duration-300 group-hover:w-full"
-        ></span>
-      </a>
+      {
+        navLinks.map((link) => (
+          <a
+            href={link.href}
+            class="nav-link relative py-1 text-xs font-mono uppercase tracking-[1.8px] text-hazard-white hover:text-link-blue transition-colors duration-180"
+          >
+            <span class="block">{link.label}</span>
+            <span class="absolute bottom-0 left-0 w-0 h-[1px] bg-brand-mint transition-[width] duration-300 group-hover:w-full" />
+          </a>
+        ))
+      }
     </nav>
 
     <!-- Right Side CTA -->
@@ -109,26 +100,26 @@ import Button from './Button.astro';
       </button>
     </div>
     <nav class="flex flex-col gap-6 mt-8">
-      <a
-        href="#about"
-        class="mobile-nav-link text-lg font-mono uppercase tracking-[2px] text-hazard-white hover:text-link-blue transition-colors py-3"
-        >Timeline</a
-      >
-      <a
-        href="#dishes"
-        class="mobile-nav-link text-lg font-mono uppercase tracking-[2px] text-hazard-white hover:text-link-blue transition-colors py-3"
-        >Menu</a
-      >
-      <a
-        href="#gallery"
-        class="mobile-nav-link text-lg font-mono uppercase tracking-[2px] text-hazard-white hover:text-link-blue transition-colors py-3"
-        >Atmosphere</a
-      >
-      <a
-        href="#reserve"
-        class="mobile-nav-link text-lg font-mono uppercase tracking-[2px] text-brand-mint hover:text-link-blue transition-colors py-3"
-        >Book Table</a
-      >
+      {
+        navLinks.map((link) => (
+          <a
+            href={link.href}
+            class="mobile-nav-link text-lg font-mono uppercase tracking-[2px] text-hazard-white hover:text-link-blue transition-colors py-3"
+          >
+            {link.label}
+          </a>
+        ))
+      }
+      {
+        mobileOnlyLinks.map((link) => (
+          <a
+            href={link.href}
+            class="mobile-nav-link text-lg font-mono uppercase tracking-[2px] text-brand-mint hover:text-link-blue transition-colors py-3"
+          >
+            {link.label}
+          </a>
+        ))
+      }
     </nav>
   </div>
 </header>
@@ -153,10 +144,9 @@ import Button from './Button.astro';
 
 <script>
   import { gsap } from 'gsap';
+  import { handleNavClick } from '../utils/navigateWithTransition';
 
   document.addEventListener('DOMContentLoaded', () => {
-    const navbarWrapper = document.querySelector('.navbar-wrapper');
-    const navbarContainer = document.querySelector('.navbar-container');
     const logo = document.querySelector('.brand-logo') as HTMLElement | null;
     const navLinkElements = document.querySelectorAll('.nav-link');
     const navCtaButtons = document.querySelectorAll('.nav-cta');
@@ -165,7 +155,7 @@ import Button from './Button.astro';
     const mobileClose = document.querySelector('.mobile-close');
     const mobileDrawer = document.querySelector('.mobile-drawer');
 
-    // 3. Mobile drawer open/close
+    // Mobile drawer open/close
     mobileToggle?.addEventListener('click', () => {
       mobileDrawer?.classList.remove('translate-x-full');
     });
@@ -174,29 +164,13 @@ import Button from './Button.astro';
       mobileDrawer?.classList.add('translate-x-full');
     });
 
-    // 5. Nav link & CTA clicks via page transition
-    const onNavClick = (clickEvent: Event) => {
-      clickEvent.preventDefault();
-      const mouseEvent = clickEvent as MouseEvent;
-      const el = clickEvent.currentTarget as HTMLElement | null;
-      const href = el?.getAttribute('href');
-      let cx = mouseEvent.clientX;
-      let cy = mouseEvent.clientY;
-      // Keyboard clicks produce (0,0) with detail=0 — use element centre instead
-      if (cx === 0 && cy === 0 && (clickEvent as MouseEvent).detail === 0 && el) {
-        const rect = el.getBoundingClientRect();
-        cx = rect.left + rect.width / 2;
-        cy = rect.top + rect.height / 2;
-      }
-      if (href && window.__pageTransition) window.__pageTransition(href, cx, cy);
-    };
-
-    logo?.addEventListener('click', onNavClick);
-    navLinkElements.forEach((el) => el.addEventListener('click', onNavClick));
-    navCtaButtons.forEach((el) => el.addEventListener('click', onNavClick));
+    // Nav link & CTA clicks via page transition
+    logo?.addEventListener('click', handleNavClick);
+    navLinkElements.forEach((el) => el.addEventListener('click', handleNavClick));
+    navCtaButtons.forEach((el) => el.addEventListener('click', handleNavClick));
     mobileNavLinks.forEach((el) => {
       el.addEventListener('click', (e) => {
-        onNavClick(e);
+        handleNavClick(e);
         mobileDrawer?.classList.add('translate-x-full');
       });
     });
