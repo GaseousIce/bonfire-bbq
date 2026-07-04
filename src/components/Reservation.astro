@@ -65,7 +65,6 @@ import Button from './Button.astro';
           </div>
 
           <form class="flex flex-col gap-5" onsubmit="return false">
-            <!-- TODO: Add "Booking coming soon" overlay/toast on button click -->
             <!-- Grid row -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <!-- Name Input -->
@@ -380,6 +379,19 @@ import Button from './Button.astro';
       </div>
     </div>
   </div>
+
+  <!-- "Booking coming soon" toast -->
+  <div
+    class="reserve-toast fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-surface-slate border border-brand-mint/30 rounded-[20px] px-6 py-4 pointer-events-none"
+    style="opacity: 0; transform: translateY(20px);"
+    role="status"
+    aria-live="polite"
+  >
+    <span class="inline-block w-2 h-2 rounded-full bg-brand-mint flex-shrink-0"></span>
+    <span class="font-mono text-xs uppercase tracking-[2px] text-hazard-white"
+      >Booking coming soon</span
+    >
+  </div>
 </section>
 
 <style>
@@ -387,6 +399,10 @@ import Button from './Button.astro';
   .reserve-section {
     content-visibility: auto;
     contain-intrinsic-size: 0 100vh;
+  }
+
+  .reserve-toast {
+    max-width: calc(100vw - 3rem);
   }
 </style>
 
@@ -790,6 +806,55 @@ import Button from './Button.astro';
       );
 
       renderCalendar();
+    }
+
+    // "Booking coming soon" toast on Reserve button click
+    const reserveButton = reserveSection.querySelector(
+      'form > .hover-button[type="button"]',
+    ) as HTMLElement | null;
+    const toastElement = document.querySelector('.reserve-toast') as HTMLElement | null;
+
+    if (reserveButton && toastElement) {
+      let toastTween: gsap.core.Tween | null = null;
+      let autoDismiss: gsap.core.Tween | null = null;
+
+      function showToast() {
+        if (toastTween) toastTween.kill();
+        if (autoDismiss) autoDismiss.kill();
+
+        toastElement!.style.pointerEvents = 'auto';
+        toastTween = gsap.fromTo(
+          toastElement,
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.5, ease: 'back.out(1.6)' },
+        );
+
+        autoDismiss = gsap.delayedCall(4, hideToast);
+      }
+
+      function hideToast() {
+        if (toastTween) toastTween.kill();
+        if (autoDismiss) autoDismiss.kill();
+
+        toastTween = gsap.to(toastElement, {
+          opacity: 0,
+          y: 20,
+          duration: 0.35,
+          ease: 'power2.in',
+          onComplete: () => {
+            toastElement!.style.pointerEvents = 'none';
+          },
+        });
+      }
+
+      reserveButton.addEventListener(
+        'click',
+        (e) => {
+          e.preventDefault();
+          showToast();
+        },
+        { signal: resCtrl.signal },
+      );
     }
   });
 </script>
