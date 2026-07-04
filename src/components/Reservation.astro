@@ -65,7 +65,6 @@ import Button from './Button.astro';
           </div>
 
           <form class="flex flex-col gap-5" onsubmit="return false">
-            <!-- TODO: Add "Booking coming soon" overlay/toast on button click -->
             <!-- Grid row -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <!-- Name Input -->
@@ -154,9 +153,61 @@ import Button from './Button.astro';
                       class="dt-month-prev text-hazard-white/50 hover:text-brand-mint transition-colors text-xl leading-none p-1 cursor-pointer bg-transparent border-none"
                       aria-label="Previous month">&#8249;</button
                     >
-                    <span
-                      class="dt-month-label font-mono text-xs uppercase tracking-[1.5px] text-hazard-white font-semibold"
-                    ></span>
+                    <div class="flex items-center gap-1.5">
+                      <!-- Month Custom Dropdown -->
+                      <div class="custom-select dt-month-select relative" data-name="month">
+                        <button
+                          type="button"
+                          class="custom-select-trigger bg-canvas-black border border-white/10 text-[10px] font-mono uppercase tracking-[1px] text-hazard-white px-2 py-1 rounded-[6px] focus:outline-none focus:border-brand-mint cursor-pointer hover:border-white/20 transition-colors flex items-center gap-1.5"
+                          aria-expanded="false"
+                        >
+                          <span class="custom-select-label">Jan</span>
+                          <svg
+                            class="custom-select-arrow w-2 h-1.5 text-hazard-white/60"
+                            viewBox="0 0 12 8"
+                            fill="none"
+                            style="transform-origin: center;"
+                            ><path
+                              d="M1 1l5 5 5-5"
+                              stroke="currentColor"
+                              stroke-width="1.5"
+                              stroke-linecap="round"></path></svg
+                          >
+                        </button>
+                        <div
+                          class="custom-select-options grid grid-cols-3 gap-1 p-1.5 absolute top-full -left-6 z-40 mt-1 bg-canvas-black border border-white/10 rounded-[12px] shadow-2xl w-[150px]"
+                          style="display: none; opacity: 0; transform: translateY(-6px);"
+                        >
+                        </div>
+                      </div>
+
+                      <!-- Year Custom Dropdown -->
+                      <div class="custom-select dt-year-select relative" data-name="year">
+                        <button
+                          type="button"
+                          class="custom-select-trigger bg-canvas-black border border-white/10 text-[10px] font-mono uppercase tracking-[1px] text-hazard-white px-2 py-1 rounded-[6px] focus:outline-none focus:border-brand-mint cursor-pointer hover:border-white/20 transition-colors flex items-center gap-1.5"
+                          aria-expanded="false"
+                        >
+                          <span class="custom-select-label">2026</span>
+                          <svg
+                            class="custom-select-arrow w-2 h-1.5 text-hazard-white/60"
+                            viewBox="0 0 12 8"
+                            fill="none"
+                            style="transform-origin: center;"
+                            ><path
+                              d="M1 1l5 5 5-5"
+                              stroke="currentColor"
+                              stroke-width="1.5"
+                              stroke-linecap="round"></path></svg
+                          >
+                        </button>
+                        <div
+                          class="custom-select-options absolute top-full left-0 z-40 mt-1 bg-canvas-black border border-white/10 rounded-[8px] overflow-x-hidden shadow-2xl min-w-[70px] max-h-[240px] overflow-y-auto custom-scrollbar"
+                          style="display: none; opacity: 0; transform: translateY(-6px);"
+                        >
+                        </div>
+                      </div>
+                    </div>
                     <button
                       type="button"
                       class="dt-month-next text-hazard-white/50 hover:text-brand-mint transition-colors text-xl leading-none p-1 cursor-pointer bg-transparent border-none"
@@ -376,6 +427,25 @@ import Button from './Button.astro';
               Reserve Hearth Seating
             </Button>
           </form>
+
+          <!-- "Booking coming soon" overlay -->
+          <div
+            class="reserve-toast absolute inset-0 z-20 flex flex-col items-center justify-center rounded-[24px] pointer-events-none"
+            style="opacity: 0;"
+            role="status"
+            aria-live="polite"
+          >
+            <div class="absolute inset-0 bg-canvas-black/80 rounded-[24px]"></div>
+            <div class="relative flex flex-col items-center gap-3">
+              <span class="inline-block w-2.5 h-2.5 rounded-full bg-brand-mint"></span>
+              <span class="font-mono text-sm uppercase tracking-[2.5px] text-hazard-white"
+                >Booking coming soon</span
+              >
+              <span class="font-serif italic text-sm text-hazard-white/50 mt-1"
+                >We’ll be taking reservations shortly</span
+              >
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -387,6 +457,28 @@ import Button from './Button.astro';
   .reserve-section {
     content-visibility: auto;
     contain-intrinsic-size: 0 100vh;
+  }
+
+  .reserve-toast {
+    backdrop-filter: blur(4px);
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.25);
+  }
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
   }
 </style>
 
@@ -448,12 +540,11 @@ import Button from './Button.astro';
       },
     );
 
-    // Custom GSAP dropdowns
-    const dropdownContainers = document.querySelectorAll(
-      '.custom-select',
-    ) as NodeListOf<HTMLElement>;
+    // Custom GSAP dropdowns function
+    function initCustomDropdown(dropdownContainer: HTMLElement) {
+      if (dropdownContainer.dataset.initialized) return;
+      dropdownContainer.dataset.initialized = 'true';
 
-    dropdownContainers.forEach((dropdownContainer) => {
       const dropdownTriggerButton = dropdownContainer.querySelector(
         '.custom-select-trigger',
       ) as HTMLElement;
@@ -468,14 +559,16 @@ import Button from './Button.astro';
       ) as HTMLElement;
       const hiddenInput = dropdownContainer.querySelector(
         'input[type="hidden"]',
-      ) as HTMLInputElement;
+      ) as HTMLInputElement | null;
+      // Note: we dynamically query elements so newly added options are found
       const optionElements = dropdownContainer.querySelectorAll(
         '.custom-select-option',
       ) as NodeListOf<HTMLElement>;
 
+      if (!dropdownTriggerButton || !dropdownOptionsPanel) return;
+
       let isDropdownOpen = false;
 
-      // GSAP tween for dropdown opening (opacity + y, NO scale)
       const openTween = gsap.fromTo(
         dropdownOptionsPanel,
         { opacity: 0, y: -6 },
@@ -492,21 +585,24 @@ import Button from './Button.astro';
         },
       );
 
-      // Arrow rotation tween
-      const arrowTween = gsap.to(dropdownArrowIcon, {
-        rotation: 180,
-        duration: 0.3,
-        ease: 'power2.out',
-        paused: true,
-      });
+      const arrowTween = dropdownArrowIcon
+        ? gsap.to(dropdownArrowIcon, {
+            rotation: 180,
+            duration: 0.3,
+            ease: 'power2.out',
+            paused: true,
+          })
+        : null;
 
       function openDropdown() {
         if (isDropdownOpen) return;
         isDropdownOpen = true;
         dropdownTriggerButton.setAttribute('aria-expanded', 'true');
-        dropdownOptionsPanel.style.display = 'block';
+        dropdownOptionsPanel.style.display = dropdownOptionsPanel.classList.contains('grid')
+          ? 'grid'
+          : 'block';
         openTween.restart();
-        arrowTween.play();
+        if (arrowTween) arrowTween.play();
       }
 
       function closeDropdown() {
@@ -514,7 +610,7 @@ import Button from './Button.astro';
         isDropdownOpen = false;
         dropdownTriggerButton.setAttribute('aria-expanded', 'false');
         openTween.timeScale(2).reverse();
-        arrowTween.timeScale(2).reverse();
+        if (arrowTween) arrowTween.timeScale(2).reverse();
       }
 
       dropdownTriggerButton.addEventListener('click', (clickEvent) => {
@@ -526,10 +622,13 @@ import Button from './Button.astro';
         optionElement.addEventListener('click', () => {
           const value = optionElement.dataset.value;
           const selectedOptionText = optionElement.textContent;
-          dropdownLabelElement.textContent = selectedOptionText;
-          dropdownLabelElement.classList.remove('text-secondary-text');
+          if (dropdownLabelElement) {
+            dropdownLabelElement.textContent = selectedOptionText;
+            dropdownLabelElement.classList.remove('text-secondary-text');
+          }
           if (hiddenInput) hiddenInput.value = value || '';
           dropdownContainer.dataset.value = value || '';
+          dropdownContainer.dispatchEvent(new Event('change'));
           closeDropdown();
         });
       });
@@ -543,7 +642,12 @@ import Button from './Button.astro';
         },
         { signal: resCtrl.signal },
       );
-    });
+    }
+
+    const dropdownContainers = document.querySelectorAll(
+      '.custom-select',
+    ) as NodeListOf<HTMLElement>;
+    dropdownContainers.forEach(initCustomDropdown);
 
     // Custom GSAP date picker
     const dateTimeContainer = document.querySelector('.custom-datetime');
@@ -560,7 +664,20 @@ import Button from './Button.astro';
       const hiddenInput = dateTimeContainer.querySelector(
         'input[type="hidden"]',
       ) as HTMLInputElement;
-      const calendarMonthLabel = dateTimeContainer.querySelector('.dt-month-label') as HTMLElement;
+      const monthSelectElement = dateTimeContainer.querySelector('.dt-month-select') as HTMLElement;
+      const yearSelectElement = dateTimeContainer.querySelector('.dt-year-select') as HTMLElement;
+      const monthOptionsPanel = monthSelectElement.querySelector(
+        '.custom-select-options',
+      ) as HTMLElement;
+      const yearOptionsPanel = yearSelectElement.querySelector(
+        '.custom-select-options',
+      ) as HTMLElement;
+      const monthLabelElement = monthSelectElement.querySelector(
+        '.custom-select-label',
+      ) as HTMLElement;
+      const yearLabelElement = yearSelectElement.querySelector(
+        '.custom-select-label',
+      ) as HTMLElement;
       const calendarDaysGrid = dateTimeContainer.querySelector('.dt-days') as HTMLElement;
       const previousMonthButton = dateTimeContainer.querySelector('.dt-month-prev') as HTMLElement;
       const nextMonthButton = dateTimeContainer.querySelector('.dt-month-next') as HTMLElement;
@@ -611,8 +728,46 @@ import Button from './Button.astro';
         'December',
       ];
 
+      monthNames.forEach((month, index) => {
+        const option = document.createElement('button');
+        option.type = 'button';
+        option.className =
+          'custom-select-option w-full text-center py-2 text-[10px] font-mono uppercase tracking-[1px] text-hazard-white hover:bg-white/10 hover:text-brand-mint transition-colors duration-150 rounded-[6px] cursor-pointer';
+        option.dataset.value = String(index);
+        option.textContent = month.substring(0, 3);
+        monthOptionsPanel.appendChild(option);
+      });
+
+      const currentYearForSelect = new Date().getFullYear();
+      for (let i = 0; i < 5; i++) {
+        const option = document.createElement('button');
+        option.type = 'button';
+        option.className =
+          'custom-select-option w-full text-left px-3 py-2 text-[10px] font-mono uppercase tracking-[1px] text-hazard-white hover:bg-white/5 hover:text-brand-mint transition-colors duration-150 border-b border-white/5 last:border-b-0 cursor-pointer';
+        option.dataset.value = String(currentYearForSelect + i);
+        option.textContent = String(currentYearForSelect + i);
+        yearOptionsPanel.appendChild(option);
+      }
+
+      // Initialize the GSAP interactions for the newly created dynamic elements
+      initCustomDropdown(monthSelectElement);
+      initCustomDropdown(yearSelectElement);
+
+      monthSelectElement.addEventListener('change', () => {
+        viewedMonth = parseInt(monthSelectElement.dataset.value || '0', 10);
+        renderCalendar();
+      });
+
+      yearSelectElement.addEventListener('change', () => {
+        viewedYear = parseInt(yearSelectElement.dataset.value || '0', 10);
+        renderCalendar();
+      });
+
       function renderCalendar() {
-        calendarMonthLabel.textContent = `${monthNames[viewedMonth]} ${viewedYear}`;
+        monthSelectElement.dataset.value = String(viewedMonth);
+        yearSelectElement.dataset.value = String(viewedYear);
+        monthLabelElement.textContent = monthNames[viewedMonth].substring(0, 3);
+        yearLabelElement.textContent = String(viewedYear);
 
         const firstDay = new Date(viewedYear, viewedMonth, 1).getDay();
         const daysInMonth = new Date(viewedYear, viewedMonth + 1, 0).getDate();
@@ -790,6 +945,68 @@ import Button from './Button.astro';
       );
 
       renderCalendar();
+    }
+
+    // "Booking coming soon" overlay on Reserve button click
+    const reserveButton = reserveSection.querySelector(
+      'form > .hover-button[type="button"]',
+    ) as HTMLElement | null;
+    const toastElement = reserveSection.querySelector('.reserve-toast') as HTMLElement | null;
+    const toastInner = toastElement?.querySelector('.relative') as HTMLElement | null;
+
+    if (reserveButton && toastElement && toastInner) {
+      let toastTween: gsap.core.Timeline | null = null;
+      let autoDismiss: gsap.core.Tween | null = null;
+
+      function showToast() {
+        if (toastTween) toastTween.kill();
+        if (autoDismiss) autoDismiss.kill();
+
+        toastElement!.style.pointerEvents = 'auto';
+        toastTween = gsap.timeline();
+        toastTween.fromTo(
+          toastElement,
+          { opacity: 0 },
+          { opacity: 1, duration: 0.35, ease: 'power2.out' },
+          0,
+        );
+        toastTween.fromTo(
+          toastInner,
+          { opacity: 0, scale: 0.9, y: 12 },
+          { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: 'back.out(1.8)' },
+          0.1,
+        );
+
+        autoDismiss = gsap.delayedCall(4, hideToast);
+      }
+
+      function hideToast() {
+        if (toastTween) toastTween.kill();
+        if (autoDismiss) autoDismiss.kill();
+
+        toastTween = gsap.timeline({
+          onComplete: () => {
+            toastElement!.style.pointerEvents = 'none';
+          },
+        });
+        toastTween.to(
+          toastInner!,
+          { opacity: 0, scale: 0.95, duration: 0.2, ease: 'power2.in' },
+          0,
+        );
+        toastTween.to(toastElement!, { opacity: 0, duration: 0.25, ease: 'power2.in' }, 0.05);
+      }
+
+      reserveButton.addEventListener(
+        'click',
+        (e) => {
+          e.preventDefault();
+          showToast();
+        },
+        { signal: resCtrl.signal },
+      );
+
+      toastElement.addEventListener('click', () => hideToast(), { signal: resCtrl.signal });
     }
   });
 </script>
