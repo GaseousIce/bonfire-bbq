@@ -597,6 +597,12 @@ import Button from './Button.astro';
       function openDropdown() {
         if (isDropdownOpen) return;
         isDropdownOpen = true;
+
+        const event = new CustomEvent('bonfire:dropdown-opened', {
+          detail: { target: dropdownContainer },
+        });
+        document.dispatchEvent(event);
+
         dropdownTriggerButton.setAttribute('aria-expanded', 'true');
         dropdownOptionsPanel.style.display = dropdownOptionsPanel.classList.contains('grid')
           ? 'grid'
@@ -640,6 +646,16 @@ import Button from './Button.astro';
             closeDropdown();
           }
         },
+        { signal: resCtrl.signal },
+      );
+
+      document.addEventListener(
+        'bonfire:dropdown-opened',
+        ((e: CustomEvent) => {
+          if (isDropdownOpen && !dropdownContainer.contains(e.detail.target as Node)) {
+            closeDropdown();
+          }
+        }) as EventListener,
         { signal: resCtrl.signal },
       );
     }
@@ -850,6 +866,12 @@ import Button from './Button.astro';
       function openCalendarPanel() {
         if (isCalendarOpen) return;
         isCalendarOpen = true;
+
+        const event = new CustomEvent('bonfire:dropdown-opened', {
+          detail: { target: dateTimeContainer },
+        });
+        document.dispatchEvent(event);
+
         dateTimeTriggerButton.setAttribute('aria-expanded', 'true');
         renderCalendar();
         calendarPanelElement.style.display = 'block';
@@ -936,6 +958,16 @@ import Button from './Button.astro';
             closeCalendarPanel();
           }
         },
+        { signal: resCtrl.signal },
+      );
+
+      document.addEventListener(
+        'bonfire:dropdown-opened',
+        ((e: CustomEvent) => {
+          if (isCalendarOpen && !dateTimeContainer.contains(e.detail.target as Node)) {
+            closeCalendarPanel();
+          }
+        }) as EventListener,
         { signal: resCtrl.signal },
       );
 
