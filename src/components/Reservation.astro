@@ -744,14 +744,20 @@ import Button from './Button.astro';
         yearOptionsPanel.appendChild(option);
       }
 
+      let monthNavTween: gsap.core.Tween | null = null;
+
       monthSelectElement.addEventListener('change', () => {
         viewedMonth = parseInt(monthSelectElement.dataset.value || '0', 10);
         renderCalendar();
+        if (monthNavTween) monthNavTween.kill();
+        staggerCalendarDays();
       });
 
       yearSelectElement.addEventListener('change', () => {
         viewedYear = parseInt(yearSelectElement.dataset.value || '0', 10);
         renderCalendar();
+        if (monthNavTween) monthNavTween.kill();
+        staggerCalendarDays();
       });
 
       function renderCalendar() {
@@ -862,8 +868,6 @@ import Button from './Button.astro';
         clickEvent.stopPropagation();
         isCalendarOpen ? closeCalendarPanel() : openCalendarPanel();
       });
-
-      let monthNavTween: gsap.core.Tween | null = null;
 
       previousMonthButton.addEventListener('click', (clickEvent) => {
         clickEvent.stopPropagation();
