@@ -97,11 +97,4 @@ All commands are run from the root of the project:
 | `npm run astro ...`    | Runs Astro CLI commands (e.g. `astro add`)            |
 | `graphify update .`    | Rebuilds the codebase knowledge graph                 |
 
----
 
-## 🤖 Guidelines for AI Assistants
-
-Before modifying any code, all AI assistants **must** read and adhere to:
-
-1. [AGENTS.md](./AGENTS.md) — Universal safety rules, conventional commits, command caching rules, and project-specific developer skills.
-2. [DESIGN.md](./DESIGN.md) — Strict visual guidelines, component stylings, and responsive behavior constraints.
