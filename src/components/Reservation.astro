@@ -568,6 +568,7 @@ import Button from './Button.astro';
     const reservationCardWrapper = document.querySelector('.reserve-card-wrap') as HTMLElement;
     const primaryHearthGlow = document.querySelector('.hearth-glow') as HTMLElement;
     const secondaryHearthGlow = document.querySelector('.hearth-glow-secondary') as HTMLElement;
+    let selectedDate: Date | null = null;
 
     if (!reserveSection) return;
 
@@ -702,6 +703,7 @@ import Button from './Button.astro';
 
       optionElements.forEach((optionElement) => {
         optionElement.addEventListener('click', () => {
+          if ((optionElement as HTMLButtonElement).disabled) return;
           const value = optionElement.dataset.value;
           const selectedOptionText = optionElement.textContent;
           if (dropdownLabelElement) {
@@ -766,13 +768,16 @@ import Button from './Button.astro';
         '.custom-select-label',
       ) as HTMLElement;
       const calendarDaysGrid = dateTimeContainer.querySelector('.dt-days') as HTMLElement;
-      const previousMonthButton = dateTimeContainer.querySelector('.dt-month-prev') as HTMLElement;
-      const nextMonthButton = dateTimeContainer.querySelector('.dt-month-next') as HTMLElement;
+      const previousMonthButton = dateTimeContainer.querySelector(
+        '.dt-month-prev',
+      ) as HTMLButtonElement;
+      const nextMonthButton = dateTimeContainer.querySelector(
+        '.dt-month-next',
+      ) as HTMLButtonElement;
 
       let isCalendarOpen = false;
       let viewedMonth = new Date().getMonth();
       let viewedYear = new Date().getFullYear();
-      let selectedDate: Date | null = null;
 
       const monthNames = [
         'January',
@@ -799,6 +804,23 @@ import Button from './Button.astro';
         monthOptionsPanel.appendChild(option);
       });
 
+      function updateMonthOptionsState() {
+        const currentYear = new Date().getFullYear();
+        const currentMonth = new Date().getMonth();
+        const selectedYear = parseInt(yearSelectElement.dataset.value || String(currentYear), 10);
+        const opts = monthOptionsPanel.querySelectorAll('.custom-select-option');
+        opts.forEach((opt, idx) => {
+          const isPast = selectedYear === currentYear && idx < currentMonth;
+          (opt as HTMLButtonElement).disabled = isPast;
+          opt.classList.toggle('opacity-30', isPast);
+          opt.classList.toggle('cursor-not-allowed', isPast);
+          opt.classList.toggle('hover:bg-white/10', !isPast);
+          opt.classList.toggle('hover:text-brand-mint', !isPast);
+        });
+      }
+
+      updateMonthOptionsState();
+
       const currentYearForSelect = new Date().getFullYear();
       for (let i = 0; i < 5; i++) {
         const option = document.createElement('button');
@@ -821,6 +843,7 @@ import Button from './Button.astro';
 
       yearSelectElement.addEventListener('change', () => {
         viewedYear = parseInt(yearSelectElement.dataset.value || '0', 10);
+        updateMonthOptionsState();
         renderCalendar();
         if (monthNavTween) monthNavTween.kill();
         staggerCalendarDays();
@@ -835,6 +858,14 @@ import Button from './Button.astro';
         const firstDay = new Date(viewedYear, viewedMonth, 1).getDay();
         const daysInMonth = new Date(viewedYear, viewedMonth + 1, 0).getDate();
         const today = new Date();
+        const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+        // Update previous month button state (TODO-2)
+        const isCurrentMonth =
+          viewedMonth === today.getMonth() && viewedYear === today.getFullYear();
+        previousMonthButton.disabled = isCurrentMonth;
+        previousMonthButton.classList.toggle('opacity-25', isCurrentMonth);
+        previousMonthButton.classList.toggle('cursor-not-allowed', isCurrentMonth);
 
         calendarDaysGrid.innerHTML = '';
 
@@ -854,8 +885,16 @@ import Button from './Button.astro';
           const isCurrentDay = dateObj.toDateString() === today.toDateString();
           const isSelectedDate =
             selectedDate && dateObj.toDateString() === selectedDate.toDateString();
+          const isPastDate = dateObj < todayStart;
 
-          if (isSelectedDate) {
+          if (isPastDate) {
+            dayButtonElement.disabled = true;
+            dayButtonElement.classList.add(
+              'text-hazard-white/20',
+              'opacity-25',
+              'cursor-not-allowed',
+            );
+          } else if (isSelectedDate) {
             dayButtonElement.classList.add('bg-brand-mint', 'text-canvas-black', 'font-semibold');
           } else if (isCurrentDay) {
             dayButtonElement.classList.add('border', 'border-brand-mint/40', 'text-brand-mint');
@@ -867,30 +906,32 @@ import Button from './Button.astro';
             );
           }
 
-          dayButtonElement.addEventListener('click', (clickEvent) => {
-            clickEvent.stopPropagation();
-            selectedDate = dateObj;
-            renderCalendar();
+          if (!isPastDate) {
+            dayButtonElement.addEventListener('click', (clickEvent) => {
+              clickEvent.stopPropagation();
+              selectedDate = dateObj;
+              renderCalendar();
 
-            // Set label and input values
-            const monthShort = dateObj.toLocaleString('default', { month: 'short' });
-            const day = dateObj.getDate();
-            dateTimeLabelElement.textContent = `${monthShort} ${day}`;
-            dateTimeLabelElement.classList.remove('text-secondary-text');
+              // Set label and input values
+              const monthShort = dateObj.toLocaleString('default', { month: 'short' });
+              const day = dateObj.getDate();
+              dateTimeLabelElement.textContent = `${monthShort} ${day}`;
+              dateTimeLabelElement.classList.remove('text-secondary-text');
 
-            const yyyy = dateObj.getFullYear();
-            const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
-            const dd = String(dateObj.getDate()).padStart(2, '0');
-            hiddenInput.value = `${yyyy}-${mm}-${dd}`;
+              const yyyy = dateObj.getFullYear();
+              const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
+              const dd = String(dateObj.getDate()).padStart(2, '0');
+              hiddenInput.value = `${yyyy}-${mm}-${dd}`;
 
-            closeCalendarPanel();
+              closeCalendarPanel();
 
-            // Dispatch event to open time picker
-            const dateSelectedEvent = new CustomEvent('bonfire:date-selected', {
-              detail: { date: dateObj },
+              // Dispatch event to open time picker
+              const dateSelectedEvent = new CustomEvent('bonfire:date-selected', {
+                detail: { date: dateObj },
+              });
+              document.dispatchEvent(dateSelectedEvent);
             });
-            document.dispatchEvent(dateSelectedEvent);
-          });
+          }
 
           calendarDaysGrid.appendChild(dayButtonElement);
         }
@@ -962,6 +1003,8 @@ import Button from './Button.astro';
 
       previousMonthButton.addEventListener('click', (clickEvent) => {
         clickEvent.stopPropagation();
+        const today = new Date();
+        if (viewedMonth === today.getMonth() && viewedYear === today.getFullYear()) return;
         viewedMonth--;
         if (viewedMonth < 0) {
           viewedMonth = 11;
@@ -1028,6 +1071,61 @@ import Button from './Button.astro';
 
       let isTimeOpen = false;
 
+      function updateTimeChipsState(selectedDate: Date | null) {
+        const now = new Date();
+        const isToday =
+          selectedDate !== null &&
+          selectedDate.getDate() === now.getDate() &&
+          selectedDate.getMonth() === now.getMonth() &&
+          selectedDate.getFullYear() === now.getFullYear();
+        const currentMinutes = now.getHours() * 60 + now.getMinutes();
+        timeChips.forEach((chip) => {
+          if (!chip.dataset.value) return;
+          const [h, m] = chip.dataset.value.split(':').map(Number);
+          const chipMinutes = h * 60 + m;
+          const isPast = selectedDate === null || (isToday && chipMinutes <= currentMinutes);
+          (chip as HTMLButtonElement).disabled = isPast;
+
+          // Toggle disabled state classes
+          chip.classList.toggle('opacity-25', isPast);
+          chip.classList.toggle('cursor-not-allowed', isPast);
+          chip.classList.toggle('text-hazard-white/20', isPast);
+          chip.classList.toggle('border-white/5', isPast);
+
+          // Reset selection if the currently-selected time is now past or date is cleared
+          if (isPast && timeHiddenInput.value === chip.dataset.value) {
+            timeHiddenInput.value = '';
+            timeLabelElement.textContent = 'Select time';
+            timeLabelElement.classList.add('text-secondary-text');
+          }
+
+          if (isPast) {
+            chip.classList.remove(
+              'bg-surface-slate',
+              'text-hazard-white',
+              'border-white/10',
+              'hover:border-brand-mint',
+              'bg-brand-mint',
+              'text-canvas-black',
+              'border-brand-mint',
+            );
+          } else {
+            const isSelected = timeHiddenInput.value === chip.dataset.value;
+            chip.classList.toggle('hover:border-brand-mint', true);
+            chip.classList.toggle('text-hazard-white/20', false);
+            chip.classList.toggle('border-white/5', false);
+
+            if (isSelected) {
+              chip.classList.remove('bg-surface-slate', 'text-hazard-white', 'border-white/10');
+              chip.classList.add('bg-brand-mint', 'text-canvas-black', 'border-brand-mint');
+            } else {
+              chip.classList.remove('bg-brand-mint', 'text-canvas-black', 'border-brand-mint');
+              chip.classList.add('bg-surface-slate', 'text-hazard-white', 'border-white/10');
+            }
+          }
+        });
+      }
+
       const timePanelTween = gsap.fromTo(
         timePanelElement,
         { opacity: 0, y: -6 },
@@ -1047,6 +1145,8 @@ import Button from './Button.astro';
       function openTimePanel() {
         if (isTimeOpen) return;
         isTimeOpen = true;
+
+        updateTimeChipsState(selectedDate);
 
         const event = new CustomEvent('bonfire:dropdown-opened', {
           detail: { target: timeContainer },
@@ -1086,6 +1186,7 @@ import Button from './Button.astro';
 
       timeChips.forEach((chip) => {
         chip.addEventListener('click', (clickEvent) => {
+          if ((chip as HTMLButtonElement).disabled) return;
           clickEvent.stopPropagation();
           const value = chip.dataset.value;
           const text = chip.textContent;
@@ -1134,11 +1235,12 @@ import Button from './Button.astro';
 
       document.addEventListener(
         'bonfire:date-selected',
-        () => {
+        ((event: CustomEvent) => {
+          updateTimeChipsState(event.detail.date);
           setTimeout(() => {
             openTimePanel();
           }, 150);
-        },
+        }) as EventListener,
         { signal: resCtrl.signal },
       );
     }
