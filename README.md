@@ -15,7 +15,7 @@ Bonfire BBQ adopts a premium, high-contrast dark editorial aesthetic inspired by
 
 - **Canvas**: Near-black editorial canvas (`#131313`) as the default surface.
 - **Accents**: Acidic **Jelly Mint** (`#3cffd0`) and **Verge Ultraviolet** (`#5200ff`) used as eye-catching hazard accents (buttons, borders, and timeline tags).
-- **Typography**: Heavy, condensed **Manuka** displays for hero headings paired with clean **PolySans** for body and **PolySans Mono** for uppercase metadata.
+- **Typography**: Heavy, condensed **Bebas Neue** displays for hero headings paired with clean **Space Grotesk** for body and **Space Mono** for uppercase metadata.
 - **Tactility**: Rounded-pill everything (20px to 40px corner radii) framed by hairline 1px solid borders (`#ffffff` or accent colors). **No decorative drop-shadows or gradients** are used; elevation is represented purely by solid color blocks.
 - **Timeline**: The signature **StoryStream** vertical feed with mono-uppercase timestamps.
 
@@ -41,12 +41,15 @@ This project has been thoroughly audited and polished, achieving high-performanc
 - **Atmosphere Gallery**: Responsive stack reveal gallery (pins and stacks cards on desktop, adapts to a robust grid on mobile devices).
 - **Hearth Reservation**: Interactive booking form powered by custom GSAP-animated calendar date/time pickers and custom dropdown selects that replace standard native controls.
 - **Global Smooth Scroll**: ScrollSmoother integration covering the entire layout, intercepting anchor links (nav, footer, brand, and CTA buttons) for cinematic scroll transitions.
+- **Page Transitions**: Clip-path wipe overlay transitions between pages, driven from the navbar via a shared utility.
+- **Hover Effects**: Interactive button hover animations with expanding circle reveals, managed via a dedicated utility.
 
 ### 🛡️ Engineering & Accessibility
 
 - **Strict Cleanups**: Automated cleanup of global event listeners using `AbortController` in persistent components.
 - **Memory Leak Prevention**: Destruction and garbage collection of orphan GSAP tweens during calendar navigation.
 - **Type Safety**: Strictly typed event parameters and explicit TypeScript casts across all components.
+- **Modular Utilities**: Shared TypeScript modules for custom dropdowns, hover button effects, and page transition handling.
 
 ---
 
@@ -56,15 +59,25 @@ Inside this Astro project, you will find:
 
 ```text
 /
-├── .agents/skills/    # Installed developer skill files (Tailwind, GSAP, etc.)
-├── public/            # Static assets (images, icons)
+├── .agents/          # Installed developer skills, rules, and workflows
+├── public/           # Static favicon files
 ├── src/
-│   ├── assets/        # Local media, images, and brand assets
-│   ├── components/    # Reusable Astro components (Hero, Navbar, About, SignatureDishes, Gallery, Reservation, Footer, Button)
-│   ├── layouts/       # Site shell & head metadata configuration
-│   └── styles/        # Global style sheets (Tailwind imports and custom overrides)
-├── AGENTS.md          # Coding guidelines and safety rules for AI agents
-└── DESIGN.md          # Full design system specifications & tokens
+│   ├── assets/       # Image barrel (images.ts) + 14 PNGs
+│   ├── components/   # Reusable Astro components
+│   │   ├── Hero.astro, Navbar.astro, About.astro
+│   │   ├── SignatureDishes.astro, Gallery.astro
+│   │   ├── Reservation.astro, Footer.astro
+│   │   ├── Button.astro, LegalModal.astro
+│   │   ├── LoadingScreen.astro, PageTransition.astro
+│   │   └── reservation/   # CalendarPicker, TimePicker, CustomDropdown, BookingToast, ReservationInfo
+│   ├── layouts/      # Layout.astro — page shell, GSAP init, meta
+│   ├── pages/        # index.astro — single route, composes all sections
+│   ├── scripts/      # Shared vanilla TS (dropdown.ts)
+│   ├── styles/       # global.css — Tailwind v4 @theme tokens + utilities
+│   └── utils/        # Shared utility modules (hoverButton.ts, navigateWithTransition.ts)
+├── AGENTS.md         # Coding guidelines and safety rules for AI agents
+├── CLAUDE.md         # Agent configuration (references AGENTS.md)
+└── DESIGN.md         # Full design system specifications & tokens
 ```
 
 ---
