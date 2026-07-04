@@ -125,6 +125,7 @@ Before writing, modifying, or auditing code, read the instructions in the projec
 ## 4. Git Commits and Branches
 
 - **Format**: Conventional Commits: `<type>(<scope>): <description>` (e.g., `feat(hero): add mouse parallax scroll effect`).
+- **Detail**: Write a short, specific description followed by a blank line and a bullet-point body explaining what changed and why. Be explicit about which components, files, or behaviors were modified.
 - **Rules**: Lowercase description, imperative mood, no trailing period.
 - **Allowed Types**: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `chore`.
 - **Allowed Scopes**: Component names (`hero`, `about`, etc.) or areas (`scroll`, `styles`, `assets`, `build`, `agents`, `deps`).
