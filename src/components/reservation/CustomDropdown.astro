@@ -1,0 +1,79 @@
+---
+interface Option {
+  value: string;
+  label: string;
+}
+
+interface Props {
+  name: string;
+  label: string;
+  placeholder?: string;
+  options: Option[];
+  optionsClass?: string;
+}
+
+const { name, label, placeholder = 'Select', options, optionsClass = '' } = Astro.props;
+---
+
+<div class="flex flex-col gap-2">
+  <label
+    for={`${name}-trigger`}
+    class="font-mono text-[10px] uppercase tracking-[1.5px] text-hazard-white/80"
+  >
+    {label}
+  </label>
+  <div class="custom-select relative" data-name={name}>
+    <input type="hidden" name={name} value="" />
+    <button
+      type="button"
+      id={`${name}-trigger`}
+      class="custom-select-trigger bg-canvas-black border border-white/20 text-sm font-sans text-hazard-white px-4 py-3 rounded-[12px] focus:outline-none focus:border-brand-mint focus:ring-1 focus:ring-brand-purple transition-[border-color,box-shadow] duration-150 w-full flex items-center justify-between cursor-pointer"
+      role="combobox"
+      aria-expanded="false"
+      aria-haspopup="listbox"
+      aria-label={label}
+    >
+      <span class="custom-select-label text-secondary-text">{placeholder}</span>
+      <svg
+        class="custom-select-arrow w-3 h-2 text-hazard-white/60"
+        width="12"
+        height="8"
+        viewBox="0 0 12 8"
+        fill="none"
+        style="transform-origin: center;"
+      >
+        <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+        ></path>
+      </svg>
+    </button>
+    <div
+      class="custom-select-options absolute top-full left-0 right-0 z-20 mt-1.5 bg-canvas-black border border-white/10 rounded-[12px] overflow-hidden shadow-2xl {optionsClass}"
+      role="listbox"
+      style="display: none; opacity: 0; transform: translateY(-6px);"
+    >
+      {
+        options.map((opt) => (
+          <button
+            type="button"
+            class="custom-select-option w-full text-left px-4 py-3 text-sm font-sans text-hazard-white hover:bg-white/5 hover:text-brand-mint transition-colors duration-150 border-b border-white/5 last:border-b-0 cursor-pointer"
+            role="option"
+            data-value={opt.value}
+          >
+            {opt.label}
+          </button>
+        ))
+      }
+    </div>
+  </div>
+</div>
+
+<script>
+  import { initCustomDropdown } from '../../scripts/dropdown';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const ctrl = new AbortController();
+    document.querySelectorAll('.custom-select').forEach((container) => {
+      initCustomDropdown(container as HTMLElement, ctrl.signal);
+    });
+  });
+</script>

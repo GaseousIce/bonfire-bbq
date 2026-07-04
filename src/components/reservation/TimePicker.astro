@@ -1,0 +1,272 @@
+---
+const timeChipData = [
+  {
+    section: 'LUNCH',
+    chips: [
+      { value: '11:30', label: '11:30 AM' },
+      { value: '12:30', label: '12:30 PM' },
+      { value: '13:30', label: '1:30 PM' },
+      { value: '14:30', label: '2:30 PM' },
+    ],
+  },
+  {
+    section: 'DINNER',
+    chips: [
+      { value: '17:00', label: '5:00 PM' },
+      { value: '18:00', label: '6:00 PM' },
+      { value: '19:00', label: '7:00 PM' },
+      { value: '20:00', label: '8:00 PM' },
+      { value: '21:00', label: '9:00 PM' },
+    ],
+  },
+];
+---
+
+<div class="flex flex-col gap-2">
+  <label
+    for="time-trigger"
+    class="font-mono text-[10px] uppercase tracking-[1.5px] text-hazard-white/80">Time</label
+  >
+  <div class="time-picker-wrap relative">
+    <input type="hidden" name="time" value="" />
+    <button
+      type="button"
+      id="time-trigger"
+      class="time-trigger bg-canvas-black border border-white/20 text-sm font-sans text-hazard-white px-4 py-3 rounded-[12px] focus:outline-none focus:border-brand-mint focus:ring-1 focus:ring-brand-purple transition-[border-color,box-shadow] duration-150 w-full flex items-center justify-between cursor-pointer"
+      role="combobox"
+      aria-expanded="false"
+      aria-label="Time"
+    >
+      <span class="time-label text-secondary-text">Select time</span>
+      <svg
+        class="w-3.5 h-3.5 text-hazard-white/60 flex-shrink-0"
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <circle cx="12" cy="12" r="10"></circle>
+        <polyline points="12 6 12 12 16 14"></polyline>
+      </svg>
+    </button>
+
+    <!-- Time panel -->
+    <div
+      class="time-panel absolute top-full left-0 right-0 z-30 mt-1.5 bg-canvas-black border border-white/10 rounded-[16px] shadow-2xl p-4 flex flex-col gap-3 min-w-[280px]"
+      style="display: none; opacity: 0; transform: translateY(-6px);"
+    >
+      {
+        timeChipData.map((group) => (
+          <div>
+            <span class="font-mono text-[9px] uppercase tracking-[1px] text-secondary-text mb-2 block">
+              {group.section}
+            </span>
+            <div class="grid grid-cols-3 gap-2">
+              {group.chips.map((chip) => (
+                <button
+                  type="button"
+                  class="time-chip font-mono text-[11px] font-semibold text-hazard-white bg-surface-slate border border-white/10 hover:border-brand-mint rounded-[40px] py-2 px-1 cursor-pointer transition-colors duration-150 text-center"
+                  data-value={chip.value}
+                >
+                  {chip.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</div>
+
+<script>
+  import { gsap } from 'gsap';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const ctrl = new AbortController();
+    const timeContainer = document.querySelector('.time-picker-wrap');
+    if (!timeContainer) return;
+
+    const timeTriggerButton = timeContainer.querySelector('.time-trigger') as HTMLElement;
+    const timePanelElement = timeContainer.querySelector('.time-panel') as HTMLElement;
+    const timeLabelElement = timeContainer.querySelector('.time-label') as HTMLElement;
+    const timeHiddenInput = timeContainer.querySelector('input[type="hidden"]') as HTMLInputElement;
+    const timeChips = timeContainer.querySelectorAll('.time-chip') as NodeListOf<HTMLElement>;
+
+    let isTimeOpen = false;
+    let lastSelectedDate: Date | null = null;
+
+    function updateTimeChipsState(selectedDate: Date | null) {
+      const now = new Date();
+      const isToday =
+        selectedDate !== null &&
+        selectedDate.getDate() === now.getDate() &&
+        selectedDate.getMonth() === now.getMonth() &&
+        selectedDate.getFullYear() === now.getFullYear();
+      const currentMinutes = now.getHours() * 60 + now.getMinutes();
+      timeChips.forEach((chip) => {
+        if (!chip.dataset.value) return;
+        const [h, m] = chip.dataset.value.split(':').map(Number);
+        const chipMinutes = h * 60 + m;
+        const isPast = selectedDate === null || (isToday && chipMinutes <= currentMinutes);
+        (chip as HTMLButtonElement).disabled = isPast;
+
+        chip.classList.toggle('opacity-25', isPast);
+        chip.classList.toggle('cursor-not-allowed', isPast);
+        chip.classList.toggle('text-hazard-white/20', isPast);
+        chip.classList.toggle('border-white/5', isPast);
+
+        if (isPast && timeHiddenInput.value === chip.dataset.value) {
+          timeHiddenInput.value = '';
+          timeLabelElement.textContent = 'Select time';
+          timeLabelElement.classList.add('text-secondary-text');
+        }
+
+        if (isPast) {
+          chip.classList.remove(
+            'bg-surface-slate',
+            'text-hazard-white',
+            'border-white/10',
+            'hover:border-brand-mint',
+            'bg-brand-mint',
+            'text-canvas-black',
+            'border-brand-mint',
+          );
+        } else {
+          const isSelected = timeHiddenInput.value === chip.dataset.value;
+          chip.classList.add('hover:border-brand-mint');
+          chip.classList.remove('text-hazard-white/20', 'border-white/5');
+
+          if (isSelected) {
+            chip.classList.remove('bg-surface-slate', 'text-hazard-white', 'border-white/10');
+            chip.classList.add('bg-brand-mint', 'text-canvas-black', 'border-brand-mint');
+          } else {
+            chip.classList.remove('bg-brand-mint', 'text-canvas-black', 'border-brand-mint');
+            chip.classList.add('bg-surface-slate', 'text-hazard-white', 'border-white/10');
+          }
+        }
+      });
+    }
+
+    const timePanelTween = gsap.fromTo(
+      timePanelElement,
+      { opacity: 0, y: -6 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.5,
+        ease: 'elastic.out(1, 0.4)',
+        easeReverse: 'power2.in',
+        paused: true,
+        onReverseComplete: () => {
+          timePanelElement.style.display = 'none';
+        },
+      },
+    );
+
+    function openTimePanel() {
+      if (isTimeOpen) return;
+      isTimeOpen = true;
+
+      updateTimeChipsState(lastSelectedDate);
+
+      const event = new CustomEvent('bonfire:dropdown-opened', {
+        detail: { target: timeContainer },
+      });
+      document.dispatchEvent(event);
+
+      timeTriggerButton.setAttribute('aria-expanded', 'true');
+      timePanelElement.style.display = 'block';
+      timePanelTween.restart();
+
+      gsap.fromTo(
+        timeChips,
+        { opacity: 0, y: 10, scale: 0.9 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.35,
+          stagger: 0.03,
+          ease: 'back.out(1.4)',
+          clearProps: 'scale',
+        },
+      );
+    }
+
+    function closeTimePanel() {
+      if (!isTimeOpen) return;
+      isTimeOpen = false;
+      timeTriggerButton.setAttribute('aria-expanded', 'false');
+      timePanelTween.timeScale(2).reverse();
+    }
+
+    timeTriggerButton.addEventListener('click', (clickEvent) => {
+      clickEvent.stopPropagation();
+      isTimeOpen ? closeTimePanel() : openTimePanel();
+    });
+
+    timeChips.forEach((chip) => {
+      chip.addEventListener('click', (clickEvent) => {
+        if ((chip as HTMLButtonElement).disabled) return;
+        clickEvent.stopPropagation();
+        const value = chip.dataset.value;
+        const text = chip.textContent;
+
+        timeChips.forEach((c) => {
+          c.classList.remove('bg-brand-mint', 'text-canvas-black', 'border-brand-mint');
+          c.classList.add('bg-surface-slate', 'text-hazard-white', 'border-white/10');
+        });
+
+        chip.classList.remove('bg-surface-slate', 'text-hazard-white', 'border-white/10');
+        chip.classList.add('bg-brand-mint', 'text-canvas-black', 'border-brand-mint');
+
+        if (timeLabelElement && text) {
+          timeLabelElement.textContent = text;
+          timeLabelElement.classList.remove('text-secondary-text');
+        }
+        if (timeHiddenInput && value) {
+          timeHiddenInput.value = value;
+        }
+
+        closeTimePanel();
+      });
+    });
+
+    document.addEventListener(
+      'click',
+      (clickEvent) => {
+        if (!timeContainer.contains(clickEvent.target as Node) && isTimeOpen) {
+          closeTimePanel();
+        }
+      },
+      { signal: ctrl.signal },
+    );
+
+    document.addEventListener(
+      'bonfire:dropdown-opened',
+      ((e: CustomEvent) => {
+        if (isTimeOpen && !timeContainer.contains(e.detail.target as Node)) {
+          closeTimePanel();
+        }
+      }) as EventListener,
+      { signal: ctrl.signal },
+    );
+
+    document.addEventListener(
+      'bonfire:date-selected',
+      ((event: CustomEvent) => {
+        lastSelectedDate = event.detail.date;
+        updateTimeChipsState(event.detail.date);
+        setTimeout(() => {
+          openTimePanel();
+        }, 150);
+      }) as EventListener,
+      { signal: ctrl.signal },
+    );
+  });
+</script>
