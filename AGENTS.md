@@ -128,6 +128,7 @@ Before writing, modifying, or auditing code, read the instructions in the projec
 - **Rules**: Lowercase description, imperative mood, no trailing period.
 - **Allowed Types**: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `chore`.
 - **Allowed Scopes**: Component names (`hero`, `about`, etc.) or areas (`scroll`, `styles`, `assets`, `build`, `agents`, `deps`).
+- **Formatting**: ALWAYS run `npm run format` before committing any code changes to ensure consistent styling.
 - **NEVER** create or run commit commands on your own; write/make commits ONLY when explicitly asked by the user.
 
 
