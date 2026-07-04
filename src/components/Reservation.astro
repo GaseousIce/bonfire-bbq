@@ -4,7 +4,7 @@ import Button from './Button.astro';
 
 <section
   id="reserve"
-  class="reserve-section relative w-full min-h-screen bg-canvas-black py-16 sm:py-20 lg:py-24 flex items-center justify-center overflow-hidden border-t border-white/5"
+  class="reserve-section relative w-full min-h-screen bg-canvas-black py-16 sm:py-20 lg:py-24 flex items-center justify-center z-20 border-t border-white/5"
 >
   <!-- Glowing hearth backdrop (expanding fire glow) -->
   <div
@@ -453,12 +453,6 @@ import Button from './Button.astro';
 </section>
 
 <style>
-  /* Defer off-screen rendering — browser skips paint/layout until near viewport */
-  .reserve-section {
-    content-visibility: auto;
-    contain-intrinsic-size: 0 100vh;
-  }
-
   .reserve-toast {
     backdrop-filter: blur(4px);
   }
