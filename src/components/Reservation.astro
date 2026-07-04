@@ -48,11 +48,15 @@ import BookingToast from './reservation/BookingToast.astro';
                   class="font-mono text-[10px] uppercase tracking-[1.5px] text-hazard-white/80"
                   >Your Name</label
                 >
+                <!-- 🛡️ Sentinel: Added maxlength for defense in depth against DoS via massive payloads -->
                 <input
                   type="text"
                   id="name"
+                  name="name"
                   placeholder="e.g. Marcus Aurelius"
                   required
+                  maxlength="100"
+                  autocomplete="name"
                   class="bg-canvas-black border border-white/20 text-sm font-sans text-hazard-white placeholder-secondary-text px-4 py-3 rounded-[12px] focus:outline-none focus:border-brand-mint focus:ring-1 focus:ring-brand-purple transition-[border-color,box-shadow] duration-150"
                 />
               </div>
@@ -62,11 +66,15 @@ import BookingToast from './reservation/BookingToast.astro';
                   class="font-mono text-[10px] uppercase tracking-[1.5px] text-hazard-white/80"
                   >Email Address</label
                 >
+                <!-- 🛡️ Sentinel: Added maxlength for defense in depth against DoS via massive payloads -->
                 <input
                   type="email"
                   id="email"
+                  name="email"
                   placeholder="e.g. pit@bonfire.com"
                   required
+                  maxlength="150"
+                  autocomplete="email"
                   class="bg-canvas-black border border-white/20 text-sm font-sans text-hazard-white placeholder-secondary-text px-4 py-3 rounded-[12px] focus:outline-none focus:border-brand-mint focus:ring-1 focus:ring-brand-purple transition-[border-color,box-shadow] duration-150"
                 />
               </div>
