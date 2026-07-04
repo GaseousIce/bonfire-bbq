@@ -1,0 +1,205 @@
+---
+
+---
+
+<div
+  id="legal-modal"
+  class="fixed inset-0 z-50 bg-canvas-black/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 opacity-0 pointer-events-none transition-opacity duration-300"
+  aria-hidden="true"
+  role="dialog"
+  aria-modal="true"
+>
+  <div
+    class="bg-canvas-black border border-white/10 rounded-2xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden relative transform scale-95 transition-transform duration-300"
+    id="legal-modal-card"
+  >
+    <!-- Modal Header -->
+    <div
+      class="flex items-center justify-between px-6 py-5 border-b border-white/10 bg-white/[0.02]"
+    >
+      <div class="flex items-center gap-3">
+        <span class="w-2 h-2 rounded-full bg-brand-mint"></span>
+        <h3
+          id="legal-modal-title"
+          class="font-mono text-xs uppercase tracking-[2px] text-brand-mint font-bold"
+        >
+          HEARTH CHARTER
+        </h3>
+      </div>
+      <button
+        type="button"
+        id="legal-modal-close"
+        class="text-hazard-white/60 hover:text-brand-mint p-1 rounded-lg transition-colors cursor-pointer text-base font-mono leading-none"
+        aria-label="Close dialog"
+      >
+        ✕
+      </button>
+    </div>
+
+    <!-- Modal Body -->
+    <div
+      id="legal-modal-content"
+      class="p-6 overflow-y-auto space-y-4 font-sans text-xs text-hazard-white/80 leading-relaxed max-h-[60vh]"
+    >
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="px-6 py-4 border-t border-white/10 bg-white/[0.02] flex justify-end">
+      <button
+        type="button"
+        id="legal-modal-done"
+        class="font-mono text-[11px] uppercase tracking-[1.5px] font-bold px-6 py-2.5 rounded-full bg-brand-mint text-canvas-black hover:bg-white transition-colors cursor-pointer"
+      >
+        Acknowledge &amp; Close
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { gsap } from 'gsap';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const legalModal = document.getElementById('legal-modal');
+    const legalModalCard = document.getElementById('legal-modal-card');
+    const legalModalTitle = document.getElementById('legal-modal-title');
+    const legalModalContent = document.getElementById('legal-modal-content');
+    const legalModalClose = document.getElementById('legal-modal-close');
+    const legalModalDone = document.getElementById('legal-modal-done');
+    const modalTriggers = document.querySelectorAll('.legal-modal-trigger');
+
+    if (!legalModal) return;
+
+    document.body.appendChild(legalModal);
+
+    type LegalParagraph = { text: string; bold: boolean };
+
+    const legalTexts: Record<string, { title: string; paragraphs: LegalParagraph[] }> = {
+      privacy: {
+        title: 'PRIVACY POLICY — HEARTH DATA CHARTER',
+        paragraphs: [
+          { text: '1. Hearth Commitment', bold: true },
+          {
+            text: 'At Bonfire Barbecue, we protect your personal information with the same dedication we bring to our open-fire cooking. This charter outlines how we manage your details when reserving seating or contacting our pit masters.',
+            bold: false,
+          },
+          { text: '2. Information Collection', bold: true },
+          {
+            text: 'We collect only essential details required to manage reservations and seating preferences, including your name, email address, phone number, party size, and dietary notes.',
+            bold: false,
+          },
+          { text: '3. Culinary Analytics', bold: true },
+          {
+            text: 'We analyze anonymized visit metrics to optimize seasonal menu rotation and maintain kitchen pacing during peak dining hours.',
+            bold: false,
+          },
+          { text: '4. Data Protection', bold: true },
+          {
+            text: 'Your details are securely encrypted. We strictly never sell, rent, or trade your personal information to third parties.',
+            bold: false,
+          },
+        ],
+      },
+      terms: {
+        title: 'TERMS OF SERVICE — DINING PROTOCOL',
+        paragraphs: [
+          { text: '1. Reservation Holding Pacing', bold: true },
+          {
+            text: 'Tables are held for up to 15 minutes past scheduled booking times. Due to live coal kitchen preparation, late arrivals may experience adjusted table seating or staggered dish timing.',
+            bold: false,
+          },
+          { text: '2. Pitmaster Tasting & Dietary Notes', bold: true },
+          {
+            text: 'Our dishes highlight traditional tandoori roasting and authentic spice blends. Please inform your server or note during booking of any severe food allergies.',
+            bold: false,
+          },
+          { text: '3. Party Cancellations', bold: true },
+          {
+            text: 'For parties of 6 or more, we kindly request 24 hours advance cancellation notice to assist our culinary team with fresh daily sourcing.',
+            bold: false,
+          },
+          { text: '4. Atmosphere & Conduct', bold: true },
+          {
+            text: 'Bonfire Barbecue preserves a cinematic, immersive hearth environment. Guests are asked to observe courteous dining etiquette near live charcoal stations.',
+            bold: false,
+          },
+        ],
+      },
+    };
+
+    function renderLegalContent(container: HTMLElement, paragraphs: LegalParagraph[]): void {
+      container.textContent = '';
+      for (let i = 0; i < paragraphs.length; i++) {
+        const p = document.createElement('p');
+        const classes = ['text-hazard-white'];
+        if (paragraphs[i].bold) classes.push('font-semibold');
+        if (i > 0 && paragraphs[i].bold) classes.push('pt-2');
+        p.className = classes.join(' ');
+        p.textContent = paragraphs[i].text;
+        container.appendChild(p);
+      }
+    }
+
+    const openModal = (policyType: string) => {
+      const policyDetails = legalTexts[policyType];
+      if (!policyDetails || !legalModalTitle || !legalModalContent || !legalModalCard) return;
+
+      legalModalTitle.textContent = policyDetails.title;
+      renderLegalContent(legalModalContent, policyDetails.paragraphs);
+
+      legalModal.classList.remove('opacity-0', 'pointer-events-none');
+      legalModal.classList.add('opacity-100', 'pointer-events-auto');
+      legalModal.setAttribute('aria-hidden', 'false');
+
+      legalModalCard.classList.remove('scale-95');
+      legalModalCard.classList.add('scale-100');
+
+      document.body.style.overflow = 'hidden';
+      const smoother = window.__smoother;
+      if (smoother) smoother.paused(true);
+    };
+
+    const closeModal = () => {
+      if (!legalModal || !legalModalCard) return;
+      legalModal.classList.remove('opacity-100', 'pointer-events-auto');
+      legalModal.classList.add('opacity-0', 'pointer-events-none');
+      legalModal.setAttribute('aria-hidden', 'true');
+
+      legalModalCard.classList.remove('scale-100');
+      legalModalCard.classList.add('scale-95');
+
+      document.body.style.overflow = '';
+      const smoother = window.__smoother;
+      if (smoother) smoother.paused(false);
+    };
+
+    const ctrl = new AbortController();
+
+    modalTriggers.forEach((triggerButton) => {
+      triggerButton.addEventListener('click', (clickEvent) => {
+        clickEvent.preventDefault();
+        const modalType = (triggerButton as HTMLElement).getAttribute('data-modal');
+        if (modalType) openModal(modalType);
+      });
+    });
+
+    if (legalModalClose) legalModalClose.addEventListener('click', closeModal);
+    if (legalModalDone) legalModalDone.addEventListener('click', closeModal);
+
+    if (legalModal) {
+      legalModal.addEventListener('click', (clickEvent) => {
+        if (clickEvent.target === legalModal) closeModal();
+      });
+    }
+
+    document.addEventListener(
+      'keydown',
+      (keyboardEvent) => {
+        if (keyboardEvent.key === 'Escape' && legalModal?.classList.contains('opacity-100')) {
+          closeModal();
+        }
+      },
+      { signal: ctrl.signal },
+    );
+  });
+</script>
