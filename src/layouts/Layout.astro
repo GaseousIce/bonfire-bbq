@@ -121,17 +121,26 @@ const heroImage = await getImage({
 
       gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
 
-      const isMobile = window.innerWidth < 768;
-
-      if (!isMobile) {
+      const smootherMM = gsap.matchMedia();
+      smootherMM.add('(min-width: 768px)', () => {
         ScrollTrigger.normalizeScroll(true);
         window.__smoother = ScrollSmoother.create({
           wrapper: '#smooth-wrapper',
           content: '#smooth-content',
           smooth: 0.6,
         });
-      }
+        return () => {
+          window.__smoother?.kill();
+          window.__smoother = undefined;
+          ScrollTrigger.normalizeScroll(false);
+        };
+      });
       requestAnimationFrame(() => ScrollTrigger.refresh());
+
+      const breakpointWatcher = window.matchMedia('(min-width: 768px)');
+      breakpointWatcher.addEventListener('change', () => {
+        requestAnimationFrame(() => ScrollTrigger.refresh());
+      });
 
       // ── Page transition SplitText initialization (once, not on every click) ──
       let __ptCharsTween: gsap.core.Tween | null = null;
