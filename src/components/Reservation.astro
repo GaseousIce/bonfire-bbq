@@ -644,11 +644,6 @@ import Button from './Button.astro';
       );
     }
 
-    const dropdownContainers = document.querySelectorAll(
-      '.custom-select',
-    ) as NodeListOf<HTMLElement>;
-    dropdownContainers.forEach(initCustomDropdown);
-
     // Custom GSAP date picker
     const dateTimeContainer = document.querySelector('.custom-datetime');
     if (dateTimeContainer) {
@@ -748,10 +743,6 @@ import Button from './Button.astro';
         option.textContent = String(currentYearForSelect + i);
         yearOptionsPanel.appendChild(option);
       }
-
-      // Initialize the GSAP interactions for the newly created dynamic elements
-      initCustomDropdown(monthSelectElement);
-      initCustomDropdown(yearSelectElement);
 
       monthSelectElement.addEventListener('change', () => {
         viewedMonth = parseInt(monthSelectElement.dataset.value || '0', 10);
@@ -946,6 +937,11 @@ import Button from './Button.astro';
 
       renderCalendar();
     }
+
+    const dropdownContainers = document.querySelectorAll(
+      '.custom-select',
+    ) as NodeListOf<HTMLElement>;
+    dropdownContainers.forEach(initCustomDropdown);
 
     // "Booking coming soon" overlay on Reserve button click
     const reserveButton = reserveSection.querySelector(
