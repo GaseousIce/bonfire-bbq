@@ -165,15 +165,16 @@ import { heroTandoor } from '../assets/images';
     const heroMm = gsap.matchMedia();
     heroMm.add('(hover: hover)', () => {
       const heroSection = document.getElementById('hero');
-      if (!heroSection) return;
+      if (!heroSection) return () => {};
 
       let heroWidth = heroSection.offsetWidth;
       let heroHeight = heroSection.offsetHeight;
 
-      window.addEventListener('resize', () => {
+      const onResize = () => {
         heroWidth = heroSection.offsetWidth;
         heroHeight = heroSection.offsetHeight;
-      });
+      };
+      window.addEventListener('resize', onResize);
 
       let mouseX = 0;
       let mouseY = 0;
@@ -226,16 +227,16 @@ import { heroTandoor } from '../assets/images';
         animationFrameId = null;
       };
 
-      heroSection.addEventListener('mousemove', (mouseEvent: MouseEvent) => {
+      const onMouseMove = (mouseEvent: MouseEvent) => {
         mouseX = mouseEvent.clientX;
         mouseY = mouseEvent.clientY;
 
         if (animationFrameId === null) {
           animationFrameId = requestAnimationFrame(updateParallax);
         }
-      });
+      };
 
-      heroSection.addEventListener('mouseleave', () => {
+      const onMouseLeave = () => {
         if (animationFrameId !== null) {
           cancelAnimationFrame(animationFrameId);
           animationFrameId = null;
@@ -266,7 +267,28 @@ import { heroTandoor } from '../assets/images';
           ease: 'power2.out',
           overwrite: 'auto',
         });
-      });
+      };
+
+      heroSection.addEventListener('mousemove', onMouseMove);
+      heroSection.addEventListener('mouseleave', onMouseLeave);
+
+      return () => {
+        heroSection.removeEventListener('mousemove', onMouseMove);
+        heroSection.removeEventListener('mouseleave', onMouseLeave);
+        window.removeEventListener('resize', onResize);
+        if (animationFrameId !== null) {
+          cancelAnimationFrame(animationFrameId);
+          animationFrameId = null;
+        }
+        gsap.killTweensOf([
+          heroBackgroundWrapper,
+          heroContent,
+          smoke1,
+          smoke2,
+          heroGlow,
+          heroGlowSecondary,
+        ]);
+      };
     });
 
     // ----------------------------------------------------
