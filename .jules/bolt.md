@@ -1,0 +1,3 @@
+## 2026-07-04 - GSAP Animation Layout Thrashing
+**Learning:** Found an instance in `src/utils/hoverButton.ts` where iterating over multiple DOM elements and calling `getBoundingClientRect()` inside a loop alongside `gsap.set()` writes caused significant layout thrashing. Additionally, high-frequency `mousemove` events were repeatedly triggering synchronous layout reads.
+**Action:** When initializing multiple GSAP elements based on DOM dimensions, separate DOM reads (e.g., `getBoundingClientRect`) and writes (`gsap.set`) into separate loops. Also, cache DOMRect boundaries during `mouseenter` rather than recalculating them on every `mousemove`. Consolidate window listeners like `resize` into a single global debounced listener instead of attaching one per element.

@@ -9,38 +9,61 @@ export function initHoverButtons(): void {
   mm.add('(min-width: 1024px)', () => {
     const cleanups: (() => void)[] = [];
 
+    const buttonData: { button: Element; circle: HTMLElement; isPrimary: boolean }[] = [];
+
     buttons.forEach((button) => {
       const circle = button.querySelector('.hover-circle') as HTMLElement | null;
       if (!circle) return;
 
       const isPrimary = button.classList.contains('variant-primary');
+      buttonData.push({ button, circle, isPrimary });
+    });
 
+    buttonData.forEach(({ circle, isPrimary }) => {
       if (isPrimary) {
         gsap.set(circle, { backgroundColor: '#ffffff' });
       } else {
         gsap.set(circle, { backgroundColor: '#3cffd0' });
       }
+    });
 
-      const updateSize = () => {
-        const rect = button.getBoundingClientRect();
+    const updateAllSizes = () => {
+      const rects = buttonData.map(({ button }) => button.getBoundingClientRect());
+
+      buttonData.forEach(({ circle }, i) => {
+        const rect = rects[i];
         const diagonal = Math.sqrt(rect.width * rect.width + rect.height * rect.height);
         gsap.set(circle, { width: diagonal * 2, height: diagonal * 2 });
-      };
+      });
+    };
 
-      updateSize();
-      window.addEventListener('resize', updateSize);
+    updateAllSizes();
 
+    let resizeTimer: ReturnType<typeof setTimeout> | null = null;
+    const onResize = () => {
+      if (resizeTimer) clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(updateAllSizes, 150);
+    };
+
+    window.addEventListener('resize', onResize);
+    cleanups.push(() => {
+      window.removeEventListener('resize', onResize);
+      if (resizeTimer) clearTimeout(resizeTimer);
+    });
+
+    buttonData.forEach(({ button, circle, isPrimary }) => {
       let hoverTween: gsap.core.Timeline | null = null;
       let enterDelay: gsap.core.Tween | null = null;
       let isHovered = false;
       let startX = 0;
       let startY = 0;
+      let cachedRect: DOMRect | null = null;
 
       const onMouseEnter = (e: MouseEvent) => {
         isHovered = true;
-        const rect = button.getBoundingClientRect();
-        startX = e.clientX - rect.left;
-        startY = e.clientY - rect.top;
+        cachedRect = button.getBoundingClientRect();
+        startX = e.clientX - cachedRect.left;
+        startY = e.clientY - cachedRect.top;
 
         if (enterDelay) enterDelay.kill();
         if (hoverTween) hoverTween.kill();
@@ -79,9 +102,10 @@ export function initHoverButtons(): void {
 
       const onMouseMove = (e: MouseEvent) => {
         if (isHovered && (!hoverTween || !hoverTween.isActive())) {
-          const rect = button.getBoundingClientRect();
-          startX = e.clientX - rect.left;
-          startY = e.clientY - rect.top;
+          if (cachedRect) {
+            startX = e.clientX - cachedRect.left;
+            startY = e.clientY - cachedRect.top;
+          }
         }
       };
 
@@ -89,9 +113,19 @@ export function initHoverButtons(): void {
         isHovered = false;
         if (enterDelay) enterDelay.kill();
 
-        const rect = button.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+        let x = e.clientX;
+        let y = e.clientY;
+
+        if (cachedRect) {
+          x -= cachedRect.left;
+          y -= cachedRect.top;
+        } else {
+          const rect = button.getBoundingClientRect();
+          x -= rect.left;
+          y -= rect.top;
+        }
+
+        cachedRect = null;
 
         if (hoverTween) hoverTween.kill();
         hoverTween = gsap.timeline();
@@ -127,7 +161,6 @@ export function initHoverButtons(): void {
       button.addEventListener('mouseleave', onMouseLeave as EventListener);
 
       cleanups.push(() => {
-        window.removeEventListener('resize', updateSize);
         button.removeEventListener('mouseenter', onMouseEnter as EventListener);
         button.removeEventListener('mousemove', onMouseMove as EventListener);
         button.removeEventListener('mouseleave', onMouseLeave as EventListener);
