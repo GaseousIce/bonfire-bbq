@@ -1,0 +1,82 @@
+---
+
+---
+
+<div
+  class="reserve-toast absolute inset-0 z-20 flex flex-col items-center justify-center rounded-[24px] pointer-events-none"
+  style="opacity: 0;"
+  role="status"
+  aria-live="polite"
+>
+  <div class="absolute inset-0 bg-canvas-black/80 rounded-[24px]"></div>
+  <div class="relative flex flex-col items-center gap-3">
+    <span class="inline-block w-2.5 h-2.5 rounded-full bg-brand-mint"></span>
+    <span class="font-mono text-sm uppercase tracking-[2.5px] text-hazard-white"
+      >Booking coming soon</span
+    >
+    <span class="font-serif italic text-sm text-hazard-white/50 mt-1"
+      >We'll be taking reservations shortly</span
+    >
+  </div>
+</div>
+
+<style>
+  .reserve-toast {
+    backdrop-filter: blur(4px);
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const ctrl = new AbortController();
+    const toastElement = document.querySelector('.reserve-toast') as HTMLElement;
+    if (!toastElement) return;
+
+    const toastInner = toastElement.querySelector('.relative') as HTMLElement;
+    if (!toastInner) return;
+
+    let toastTween: gsap.core.Timeline | null = null;
+    let autoDismiss: gsap.core.Tween | null = null;
+
+    function showToast() {
+      if (toastTween) toastTween.kill();
+      if (autoDismiss) autoDismiss.kill();
+
+      toastElement.style.pointerEvents = 'auto';
+      toastTween = gsap.timeline();
+      toastTween.fromTo(
+        toastElement,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.35, ease: 'power2.out' },
+        0,
+      );
+      toastTween.fromTo(
+        toastInner,
+        { opacity: 0, scale: 0.9, y: 12 },
+        { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: 'back.out(1.8)' },
+        0.1,
+      );
+
+      autoDismiss = gsap.delayedCall(4, hideToast);
+    }
+
+    function hideToast() {
+      if (toastTween) toastTween.kill();
+      if (autoDismiss) autoDismiss.kill();
+
+      toastTween = gsap.timeline({
+        onComplete: () => {
+          toastElement.style.pointerEvents = 'none';
+        },
+      });
+      toastTween.to(toastInner, { opacity: 0, scale: 0.95, duration: 0.2, ease: 'power2.in' }, 0);
+      toastTween.to(toastElement, { opacity: 0, duration: 0.25, ease: 'power2.in' }, 0.05);
+    }
+
+    document.addEventListener('bonfire:show-toast', () => showToast(), { signal: ctrl.signal });
+
+    toastElement.addEventListener('click', () => hideToast(), { signal: ctrl.signal });
+  });
+</script>
