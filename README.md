@@ -97,4 +97,10 @@ All commands are run from the root of the project:
 | `npm run astro ...`    | Runs Astro CLI commands (e.g. `astro add`)            |
 | `graphify update .`    | Rebuilds the codebase knowledge graph                 |
 
+---
+
+## 🤝 Contributing
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for setup instructions, design conventions, commit rules, and optional AI-assisted development tooling.
+
 
