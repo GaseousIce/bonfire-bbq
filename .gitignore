@@ -6,12 +6,8 @@ dist/
 # dependencies
 node_modules/
 
-# logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-renovate.log
+# logs — catches all .log files including rotated/archived variants (e.g. .log.1, .log.gz)
+*.log*
 
 
 # environment variables
