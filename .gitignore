@@ -31,3 +31,6 @@ graphify-out/
 
 # playwright MCP cache
 .playwright-mcp/
+
+# opencode configuration
+.opencode/
