@@ -31,3 +31,6 @@ graphify-out/
 
 # opencode configuration
 .opencode/
+
+# impeccable skill agent cache
+.impeccable/
