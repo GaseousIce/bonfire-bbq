@@ -126,8 +126,8 @@ const galleryItems = [
       (context) => {
         const { isDesktop } = context.conditions as { isDesktop: boolean };
 
-        gsap.set('.gallery-sticky-panel', { willChange: 'transform' });
-        gsap.set(galleryCards, { willChange: 'transform, opacity' });
+        gsap.set('.gallery-sticky-panel', { willChange: 'transform', force3D: true });
+        gsap.set(galleryCards, { willChange: 'transform, opacity', force3D: true });
 
         galleryCards.forEach((cardElement, cardIndex) => {
           const rotations = [-2, 3, -1.5, 2];

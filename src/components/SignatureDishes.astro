@@ -202,8 +202,8 @@ const dishes = [
       (context) => {
         const { isDesktop } = context.conditions as { isDesktop: boolean };
 
-        gsap.set(dishesScrollTrack, { willChange: 'transform' });
-        gsap.set(dishCardElements, { willChange: 'transform' });
+        gsap.set(dishesScrollTrack, { willChange: 'transform', force3D: true });
+        gsap.set(dishCardElements, { willChange: 'transform, opacity', force3D: true });
 
         const scrollTween = gsap.to(dishesScrollTrack, {
           x: () => -(dishesScrollTrack.scrollWidth - window.innerWidth),

@@ -217,6 +217,13 @@ const timelineEvents = [
         (context) => {
           const { isDesktop } = context.conditions as { isDesktop: boolean };
 
+          gsap.set('.timeline-progress-line', {
+            willChange: 'transform',
+            transformOrigin: 'top center',
+            force3D: true,
+          });
+          gsap.set('.timeline-card', { willChange: 'transform, opacity', force3D: true });
+
           gsap.fromTo(
             '.timeline-progress-line',
             { scaleY: 0 },
@@ -292,6 +299,13 @@ const timelineEvents = [
     const backImage = document.querySelector('.image-layer-back');
     const frontImage = document.querySelector('.image-layer-front');
     const textCard = document.querySelector('.parallax-text');
+
+    if (backImage || frontImage || textCard) {
+      gsap.set([backImage, frontImage, textCard].filter(Boolean), {
+        willChange: 'transform',
+        force3D: true,
+      });
+    }
 
     mediaMatcher.add(
       {

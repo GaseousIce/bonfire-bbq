@@ -162,8 +162,15 @@ import { heroTandoor } from '../assets/images';
     // Read target scale dynamically from HTML attribute (single source of truth)
     const bgScale = parseFloat(heroBackgroundWrapper.dataset.parallaxScale || '1.12') || 1.12;
 
-    // Enforce default scale on background wrapper to initialize GSAP transform cache
-    gsap.set(heroBackgroundWrapper, { scale: bgScale });
+    // Enforce default scale & hardware acceleration hints
+    gsap.set(heroBackgroundWrapper, { scale: bgScale, willChange: 'transform', force3D: true });
+    gsap.set([heroContent, smoke1, smoke2], { willChange: 'transform', force3D: true });
+    if (heroGlow || heroGlowSecondary) {
+      gsap.set([heroGlow, heroGlowSecondary].filter(Boolean), {
+        willChange: 'transform',
+        force3D: true,
+      });
+    }
 
     // ----------------------------------------------------
     // 2. Mouse Parallax — only on hover-capable devices
@@ -182,53 +189,78 @@ import { heroTandoor } from '../assets/images';
       };
       window.addEventListener('resize', onResize);
 
+      // Pre-create quickTo function setters to avoid tween allocation churn on mousemove
+      const bgXTo = gsap.quickTo(heroBackgroundWrapper, 'x', { duration: 1.2, ease: 'power2.out' });
+      const bgYTo = gsap.quickTo(heroBackgroundWrapper, 'y', { duration: 1.2, ease: 'power2.out' });
+
+      const contentXTo = gsap.quickTo(heroContent, 'x', { duration: 1.0, ease: 'power2.out' });
+      const contentYTo = gsap.quickTo(heroContent, 'y', { duration: 1.0, ease: 'power2.out' });
+
+      const smoke1XTo = gsap.quickTo(smoke1, 'x', { duration: 1.5, ease: 'power1.out' });
+      const smoke1YTo = gsap.quickTo(smoke1, 'y', { duration: 1.5, ease: 'power1.out' });
+
+      const smoke2XTo = gsap.quickTo(smoke2, 'x', { duration: 1.8, ease: 'power1.out' });
+      const smoke2YTo = gsap.quickTo(smoke2, 'y', { duration: 1.8, ease: 'power1.out' });
+
+      const glowTargets = [heroGlow, heroGlowSecondary].filter(Boolean) as HTMLElement[];
+      const glowXTo =
+        glowTargets.length > 0
+          ? gsap.quickTo(glowTargets, 'x', { duration: 1.3, ease: 'power2.out' })
+          : null;
+      const glowYTo =
+        glowTargets.length > 0
+          ? gsap.quickTo(glowTargets, 'y', { duration: 1.3, ease: 'power2.out' })
+          : null;
       let mouseX = 0;
       let mouseY = 0;
       let animationFrameId: number | null = null;
+      let isHeroVisible = true;
 
       const updateParallax = () => {
-        const xOffset = mouseX - heroWidth / 2;
-        const yOffset = mouseY - heroHeight / 2;
+        const rect = heroSection.getBoundingClientRect();
+        isHeroVisible = rect.bottom > 0 && rect.top < window.innerHeight;
 
-        gsap.to(heroBackgroundWrapper, {
-          x: -xOffset * 0.025,
-          y: -yOffset * 0.025,
-          scale: bgScale,
-          duration: 1.2,
-          ease: 'power2.out',
-          overwrite: 'auto',
-        });
+        if (!isHeroVisible) {
+          bgXTo(0);
+          bgYTo(0);
+          contentXTo(0);
+          contentYTo(0);
+          smoke1XTo(0);
+          smoke1YTo(0);
+          smoke2XTo(0);
+          smoke2YTo(0);
+          if (glowXTo && glowYTo) {
+            glowXTo(0);
+            glowYTo(0);
+          }
+          animationFrameId = null;
+          return;
+        }
 
-        gsap.to(heroContent, {
-          x: xOffset * 0.015,
-          y: yOffset * 0.015,
-          duration: 1.0,
-          ease: 'power2.out',
-          overwrite: 'auto',
-        });
+        // Clamp mouse position within viewport boundaries to ensure edges stay fully active
+        const clientX = Math.max(0, Math.min(window.innerWidth, mouseX));
+        const clientY = Math.max(0, Math.min(window.innerHeight, mouseY));
 
-        gsap.to(smoke1, {
-          x: xOffset * 0.04,
-          y: yOffset * 0.04,
-          duration: 1.5,
-          ease: 'power1.out',
-          overwrite: 'auto',
-        });
+        // Compute offsets relative to center of the Hero section
+        const xOffset = clientX - rect.left - rect.width / 2;
+        const yOffset = clientY - rect.top - rect.height / 2;
 
-        gsap.to(smoke2, {
-          x: -xOffset * 0.03,
-          y: -yOffset * 0.03,
-          duration: 1.8,
-          ease: 'power1.out',
-          overwrite: 'auto',
-        });
+        bgXTo(-xOffset * 0.025);
+        bgYTo(-yOffset * 0.025);
 
-        gsap.to([heroGlow, heroGlowSecondary], {
-          x: xOffset * 0.01,
-          y: yOffset * 0.01,
-          duration: 1.3,
-          overwrite: 'auto',
-        });
+        contentXTo(xOffset * 0.015);
+        contentYTo(yOffset * 0.015);
+
+        smoke1XTo(xOffset * 0.04);
+        smoke1YTo(yOffset * 0.04);
+
+        smoke2XTo(-xOffset * 0.03);
+        smoke2YTo(-yOffset * 0.03);
+
+        if (glowXTo && glowYTo) {
+          glowXTo(xOffset * 0.01);
+          glowYTo(yOffset * 0.01);
+        }
 
         animationFrameId = null;
       };
@@ -248,39 +280,26 @@ import { heroTandoor } from '../assets/images';
           animationFrameId = null;
         }
 
-        gsap.to(heroBackgroundWrapper, {
-          x: 0,
-          y: 0,
-          scale: bgScale,
-          duration: 1.5,
-          ease: 'power2.out',
-          overwrite: 'auto',
-        });
-
-        gsap.to([heroContent, smoke1, smoke2], {
-          x: 0,
-          y: 0,
-          scale: 1,
-          duration: 1.5,
-          ease: 'power2.out',
-          overwrite: 'auto',
-        });
-
-        gsap.to([heroGlow, heroGlowSecondary], {
-          x: 0,
-          y: 0,
-          duration: 1.5,
-          ease: 'power2.out',
-          overwrite: 'auto',
-        });
+        bgXTo(0);
+        bgYTo(0);
+        contentXTo(0);
+        contentYTo(0);
+        smoke1XTo(0);
+        smoke1YTo(0);
+        smoke2XTo(0);
+        smoke2YTo(0);
+        if (glowXTo && glowYTo) {
+          glowXTo(0);
+          glowYTo(0);
+        }
       };
 
-      heroSection.addEventListener('mousemove', onMouseMove);
-      heroSection.addEventListener('mouseleave', onMouseLeave);
+      window.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseleave', onMouseLeave);
 
       return () => {
-        heroSection.removeEventListener('mousemove', onMouseMove);
-        heroSection.removeEventListener('mouseleave', onMouseLeave);
+        window.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseleave', onMouseLeave);
         window.removeEventListener('resize', onResize);
         if (animationFrameId !== null) {
           cancelAnimationFrame(animationFrameId);

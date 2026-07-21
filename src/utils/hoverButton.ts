@@ -58,7 +58,7 @@ export function initHoverButtons(): void {
               scale: 1,
               duration: 0.6,
               ease: 'power3.out',
-              force3D: false,
+              force3D: true,
             },
             0,
           );
@@ -104,7 +104,7 @@ export function initHoverButtons(): void {
             scale: 0,
             duration: 0.5,
             ease: 'power3.inOut',
-            force3D: false,
+            force3D: true,
           },
           0,
         );
