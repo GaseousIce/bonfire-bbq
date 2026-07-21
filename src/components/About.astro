@@ -223,7 +223,6 @@ const timelineEvents = [
             {
               scaleY: 1,
               ease: 'none',
-              immediateRender: false,
               scrollTrigger: {
                 trigger: '.timeline-container',
                 start: () => `top+=${firstItem.offsetTop} 90%`,
@@ -253,7 +252,7 @@ const timelineEvents = [
               itemTimeline.fromTo(
                 cardElement,
                 { opacity: 0, x: startX, scale: 0.9 },
-                { opacity: 1, x: 0, scale: 1, ease: 'none', duration: 1, immediateRender: false },
+                { opacity: 1, x: 0, scale: 1, ease: 'none', duration: 1 },
                 0,
               );
             }
@@ -272,7 +271,6 @@ const timelineEvents = [
                   boxShadow: '0 0 10px rgba(60, 255, 208, 0.8)',
                   ease: 'none',
                   duration: 1,
-                  immediateRender: false,
                 },
                 0,
               );
@@ -282,7 +280,7 @@ const timelineEvents = [
               itemTimeline.fromTo(
                 timestampElement,
                 { opacity: 0.3 },
-                { opacity: 1, ease: 'none', duration: 1, immediateRender: false },
+                { opacity: 1, ease: 'none', duration: 1 },
                 0,
               );
             }
@@ -309,7 +307,6 @@ const timelineEvents = [
             { y: -30 },
             {
               y: 60,
-              immediateRender: false,
               scrollTrigger: {
                 trigger: '.about-section',
                 start: 'top bottom',
@@ -324,7 +321,6 @@ const timelineEvents = [
             { y: 50 },
             {
               y: -80,
-              immediateRender: false,
               scrollTrigger: {
                 trigger: '.about-section',
                 start: 'top bottom',
@@ -339,7 +335,6 @@ const timelineEvents = [
             { y: 10 },
             {
               y: -40,
-              immediateRender: false,
               scrollTrigger: {
                 trigger: '.about-section',
                 start: 'top bottom',
@@ -355,7 +350,6 @@ const timelineEvents = [
             { y: -15 },
             {
               y: 30,
-              immediateRender: false,
               scrollTrigger: {
                 trigger: '.parallax-images-container',
                 start: 'top bottom',
@@ -370,7 +364,6 @@ const timelineEvents = [
             { y: 25 },
             {
               y: -40,
-              immediateRender: false,
               scrollTrigger: {
                 trigger: '.parallax-images-container',
                 start: 'top bottom',
@@ -385,7 +378,6 @@ const timelineEvents = [
             { y: 10 },
             {
               y: -20,
-              immediateRender: false,
               scrollTrigger: {
                 trigger: '.parallax-text',
                 start: 'top bottom',
