@@ -127,10 +127,16 @@ import { heroTandoor } from '../assets/images';
 </section>
 
 <style>
+  .hero-bg-wrap,
+  .smoke-container,
+  .smoke-parallax-1,
+  .smoke-parallax-2,
   .smoke-layer,
   .hero-glow,
   .hero-glow-secondary {
     will-change: transform, opacity;
+    transform: translateZ(0);
+    backface-visibility: hidden;
   }
   .smoke-layer {
     background-position: center;
@@ -339,44 +345,65 @@ import { heroTandoor } from '../assets/images';
     );
 
     // ----------------------------------------------------
-    // 4. Scroll-based Parallax — runs on all devices
+    // 4. Scroll-based Parallax — responsive scrub & clamped bounds
     // ----------------------------------------------------
-    gsap.to(heroBackgroundWrapper, {
-      yPercent: 10,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: '#hero',
-        start: 'top top',
-        end: 'bottom top',
-        scrub: 0.5,
+    const scrollMm = gsap.matchMedia();
+    scrollMm.add(
+      {
+        isMobile: '(max-width: 767px)',
+        isDesktop: '(min-width: 768px)',
       },
-    });
+      (context) => {
+        const { isMobile } = context.conditions!;
+        const scrubVal = isMobile ? true : 0.5;
 
-    if (smokeParallax1) {
-      gsap.to(smokeParallax1, {
-        yPercent: -15,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: '#hero',
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 0.5,
-        },
-      });
-    }
+        gsap.to(heroBackgroundWrapper, {
+          yPercent: 10,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: '#hero',
+            start: 'clamp(top top)',
+            end: 'clamp(bottom top)',
+            scrub: scrubVal,
+            fastScrollEnd: true,
+            preventOverlaps: true,
+            invalidateOnRefresh: true,
+          },
+        });
 
-    if (smokeParallax2) {
-      gsap.to(smokeParallax2, {
-        yPercent: -12,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: '#hero',
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 0.5,
-        },
-      });
-    }
+        if (smokeParallax1) {
+          gsap.to(smokeParallax1, {
+            yPercent: -15,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: '#hero',
+              start: 'clamp(top top)',
+              end: 'clamp(bottom top)',
+              scrub: scrubVal,
+              fastScrollEnd: true,
+              preventOverlaps: true,
+              invalidateOnRefresh: true,
+            },
+          });
+        }
+
+        if (smokeParallax2) {
+          gsap.to(smokeParallax2, {
+            yPercent: -12,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: '#hero',
+              start: 'clamp(top top)',
+              end: 'clamp(bottom top)',
+              scrub: scrubVal,
+              fastScrollEnd: true,
+              preventOverlaps: true,
+              invalidateOnRefresh: true,
+            },
+          });
+        }
+      },
+    );
 
     // Hero CTA buttons via page transition
     const heroCtaButtons = document.querySelectorAll('.hero-cta-btn');
