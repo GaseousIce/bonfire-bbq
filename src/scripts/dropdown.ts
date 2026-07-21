@@ -108,8 +108,8 @@ export function initCustomDropdown(dropdownContainer: HTMLElement, signal: Abort
 
   document.addEventListener(
     'bonfire:dropdown-opened',
-    ((e: CustomEvent) => {
-      if (isDropdownOpen && !dropdownContainer.contains(e.detail.target as Node)) {
+    ((customEvent: CustomEvent) => {
+      if (isDropdownOpen && !dropdownContainer.contains(customEvent.detail.target as Node)) {
         closeDropdown();
       }
     }) as EventListener,

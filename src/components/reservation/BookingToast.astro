@@ -30,7 +30,7 @@
   import { gsap } from 'gsap';
 
   document.addEventListener('DOMContentLoaded', () => {
-    const ctrl = new AbortController();
+    const abortController = new AbortController();
     const toastElement = document.querySelector('.reserve-toast') as HTMLElement;
     if (!toastElement) return;
 
@@ -75,8 +75,10 @@
       toastTween.to(toastElement, { opacity: 0, duration: 0.25, ease: 'power2.in' }, 0.05);
     }
 
-    document.addEventListener('bonfire:show-toast', () => showToast(), { signal: ctrl.signal });
+    document.addEventListener('bonfire:show-toast', () => showToast(), {
+      signal: abortController.signal,
+    });
 
-    toastElement.addEventListener('click', () => hideToast(), { signal: ctrl.signal });
+    toastElement.addEventListener('click', () => hideToast(), { signal: abortController.signal });
   });
 </script>

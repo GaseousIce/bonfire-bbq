@@ -136,6 +136,6 @@ const currentYear = new Date().getFullYear();
 
   document.addEventListener('DOMContentLoaded', () => {
     const navLinks = document.querySelectorAll('.footer-nav-link');
-    navLinks.forEach((el) => el.addEventListener('click', handleNavClick));
+    navLinks.forEach((linkElement) => linkElement.addEventListener('click', handleNavClick));
   });
 </script>

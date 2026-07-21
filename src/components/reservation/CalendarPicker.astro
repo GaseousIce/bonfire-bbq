@@ -14,10 +14,13 @@ const monthNames = [
   'November',
   'December',
 ];
-const months = monthNames.map((name, i) => ({ value: String(i), label: name.substring(0, 3) }));
-const years = Array.from({ length: 5 }, (_, i) => ({
-  value: String(currentYear + i),
-  label: String(currentYear + i),
+const months = monthNames.map((monthName, monthIndex) => ({
+  value: String(monthIndex),
+  label: monthName.substring(0, 3),
+}));
+const years = Array.from({ length: 5 }, (_, yearOffset) => ({
+  value: String(currentYear + yearOffset),
+  label: String(currentYear + yearOffset),
 }));
 ---
 
@@ -206,7 +209,7 @@ const years = Array.from({ length: 5 }, (_, i) => ({
   import { initCustomDropdown } from '../../scripts/dropdown';
 
   document.addEventListener('DOMContentLoaded', () => {
-    const ctrl = new AbortController();
+    const abortController = new AbortController();
     const dateTimeContainer = document.querySelector('.custom-datetime');
     if (!dateTimeContainer) return;
 
@@ -232,8 +235,8 @@ const years = Array.from({ length: 5 }, (_, i) => ({
     const nextMonthButton = dateTimeContainer.querySelector('.dt-month-next') as HTMLButtonElement;
 
     // Init month/year dropdowns
-    initCustomDropdown(monthSelectElement, ctrl.signal);
-    initCustomDropdown(yearSelectElement, ctrl.signal);
+    initCustomDropdown(monthSelectElement, abortController.signal);
+    initCustomDropdown(yearSelectElement, abortController.signal);
 
     let isCalendarOpen = false;
     let viewedMonth = new Date().getMonth();
@@ -259,14 +262,14 @@ const years = Array.from({ length: 5 }, (_, i) => ({
       const currentYear = new Date().getFullYear();
       const currentMonth = new Date().getMonth();
       const selectedYear = parseInt(yearSelectElement.dataset.value || String(currentYear), 10);
-      const opts = monthOptionsPanel.querySelectorAll('.custom-select-option');
-      opts.forEach((opt, idx) => {
-        const isPast = selectedYear === currentYear && idx < currentMonth;
-        (opt as HTMLButtonElement).disabled = isPast;
-        opt.classList.toggle('opacity-30', isPast);
-        opt.classList.toggle('cursor-not-allowed', isPast);
-        opt.classList.toggle('hover:bg-white/10', !isPast);
-        opt.classList.toggle('hover:text-brand-mint', !isPast);
+      const monthOptionElements = monthOptionsPanel.querySelectorAll('.custom-select-option');
+      monthOptionElements.forEach((optionElement, optionIndex) => {
+        const isPast = selectedYear === currentYear && optionIndex < currentMonth;
+        (optionElement as HTMLButtonElement).disabled = isPast;
+        optionElement.classList.toggle('opacity-30', isPast);
+        optionElement.classList.toggle('cursor-not-allowed', isPast);
+        optionElement.classList.toggle('hover:bg-white/10', !isPast);
+        optionElement.classList.toggle('hover:text-brand-mint', !isPast);
       });
     }
 
@@ -355,10 +358,10 @@ const years = Array.from({ length: 5 }, (_, i) => ({
             dateTimeLabelElement.textContent = `${monthShort} ${day}`;
             dateTimeLabelElement.classList.remove('text-secondary-text');
 
-            const yyyy = dateObj.getFullYear();
-            const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
-            const dd = String(dateObj.getDate()).padStart(2, '0');
-            hiddenInput.value = `${yyyy}-${mm}-${dd}`;
+            const formattedYear = dateObj.getFullYear();
+            const formattedMonth = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const formattedDay = String(dateObj.getDate()).padStart(2, '0');
+            hiddenInput.value = `${formattedYear}-${formattedMonth}-${formattedDay}`;
 
             closeCalendarPanel();
 
@@ -477,17 +480,17 @@ const years = Array.from({ length: 5 }, (_, i) => ({
           closeCalendarPanel();
         }
       },
-      { signal: ctrl.signal },
+      { signal: abortController.signal },
     );
 
     document.addEventListener(
       'bonfire:dropdown-opened',
-      ((e: CustomEvent) => {
-        if (isCalendarOpen && !dateTimeContainer.contains(e.detail.target as Node)) {
+      ((customEvent: CustomEvent) => {
+        if (isCalendarOpen && !dateTimeContainer.contains(customEvent.detail.target as Node)) {
           closeCalendarPanel();
         }
       }) as EventListener,
-      { signal: ctrl.signal },
+      { signal: abortController.signal },
     );
 
     renderCalendar();

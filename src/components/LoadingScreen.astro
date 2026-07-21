@@ -59,7 +59,7 @@
   import { gsap } from 'gsap';
 
   document.addEventListener('DOMContentLoaded', () => {
-    const screen = document.getElementById('loading-screen');
+    const loadingScreenElement = document.getElementById('loading-screen');
     const progressWrap = document.querySelector('.loading-progress-wrap');
     const progressBar = document.querySelector('.loading-progress-bar') as HTMLElement | null;
     const percentDisplay = document.querySelector('.loading-pct') as HTMLElement | null;
@@ -67,10 +67,11 @@
     const ringA = document.querySelector('.loading-ring-a');
     const ringB = document.querySelector('.loading-ring-b');
 
-    if (!screen || !progressBar || !percentDisplay || !spinner || !ringA || !ringB) return;
+    if (!loadingScreenElement || !progressBar || !percentDisplay || !spinner || !ringA || !ringB)
+      return;
 
     const startTime = Date.now();
-    const MIN_DURATION = 800;
+    const MINIMUM_DISPLAY_DURATION = 800;
 
     // Entrance timeline
     const revealTimeline = gsap.timeline({ defaults: { ease: 'power3.out' } });
@@ -103,7 +104,7 @@
 
     const completeLoading = () => {
       const elapsed = Date.now() - startTime;
-      const remaining = Math.max(0, MIN_DURATION - elapsed);
+      const remaining = Math.max(0, MINIMUM_DISPLAY_DURATION - elapsed);
 
       setTimeout(() => {
         fillTween.kill();
@@ -120,13 +121,13 @@
           onComplete: () => {
             document.dispatchEvent(new CustomEvent('bonfire:hero-entrance'));
 
-            gsap.to(screen, {
+            gsap.to(loadingScreenElement, {
               autoAlpha: 0,
               scale: 0.95,
               duration: 0.8,
               ease: 'power2.inOut',
               delay: 0.3,
-              onComplete: () => screen.remove(),
+              onComplete: () => loadingScreenElement.remove(),
             });
           },
         });

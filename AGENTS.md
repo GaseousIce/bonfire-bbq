@@ -39,7 +39,7 @@ bonfire-bbq/
 | Symbol                  | Type      | Location          | Role                                                                           |
 | ----------------------- | --------- | ----------------- | ------------------------------------------------------------------------------ |
 | `index.astro`           | Page      | `src/pages/`      | Single route — composes Hero→About→SignatureDishes→Gallery→Reservation→Footer  |
-| `Layout.astro`          | Layout    | `src/layouts/`    | Page shell, GSAP plugin registration, ScrollSmoother, meta, page transition fn |
+| `Layout.astro`          | Layout    | `src/layouts/`    | Page shell, GSAP plugin registration, ScrollSmoother, meta, page transition function |
 | `global.css`            | Style     | `src/styles/`     | Tailwind v4 `@theme`, base resets, responsive section-padding                  |
 | `images.ts`             | Module    | `src/assets/`     | Barrel file — named re-exports of all 14 PNG imports                           |
 | `Hero.astro`            | Component | `src/components/` | Cinematic hero: staggered char reveal, mouse parallax, smoke, glow pulses      |
@@ -59,19 +59,21 @@ bonfire-bbq/
 - **Commits**: Conventional/Semantic Commits (e.g., `feat(hero): ...`) — see Section 4 for complete rules; NEVER commit unless explicitly asked
 - **Design**: Verge dark editorial — `#131313` canvas, Jelly Mint `#3cffd0` accents, pill corners (20-40px), no shadows/gradients
 - **Interactivity**: All vanilla JS + GSAP — no React/Vue/Svelte, each component has its own `<script>` block
+- **Naming**: Always use self-documenting, explicit variable and parameter names (e.g., `elementIndex` instead of `i`, `animationContext` instead of `ctx`, `clickEvent` instead of `e`, `targetElement` instead of `el`, `boundingRectangle` instead of `rect`)
 - **Skills**: Read `.agents/skills/<domain>/SKILL.md` before modifying code in that domain
 - **Shell**: Prefix commands with `rtk` for token savings — NOT for PowerShell-native cmdlets
 
 ## ANTI-PATTERNS (THIS PROJECT)
 
 - **No auto-commit**: NEVER create/run git commits unless explicitly asked
+- **Ambiguous variables**: NEVER use ambiguous or short variable names (e.g., `i`, `e`, `el`, `ctx`, `rect`, `bg`, `fn`, `opts`, `pos`, `temp`). All variables must clearly document their purpose
 - **No box-shadow**: Use 1px borders or saturated accent fills for elevation (Verge rule)
 - **No gradients**: Solid color blocks only — no glows, gradients, or atmospheric blurs
 - **No square corners**: Every interactive/content container is rounded (2/3/4/20/24/30/40px)
 - **Font roles**: Manuka (Bebas Neue) display-only ≥60px; UPPERCASE mono only; FK Roman (Newsreader) for body-only
 - **No light mode**: `#131313` canvas always — no light backgrounds on homepage
 - **No tests**: Zero test infrastructure exists — add before starting to test
-- **GSAP cleanup**: Never skip `ctx.revert()` or tween kill on unmount
+- **GSAP cleanup**: Never skip `gsapContext.revert()` or tween kill on unmount
 - **No mint text <16px on `#131313`**: Contrast vibrates at small sizes
 
 ## COMMANDS

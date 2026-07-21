@@ -87,7 +87,7 @@ const timeChipData = [
   import { gsap } from 'gsap';
 
   document.addEventListener('DOMContentLoaded', () => {
-    const ctrl = new AbortController();
+    const abortController = new AbortController();
     const timeContainer = document.querySelector('.time-picker-wrap');
     if (!timeContainer) return;
 
@@ -110,8 +110,8 @@ const timeChipData = [
       const currentMinutes = now.getHours() * 60 + now.getMinutes();
       timeChips.forEach((chip) => {
         if (!chip.dataset.value) return;
-        const [h, m] = chip.dataset.value.split(':').map(Number);
-        const chipMinutes = h * 60 + m;
+        const [hours, minutes] = chip.dataset.value.split(':').map(Number);
+        const chipMinutes = hours * 60 + minutes;
         const isPast = selectedDate === null || (isToday && chipMinutes <= currentMinutes);
         (chip as HTMLButtonElement).disabled = isPast;
 
@@ -217,9 +217,9 @@ const timeChipData = [
         const value = chip.dataset.value;
         const text = chip.textContent;
 
-        timeChips.forEach((c) => {
-          c.classList.remove('bg-brand-mint', 'text-canvas-black', 'border-brand-mint');
-          c.classList.add('bg-surface-slate', 'text-hazard-white', 'border-white/10');
+        timeChips.forEach((chipElement) => {
+          chipElement.classList.remove('bg-brand-mint', 'text-canvas-black', 'border-brand-mint');
+          chipElement.classList.add('bg-surface-slate', 'text-hazard-white', 'border-white/10');
         });
 
         chip.classList.remove('bg-surface-slate', 'text-hazard-white', 'border-white/10');
@@ -244,17 +244,17 @@ const timeChipData = [
           closeTimePanel();
         }
       },
-      { signal: ctrl.signal },
+      { signal: abortController.signal },
     );
 
     document.addEventListener(
       'bonfire:dropdown-opened',
-      ((e: CustomEvent) => {
-        if (isTimeOpen && !timeContainer.contains(e.detail.target as Node)) {
+      ((customEvent: CustomEvent) => {
+        if (isTimeOpen && !timeContainer.contains(customEvent.detail.target as Node)) {
           closeTimePanel();
         }
       }) as EventListener,
-      { signal: ctrl.signal },
+      { signal: abortController.signal },
     );
 
     document.addEventListener(
@@ -266,7 +266,7 @@ const timeChipData = [
           openTimePanel();
         }, 150);
       }) as EventListener,
-      { signal: ctrl.signal },
+      { signal: abortController.signal },
     );
   });
 </script>

@@ -129,7 +129,7 @@ import BookingToast from './reservation/BookingToast.astro';
   import { gsap } from 'gsap';
 
   document.addEventListener('DOMContentLoaded', () => {
-    const ctrl = new AbortController();
+    const abortController = new AbortController();
     const reserveSection = document.querySelector('.reserve-section') as HTMLElement;
     const reserveInfo = document.querySelector('.reserve-info') as HTMLElement;
     const reservationCardWrapper = document.querySelector('.reserve-card-wrap') as HTMLElement;
@@ -189,11 +189,11 @@ import BookingToast from './reservation/BookingToast.astro';
     if (reserveButton) {
       reserveButton.addEventListener(
         'click',
-        (e) => {
-          e.preventDefault();
+        (clickEvent) => {
+          clickEvent.preventDefault();
           document.dispatchEvent(new CustomEvent('bonfire:show-toast'));
         },
-        { signal: ctrl.signal },
+        { signal: abortController.signal },
       );
     }
   });

@@ -173,7 +173,7 @@
       if (smoother) smoother.paused(false);
     };
 
-    const ctrl = new AbortController();
+    const abortController = new AbortController();
 
     modalTriggers.forEach((triggerButton) => {
       triggerButton.addEventListener('click', (clickEvent) => {
@@ -199,7 +199,7 @@
           closeModal();
         }
       },
-      { signal: ctrl.signal },
+      { signal: abortController.signal },
     );
   });
 </script>

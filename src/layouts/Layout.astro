@@ -152,9 +152,9 @@ const heroImage = await getImage({
               type: 'chars',
               autoSplit: true,
               mask: 'chars',
-              onSplit: (self: any) => {
+              onSplit: (splitTextInstance: any) => {
                 // Symmetrical center-outward reveal with silky power3.out easing
-                pageTransitionBrandCharsTween = gsap.from(self.chars, {
+                pageTransitionBrandCharsTween = gsap.from(splitTextInstance.chars, {
                   duration: 0.42,
                   yPercent: 45,
                   opacity: 0,
@@ -168,8 +168,8 @@ const heroImage = await getImage({
                 });
               },
             });
-          } catch (e) {
-            console.warn('[PageTransition] SplitText init error:', e);
+          } catch (splitTextError) {
+            console.warn('[PageTransition] SplitText init error:', splitTextError);
           }
         }
       }
@@ -235,8 +235,11 @@ const heroImage = await getImage({
                 }
                 transferFocusToTargetSection(targetHref);
                 ScrollTrigger.refresh();
-              } catch (e) {
-                console.warn('[PageTransition] Reduced motion scroll error:', e);
+              } catch (reducedMotionScrollError) {
+                console.warn(
+                  '[PageTransition] Reduced motion scroll error:',
+                  reducedMotionScrollError,
+                );
               }
               gsap.to(transitionOverlay, {
                 autoAlpha: 0,
@@ -388,8 +391,8 @@ const heroImage = await getImage({
               }
               transferFocusToTargetSection(targetHref);
               requestAnimationFrame(() => ScrollTrigger.refresh());
-            } catch (e) {
-              console.warn('[PageTransition] scroll error:', e);
+            } catch (scrollExecutionError) {
+              console.warn('[PageTransition] scroll error:', scrollExecutionError);
             }
           },
           undefined,

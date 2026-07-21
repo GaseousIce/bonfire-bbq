@@ -4,9 +4,9 @@ export function initHoverButtons(): void {
   const buttons = document.querySelectorAll('.hover-button');
   if (buttons.length === 0) return;
 
-  const mm = gsap.matchMedia();
+  const mediaMatcher = gsap.matchMedia();
 
-  mm.add('(min-width: 1024px)', () => {
+  mediaMatcher.add('(min-width: 1024px)', () => {
     const cleanups: (() => void)[] = [];
 
     buttons.forEach((button) => {
@@ -22,8 +22,11 @@ export function initHoverButtons(): void {
       }
 
       const updateSize = () => {
-        const rect = button.getBoundingClientRect();
-        const diagonal = Math.sqrt(rect.width * rect.width + rect.height * rect.height);
+        const buttonRectangle = button.getBoundingClientRect();
+        const diagonal = Math.sqrt(
+          buttonRectangle.width * buttonRectangle.width +
+            buttonRectangle.height * buttonRectangle.height,
+        );
         gsap.set(circle, { width: diagonal * 2, height: diagonal * 2 });
       };
 
@@ -36,11 +39,11 @@ export function initHoverButtons(): void {
       let startX = 0;
       let startY = 0;
 
-      const onMouseEnter = (e: MouseEvent) => {
+      const onMouseEnter = (mouseEvent: MouseEvent) => {
         isHovered = true;
-        const rect = button.getBoundingClientRect();
-        startX = e.clientX - rect.left;
-        startY = e.clientY - rect.top;
+        const buttonRectangle = button.getBoundingClientRect();
+        startX = mouseEvent.clientX - buttonRectangle.left;
+        startY = mouseEvent.clientY - buttonRectangle.top;
 
         if (enterDelay) enterDelay.kill();
         if (hoverTween) hoverTween.kill();
@@ -77,21 +80,21 @@ export function initHoverButtons(): void {
         });
       };
 
-      const onMouseMove = (e: MouseEvent) => {
+      const onMouseMove = (mouseEvent: MouseEvent) => {
         if (isHovered && (!hoverTween || !hoverTween.isActive())) {
-          const rect = button.getBoundingClientRect();
-          startX = e.clientX - rect.left;
-          startY = e.clientY - rect.top;
+          const buttonRectangle = button.getBoundingClientRect();
+          startX = mouseEvent.clientX - buttonRectangle.left;
+          startY = mouseEvent.clientY - buttonRectangle.top;
         }
       };
 
-      const onMouseLeave = (e: MouseEvent) => {
+      const onMouseLeave = (mouseEvent: MouseEvent) => {
         isHovered = false;
         if (enterDelay) enterDelay.kill();
 
-        const rect = button.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+        const buttonRectangle = button.getBoundingClientRect();
+        const exitX = mouseEvent.clientX - buttonRectangle.left;
+        const exitY = mouseEvent.clientY - buttonRectangle.top;
 
         if (hoverTween) hoverTween.kill();
         hoverTween = gsap.timeline();
@@ -99,8 +102,8 @@ export function initHoverButtons(): void {
         hoverTween.to(
           circle,
           {
-            left: x,
-            top: y,
+            left: exitX,
+            top: exitY,
             scale: 0,
             duration: 0.5,
             ease: 'power3.inOut',

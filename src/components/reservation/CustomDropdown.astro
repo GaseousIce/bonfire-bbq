@@ -52,14 +52,14 @@ const { name, label, placeholder = 'Select', options, optionsClass = '' } = Astr
       style="display: none; opacity: 0; transform: translateY(-6px);"
     >
       {
-        options.map((opt) => (
+        options.map((optionItem) => (
           <button
             type="button"
             class="custom-select-option w-full text-left px-4 py-3 text-sm font-sans text-hazard-white hover:bg-white/5 hover:text-brand-mint transition-colors duration-150 border-b border-white/5 last:border-b-0 cursor-pointer"
             role="option"
-            data-value={opt.value}
+            data-value={optionItem.value}
           >
-            {opt.label}
+            {optionItem.label}
           </button>
         ))
       }
@@ -71,9 +71,9 @@ const { name, label, placeholder = 'Select', options, optionsClass = '' } = Astr
   import { initCustomDropdown } from '../../scripts/dropdown';
 
   document.addEventListener('DOMContentLoaded', () => {
-    const ctrl = new AbortController();
-    document.querySelectorAll('.custom-select').forEach((container) => {
-      initCustomDropdown(container as HTMLElement, ctrl.signal);
+    const abortController = new AbortController();
+    document.querySelectorAll('.custom-select').forEach((dropdownContainer) => {
+      initCustomDropdown(dropdownContainer as HTMLElement, abortController.signal);
     });
   });
 </script>

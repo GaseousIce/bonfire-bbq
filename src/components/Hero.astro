@@ -175,8 +175,11 @@ import { heroTandoor } from '../assets/images';
     // ----------------------------------------------------
     // 2. Mouse Parallax — only on hover-capable devices
     // ----------------------------------------------------
-    const heroMm = gsap.matchMedia();
-    heroMm.add('(hover: hover)', () => {
+    // ----------------------------------------------------
+    // 2. Mouse Parallax — only on hover-capable devices
+    // ----------------------------------------------------
+    const heroMediaMatcher = gsap.matchMedia();
+    heroMediaMatcher.add('(hover: hover)', () => {
       const heroSection = document.getElementById('hero');
       if (!heroSection) return () => {};
 
@@ -217,8 +220,8 @@ import { heroTandoor } from '../assets/images';
       let isHeroVisible = true;
 
       const updateParallax = () => {
-        const rect = heroSection.getBoundingClientRect();
-        isHeroVisible = rect.bottom > 0 && rect.top < window.innerHeight;
+        const boundingRectangle = heroSection.getBoundingClientRect();
+        isHeroVisible = boundingRectangle.bottom > 0 && boundingRectangle.top < window.innerHeight;
 
         if (!isHeroVisible) {
           bgXTo(0);
@@ -242,8 +245,8 @@ import { heroTandoor } from '../assets/images';
         const clientY = Math.max(0, Math.min(window.innerHeight, mouseY));
 
         // Compute offsets relative to center of the Hero section
-        const xOffset = clientX - rect.left - rect.width / 2;
-        const yOffset = clientY - rect.top - rect.height / 2;
+        const xOffset = clientX - boundingRectangle.left - boundingRectangle.width / 2;
+        const yOffset = clientY - boundingRectangle.top - boundingRectangle.height / 2;
 
         bgXTo(-xOffset * 0.025);
         bgYTo(-yOffset * 0.025);
@@ -320,14 +323,14 @@ import { heroTandoor } from '../assets/images';
     // 3. Continuous Smoke & Glow Animations — runs on all devices
     // ----------------------------------------------------
     // Smoke drift animation — continuous organic movement
-    const smokeTl = gsap.timeline({ repeat: -1 });
-    smokeTl
+    const smokeTimeline1 = gsap.timeline({ repeat: -1 });
+    smokeTimeline1
       .to(smoke1, { xPercent: 18, yPercent: -12, duration: 14, ease: 'sine.inOut' })
       .to(smoke1, { xPercent: -6, yPercent: 4, duration: 18, ease: 'sine.inOut' })
       .to(smoke1, { xPercent: 0, yPercent: 0, duration: 16, ease: 'sine.inOut' });
 
-    const smokeTl2 = gsap.timeline({ repeat: -1 });
-    smokeTl2
+    const smokeTimeline2 = gsap.timeline({ repeat: -1 });
+    smokeTimeline2
       .to(smoke2, { xPercent: -14, yPercent: 10, duration: 16, ease: 'sine.inOut' })
       .to(smoke2, { xPercent: 8, yPercent: -6, duration: 14, ease: 'sine.inOut' })
       .to(smoke2, { xPercent: 0, yPercent: 0, duration: 20, ease: 'sine.inOut' });
@@ -366,15 +369,15 @@ import { heroTandoor } from '../assets/images';
     // ----------------------------------------------------
     // 4. Scroll-based Parallax — responsive scrub & clamped bounds
     // ----------------------------------------------------
-    const scrollMm = gsap.matchMedia();
-    scrollMm.add(
+    const scrollMediaMatcher = gsap.matchMedia();
+    scrollMediaMatcher.add(
       {
         isMobile: '(max-width: 767px)',
         isDesktop: '(min-width: 768px)',
       },
       (context) => {
         const { isMobile } = context.conditions!;
-        const scrubVal = isMobile ? true : 0.5;
+        const scrubSetting = isMobile ? true : 0.5;
 
         gsap.to(heroBackgroundWrapper, {
           yPercent: 10,
@@ -383,7 +386,7 @@ import { heroTandoor } from '../assets/images';
             trigger: '#hero',
             start: 'clamp(top top)',
             end: 'clamp(bottom top)',
-            scrub: scrubVal,
+            scrub: scrubSetting,
             fastScrollEnd: true,
             preventOverlaps: true,
             invalidateOnRefresh: true,
@@ -398,7 +401,7 @@ import { heroTandoor } from '../assets/images';
               trigger: '#hero',
               start: 'clamp(top top)',
               end: 'clamp(bottom top)',
-              scrub: scrubVal,
+              scrub: scrubSetting,
               fastScrollEnd: true,
               preventOverlaps: true,
               invalidateOnRefresh: true,
@@ -414,7 +417,7 @@ import { heroTandoor } from '../assets/images';
               trigger: '#hero',
               start: 'clamp(top top)',
               end: 'clamp(bottom top)',
-              scrub: scrubVal,
+              scrub: scrubSetting,
               fastScrollEnd: true,
               preventOverlaps: true,
               invalidateOnRefresh: true,
@@ -426,34 +429,44 @@ import { heroTandoor } from '../assets/images';
 
     // Hero CTA buttons via page transition
     const heroCtaButtons = document.querySelectorAll('.hero-cta-btn');
-    heroCtaButtons.forEach((btn) => btn.addEventListener('click', handleNavClick));
+    heroCtaButtons.forEach((buttonElement) =>
+      buttonElement.addEventListener('click', handleNavClick),
+    );
 
     // Hero entrance timeline (triggered by LoadingScreen)
     document.addEventListener('bonfire:hero-entrance', () => {
-      const hbw = document.querySelector('.hero-bg-wrap') as HTMLElement | null;
+      const heroBgWrapper = document.querySelector('.hero-bg-wrap') as HTMLElement | null;
       const eyebrow = document.querySelector('.hero-eyebrow');
       const chars = document.querySelectorAll('.hero-char');
       const deck = document.querySelector('.hero-deck');
       const cta = document.querySelector('.hero-cta');
       const scrollDown = document.querySelector('.hero-scroll-down');
 
-      if (!hbw) return;
+      if (!heroBgWrapper) return;
 
-      const bgScale = parseFloat(hbw.dataset.parallaxScale || '1.12') || 1.12;
+      const bgScale = parseFloat(heroBgWrapper.dataset.parallaxScale || '1.12') || 1.12;
       const startScale = bgScale + 0.13;
 
-      const mt = gsap.timeline({ defaults: { ease: 'power3.out' } });
+      const masterEntranceTimeline = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
-      mt.fromTo(hbw, { scale: startScale }, { scale: bgScale, duration: 2.2, ease: 'power2.out' });
-      mt.to(
+      masterEntranceTimeline.fromTo(
+        heroBgWrapper,
+        { scale: startScale },
+        { scale: bgScale, duration: 2.2, ease: 'power2.out' },
+      );
+      masterEntranceTimeline.to(
         chars,
         { y: '0%', rotation: 0, stagger: 0.08, duration: 1.2, ease: 'back.out(1.5)' },
         '-=1.6',
       );
-      mt.to(eyebrow, { y: 0, opacity: 1, duration: 0.8 }, '-=0.8');
-      mt.to(deck, { y: 0, opacity: 1, duration: 0.8 }, '-=0.6');
-      mt.to(cta, { y: 0, opacity: 1, duration: 0.9, ease: 'back.out(1.8)' }, '-=0.4');
-      mt.to(scrollDown, { opacity: 1, duration: 0.6 }, '-=0.2');
+      masterEntranceTimeline.to(eyebrow, { y: 0, opacity: 1, duration: 0.8 }, '-=0.8');
+      masterEntranceTimeline.to(deck, { y: 0, opacity: 1, duration: 0.8 }, '-=0.6');
+      masterEntranceTimeline.to(
+        cta,
+        { y: 0, opacity: 1, duration: 0.9, ease: 'back.out(1.8)' },
+        '-=0.4',
+      );
+      masterEntranceTimeline.to(scrollDown, { opacity: 1, duration: 0.6 }, '-=0.2');
     });
   });
 </script>

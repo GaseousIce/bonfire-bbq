@@ -240,8 +240,8 @@ const mobileOnlyLinks = [{ href: '#reserve', label: 'Book Table' }];
         trigger: sectionElement,
         start: sectionSelectorId === '#hero' ? 'top top' : 'top 40%',
         end: 'bottom 40%',
-        onToggle: (self) => {
-          if (self.isActive) {
+        onToggle: (scrollTriggerInstance) => {
+          if (scrollTriggerInstance.isActive) {
             const activeNavLink = sectionToNavLinkMap.get(sectionSelectorId) || null;
             updateActiveIndicatorPosition(sectionSelectorId === '#hero' ? null : activeNavLink);
           }
