@@ -2,17 +2,50 @@
 
 ---
 
-<div id="page-transition" class="fixed inset-0 z-[97] pointer-events-none" aria-hidden="true">
+<div
+  id="page-transition"
+  class="fixed inset-0 z-[97] pointer-events-none"
+  aria-hidden="true"
+  style="contain: strict;"
+>
+  <!-- Layer 1: Ultraviolet Accent Halo Wipe -->
+  <div
+    id="pt-halo"
+    class="absolute inset-0 bg-brand-purple"
+    style="clip-path: circle(0px at 50vw 50vh); transform: translateZ(0); backface-visibility: hidden;"
+  >
+  </div>
+
+  <!-- Layer 2: Jelly Mint Leading Wave Wipe -->
+  <div
+    id="pt-accent"
+    class="absolute inset-0 bg-brand-mint"
+    style="clip-path: circle(0px at 50vw 50vh); transform: translateZ(0); backface-visibility: hidden;"
+  >
+  </div>
+
+  <!-- Layer 3: Main Dark Canvas Fill Wipe -->
   <div
     id="pt-wipe"
-    class="absolute inset-0 flex items-center justify-center"
-    style="background: #131313;
-              clip-path: circle(0px at 50vw 50vh);"
+    class="absolute inset-0 flex flex-col items-center justify-center bg-canvas-black overflow-hidden"
+    style="clip-path: circle(0px at 50vw 50vh); transform: translateZ(0); backface-visibility: hidden;"
   >
-    <span
-      id="pt-brand"
-      class="split font-display text-hazard-white text-[min(20vw,180px)] tracking-[0.02em] select-none opacity-0"
-      >BONFIRE</span
+    <div
+      id="pt-content"
+      class="flex flex-col items-center justify-center px-4 text-center transform-gpu"
     >
+      <span
+        id="pt-kicker"
+        class="text-[10px] sm:text-xs md:text-sm font-mono uppercase tracking-[0.2em] sm:tracking-[0.3em] text-brand-mint mb-3 sm:mb-4 opacity-0 select-none whitespace-nowrap"
+      >
+        ✦ Indian Coal & Clay Oven ✦
+      </span>
+      <span
+        id="pt-brand"
+        class="split font-display text-hazard-white text-[min(18vw,165px)] leading-none select-none opacity-0"
+      >
+        BONFIRE
+      </span>
+    </div>
   </div>
 </div>

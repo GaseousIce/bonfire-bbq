@@ -26,18 +26,23 @@ const mobileOnlyLinks = [{ href: '#reserve', label: 'Book Table' }];
     </a>
 
     <!-- Nav Links (Desktop) -->
-    <nav class="hidden md:flex items-center gap-8">
+    <nav class="hidden md:flex items-center gap-8 relative py-1">
       {
         navLinks.map((link) => (
           <a
             href={link.href}
-            class="nav-link relative py-1 text-xs font-mono uppercase tracking-[1.8px] text-hazard-white hover:text-link-blue transition-colors duration-180"
+            class="nav-link relative text-xs font-mono uppercase tracking-[1.8px] text-hazard-white/80 hover:text-brand-mint transition-colors duration-200 py-1"
           >
-            <span class="block">{link.label}</span>
-            <span class="absolute bottom-0 left-0 w-0 h-[1px] bg-brand-mint transition-[width] duration-300 group-hover:w-full" />
+            <span>{link.label}</span>
           </a>
         ))
       }
+      <!-- Fluid Animated Active Indicator Line -->
+      <div
+        id="nav-active-indicator"
+        class="absolute bottom-0 left-0 h-[2px] bg-brand-mint rounded-full pointer-events-none opacity-0 shadow-[0_0_8px_#3cffd0]"
+      >
+      </div>
     </nav>
 
     <!-- Right Side CTA -->
@@ -131,29 +136,29 @@ const mobileOnlyLinks = [{ href: '#reserve', label: 'Book Table' }];
     backdrop-filter: blur(12px);
     border-color: #3cffd0;
   }
-
-  .nav-link:hover span.absolute {
-    width: 100%;
-  }
-
-  /* Active states via bottom inset border representation */
-  .nav-link.active {
-    box-shadow: 0px -2px 0px 0px inset #3cffd0;
-  }
 </style>
 
 <script>
   import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
   import { handleNavClick } from '../utils/navigateWithTransition';
 
+  gsap.registerPlugin(ScrollTrigger);
+
   document.addEventListener('DOMContentLoaded', () => {
-    const logo = document.querySelector('.brand-logo') as HTMLElement | null;
-    const navLinkElements = document.querySelectorAll('.nav-link');
+    const brandLogoElement = document.querySelector('.brand-logo') as HTMLElement | null;
+    const desktopNavLinkElements = Array.from(
+      document.querySelectorAll('.nav-link'),
+    ) as HTMLElement[];
     const navCtaButtons = document.querySelectorAll('.nav-cta');
     const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
     const mobileToggle = document.querySelector('.mobile-toggle');
     const mobileClose = document.querySelector('.mobile-close');
     const mobileDrawer = document.querySelector('.mobile-drawer');
+    const desktopNavContainer = document.querySelector('nav') as HTMLElement | null;
+    const activeNavIndicator = document.getElementById(
+      'nav-active-indicator',
+    ) as HTMLElement | null;
 
     // Mobile drawer open/close
     mobileToggle?.addEventListener('click', () => {
@@ -165,14 +170,91 @@ const mobileOnlyLinks = [{ href: '#reserve', label: 'Book Table' }];
     });
 
     // Nav link & CTA clicks via page transition
-    logo?.addEventListener('click', handleNavClick);
-    navLinkElements.forEach((el) => el.addEventListener('click', handleNavClick));
-    navCtaButtons.forEach((el) => el.addEventListener('click', handleNavClick));
-    mobileNavLinks.forEach((el) => {
-      el.addEventListener('click', (e) => {
-        handleNavClick(e);
+    brandLogoElement?.addEventListener('click', handleNavClick);
+    desktopNavLinkElements.forEach((navLinkElement) =>
+      navLinkElement.addEventListener('click', handleNavClick),
+    );
+    navCtaButtons.forEach((ctaButton) => ctaButton.addEventListener('click', handleNavClick));
+    mobileNavLinks.forEach((mobileLink) => {
+      mobileLink.addEventListener('click', (event) => {
+        handleNavClick(event);
         mobileDrawer?.classList.add('translate-x-full');
       });
+    });
+
+    // Map href -> navLinkElement for O(1) active class updates
+    const sectionToNavLinkMap = new Map<string, HTMLElement>();
+    desktopNavLinkElements.forEach((navLink) => {
+      const targetHref = navLink.getAttribute('href');
+      if (targetHref) sectionToNavLinkMap.set(targetHref, navLink);
+    });
+
+    // Smooth fluid indicator animation function
+    const updateActiveIndicatorPosition = (targetNavLink: HTMLElement | null) => {
+      if (!activeNavIndicator || !desktopNavContainer) return;
+
+      if (!targetNavLink) {
+        gsap.to(activeNavIndicator, {
+          autoAlpha: 0,
+          duration: 0.25,
+          ease: 'power2.out',
+        });
+        desktopNavLinkElements.forEach((navLink) => {
+          navLink.classList.remove('text-brand-mint');
+          navLink.classList.add('text-hazard-white/80');
+        });
+        return;
+      }
+
+      const desktopNavContainerRect = desktopNavContainer.getBoundingClientRect();
+      const activeTargetLinkRect = targetNavLink.getBoundingClientRect();
+      const indicatorLeftPosition = activeTargetLinkRect.left - desktopNavContainerRect.left;
+      const indicatorTargetWidth = activeTargetLinkRect.width;
+
+      gsap.to(activeNavIndicator, {
+        autoAlpha: 1,
+        x: indicatorLeftPosition,
+        width: indicatorTargetWidth,
+        duration: 0.38,
+        ease: 'power3.out',
+        overwrite: 'auto',
+      });
+
+      desktopNavLinkElements.forEach((navLink) => {
+        if (navLink === targetNavLink) {
+          navLink.classList.remove('text-hazard-white/80');
+          navLink.classList.add('text-brand-mint');
+        } else {
+          navLink.classList.remove('text-brand-mint');
+          navLink.classList.add('text-hazard-white/80');
+        }
+      });
+    };
+
+    // ScrollTrigger active link highlighting for section scroll
+    const navSectionSelectorIds = ['#hero', '#about', '#dishes', '#gallery', '#reserve'];
+    navSectionSelectorIds.forEach((sectionSelectorId) => {
+      const sectionElement = document.querySelector(sectionSelectorId);
+      if (!sectionElement) return;
+      ScrollTrigger.create({
+        trigger: sectionElement,
+        start: sectionSelectorId === '#hero' ? 'top top' : 'top 40%',
+        end: 'bottom 40%',
+        onToggle: (self) => {
+          if (self.isActive) {
+            const activeNavLink = sectionToNavLinkMap.get(sectionSelectorId) || null;
+            updateActiveIndicatorPosition(sectionSelectorId === '#hero' ? null : activeNavLink);
+          }
+        },
+      });
+    });
+
+    // Re-calculate indicator position on window resize
+    window.addEventListener('resize', () => {
+      const activeNavLink = desktopNavLinkElements.find((navLink) =>
+        navLink.classList.contains('text-brand-mint'),
+      );
+      if (activeNavLink) updateActiveIndicatorPosition(activeNavLink);
     });
   });
 </script>

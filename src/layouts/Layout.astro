@@ -143,135 +143,308 @@ const heroImage = await getImage({
       });
 
       // ── Page transition SplitText initialization (once, not on every click) ──
-      let __ptCharsTween: gsap.core.Tween | null = null;
+      let pageTransitionBrandCharsTween: gsap.core.Tween | null = null;
       {
-        const splitEl = document.querySelector('.split');
-        if (splitEl) {
+        const brandSplitTextElement = document.querySelector('.split');
+        if (brandSplitTextElement) {
           try {
             SplitText.create('.split', {
               type: 'chars',
               autoSplit: true,
               mask: 'chars',
               onSplit: (self: any) => {
-                __ptCharsTween = gsap.from(self.chars, {
-                  duration: 0.28,
-                  yPercent: 40,
+                // Symmetrical center-outward reveal with silky power3.out easing
+                pageTransitionBrandCharsTween = gsap.from(self.chars, {
+                  duration: 0.42,
+                  yPercent: 45,
                   opacity: 0,
-                  stagger: 0.04,
-                  ease: 'elastic.out(1,0.5)',
+                  scale: 0.94,
+                  stagger: {
+                    amount: 0.16,
+                    from: 'center',
+                  },
+                  ease: 'power3.out',
+                  paused: true,
                 });
               },
             });
-            // Pause the tween at start — we replay it on each nav click
-            if (__ptCharsTween) __ptCharsTween.pause(0);
           } catch (e) {
             console.warn('[PageTransition] SplitText init error:', e);
           }
         }
       }
 
-      let _transitionActive = false;
+      let isPageTransitionActive = false;
 
-      window.__pageTransition = (href: string, originX?: number, originY?: number): void => {
-        if (_transitionActive) return;
-        _transitionActive = true;
+      const transferFocusToTargetSection = (targetHref: string) => {
+        if (!targetHref || !targetHref.startsWith('#')) return;
+        const targetSection =
+          targetHref === '#hero'
+            ? (document.querySelector('#hero') as HTMLElement | null) || document.body
+            : (document.querySelector(targetHref) as HTMLElement | null);
+        if (!targetSection) return;
+        const focusableHeading =
+          (targetSection.querySelector('h1, h2, h3, [role="heading"]') as HTMLElement | null) ||
+          targetSection;
+        focusableHeading.setAttribute('tabindex', '-1');
+        focusableHeading.focus({ preventScroll: true });
+      };
 
-        const ptOverlay = document.getElementById('page-transition') as HTMLElement | null;
-        const ptWipe = document.getElementById('pt-wipe') as HTMLElement | null;
-        const ptBrand = document.getElementById('pt-brand') as HTMLElement | null;
-        const smoother = window.__smoother;
-        if (!ptOverlay || !ptWipe || !ptBrand) {
-          _transitionActive = false;
+      window.__pageTransition = (
+        targetHref: string,
+        clickOriginX?: number,
+        clickOriginY?: number,
+      ): void => {
+        if (isPageTransitionActive) return;
+        isPageTransitionActive = true;
+
+        const transitionOverlay = document.getElementById('page-transition') as HTMLElement | null;
+        const haloWipeLayer = document.getElementById('pt-halo') as HTMLElement | null;
+        const mintAccentWipeLayer = document.getElementById('pt-accent') as HTMLElement | null;
+        const darkCanvasWipeLayer = document.getElementById('pt-wipe') as HTMLElement | null;
+        const transitionContentWrapper = document.getElementById(
+          'pt-content',
+        ) as HTMLElement | null;
+        const transitionBrandHeading = document.getElementById('pt-brand') as HTMLElement | null;
+        const transitionKickerLabel = document.getElementById('pt-kicker') as HTMLElement | null;
+        const scrollSmootherInstance = window.__smoother;
+
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        // ── Reduced Motion Fallback: Smooth 150ms crossfade ──
+        if (prefersReducedMotion) {
+          if (!transitionOverlay) {
+            isPageTransitionActive = false;
+            return;
+          }
+          gsap.to(transitionOverlay, {
+            autoAlpha: 1,
+            duration: 0.1,
+            onComplete: () => {
+              try {
+                if (targetHref === '#hero') {
+                  if (scrollSmootherInstance) scrollSmootherInstance.scrollTo(0, false);
+                  else window.scrollTo({ top: 0, behavior: 'auto' });
+                } else if (targetHref?.startsWith('#')) {
+                  const targetSection = document.querySelector(targetHref) as HTMLElement | null;
+                  if (targetSection) {
+                    if (scrollSmootherInstance)
+                      scrollSmootherInstance.scrollTo(targetSection, false);
+                    else targetSection.scrollIntoView({ behavior: 'auto' });
+                  }
+                }
+                transferFocusToTargetSection(targetHref);
+                ScrollTrigger.refresh();
+              } catch (e) {
+                console.warn('[PageTransition] Reduced motion scroll error:', e);
+              }
+              gsap.to(transitionOverlay, {
+                autoAlpha: 0,
+                duration: 0.1,
+                onComplete: () => {
+                  isPageTransitionActive = false;
+                },
+              });
+            },
+          });
           return;
         }
 
-        const cx = originX !== undefined ? originX : window.innerWidth / 2;
-        const cy = originY !== undefined ? originY : window.innerHeight / 2;
+        if (
+          !transitionOverlay ||
+          !darkCanvasWipeLayer ||
+          !transitionBrandHeading ||
+          !mintAccentWipeLayer ||
+          !haloWipeLayer
+        ) {
+          isPageTransitionActive = false;
+          return;
+        }
 
-        // Max radius to cover full viewport from any click point (viewport diagonal)
-        const maxRadius = Math.sqrt(
+        const originX = clickOriginX !== undefined ? clickOriginX : window.innerWidth / 2;
+        const originY = clickOriginY !== undefined ? clickOriginY : window.innerHeight / 2;
+        const viewportCoverageMaxRadius = Math.sqrt(
           window.innerWidth * window.innerWidth + window.innerHeight * window.innerHeight,
         );
+        const clipPathOriginPosition = `${originX}px ${originY}px`;
 
-        const pos = `${cx}px ${cy}px`;
+        // ── Reset & Setup Initial States ──
+        gsap.set([haloWipeLayer, mintAccentWipeLayer, darkCanvasWipeLayer], {
+          willChange: 'clip-path',
+        });
+        gsap.set(haloWipeLayer, { clipPath: `circle(0px at ${clipPathOriginPosition})` });
+        gsap.set(mintAccentWipeLayer, { clipPath: `circle(0px at ${clipPathOriginPosition})` });
+        gsap.set(darkCanvasWipeLayer, { clipPath: `circle(0px at ${clipPathOriginPosition})` });
+        if (transitionContentWrapper)
+          gsap.set(transitionContentWrapper, { scale: 0.88, opacity: 1 });
+        gsap.set(transitionBrandHeading, { autoAlpha: 0, letterSpacing: '0.01em' });
+        if (transitionKickerLabel)
+          gsap.set(transitionKickerLabel, { autoAlpha: 0, y: 12, letterSpacing: '0.15em' });
 
-        gsap.set(ptWipe, { clipPath: `circle(0px at ${pos})` });
+        const resetGPUCompositorLayers = () => {
+          gsap.set([haloWipeLayer, mintAccentWipeLayer, darkCanvasWipeLayer], {
+            willChange: 'auto',
+          });
+          isPageTransitionActive = false;
+        };
 
-        const tl = gsap.timeline({
+        const pageTransitionTimeline = gsap.timeline({
           onComplete: () => {
-            tl.kill();
-            _transitionActive = false;
+            pageTransitionTimeline.kill();
+            resetGPUCompositorLayers();
           },
           onInterrupt: () => {
-            _transitionActive = false;
+            resetGPUCompositorLayers();
           },
         });
 
-        // Phase 1: Circle expand (0s start, 0.5s duration — slower to match text reveal)
-        tl.set(ptOverlay, { autoAlpha: 1, pointerEvents: 'auto' });
-        tl.to(
-          ptWipe,
+        // ── Phase 1: Smooth Multi-Layer Radial Wave Expansion (0.0s → 0.58s) ──
+        pageTransitionTimeline.set(transitionOverlay, { autoAlpha: 1, pointerEvents: 'auto' }, 0);
+
+        // Layer 1: Ultraviolet Accent Halo expands first with smooth power3.inOut
+        pageTransitionTimeline.to(
+          haloWipeLayer,
           {
-            clipPath: `circle(${maxRadius}px at ${pos})`,
-            duration: 0.5,
-            ease: 'power2.inOut',
+            clipPath: `circle(${viewportCoverageMaxRadius}px at ${clipPathOriginPosition})`,
+            duration: 0.52,
+            ease: 'power3.inOut',
           },
           0,
         );
 
-        // Phase 2: Text reveal via pre-initialized SplitText (offset +250ms after swipe)
-        tl.call(
-          () => {
-            gsap.set(ptBrand, { autoAlpha: 1 });
-            if (__ptCharsTween) {
-              __ptCharsTween.restart();
-            }
+        // Layer 2: Jelly Mint Leading Wave expands 30ms behind
+        pageTransitionTimeline.to(
+          mintAccentWipeLayer,
+          {
+            clipPath: `circle(${viewportCoverageMaxRadius}px at ${clipPathOriginPosition})`,
+            duration: 0.52,
+            ease: 'power3.inOut',
           },
-          null,
-          null,
-          0.25,
+          0.03,
         );
 
-        // Phase 3: Navigate + cleanup (scroll while overlay is fully dark)
-        tl.call(
+        // Layer 3: Canvas Dark Wipe follows 60ms behind for a rich mint edge
+        pageTransitionTimeline.to(
+          darkCanvasWipeLayer,
+          {
+            clipPath: `circle(${viewportCoverageMaxRadius}px at ${clipPathOriginPosition})`,
+            duration: 0.52,
+            ease: 'power3.inOut',
+          },
+          0.06,
+        );
+
+        // ── Phase 2: Fluid 3D Scale-Up & Typography Reveal (0.18s → 0.60s) ──
+        if (transitionContentWrapper) {
+          pageTransitionTimeline.to(
+            transitionContentWrapper,
+            {
+              scale: 1,
+              duration: 0.48,
+              ease: 'power2.out',
+            },
+            0.18,
+          );
+        }
+
+        pageTransitionTimeline.call(
+          () => {
+            if (transitionKickerLabel) {
+              gsap.to(transitionKickerLabel, {
+                autoAlpha: 1,
+                y: 0,
+                letterSpacing: '0.3em',
+                duration: 0.38,
+                ease: 'power2.out',
+              });
+            }
+            gsap.set(transitionBrandHeading, { autoAlpha: 1 });
+            gsap.to(transitionBrandHeading, {
+              letterSpacing: '0.04em',
+              duration: 0.42,
+              ease: 'power2.out',
+            });
+            if (pageTransitionBrandCharsTween) {
+              pageTransitionBrandCharsTween.restart();
+            }
+          },
+          undefined,
+          0.2,
+        );
+
+        // ── Phase 3: Execute Scroll Jump under full coverage (0.52s mark) ──
+        pageTransitionTimeline.call(
           () => {
             try {
-              if (href === '#hero') {
-                if (smoother) smoother.scrollTo(0, false);
+              if (targetHref === '#hero') {
+                if (scrollSmootherInstance) scrollSmootherInstance.scrollTo(0, false);
                 else window.scrollTo({ top: 0 });
-              } else if (href?.startsWith('#')) {
-                const target = document.querySelector(href);
-                if (target) {
-                  if (smoother) smoother.scrollTo(target, false);
-                  else target.scrollIntoView();
+              } else if (targetHref?.startsWith('#')) {
+                const targetSection = document.querySelector(targetHref);
+                if (targetSection) {
+                  if (scrollSmootherInstance) scrollSmootherInstance.scrollTo(targetSection, false);
+                  else targetSection.scrollIntoView();
                 }
               }
-              ScrollTrigger.refresh();
+              transferFocusToTargetSection(targetHref);
+              requestAnimationFrame(() => ScrollTrigger.refresh());
             } catch (e) {
-              console.warn('[PageTransition] callback error:', e);
+              console.warn('[PageTransition] scroll error:', e);
             }
           },
-          null,
-          null,
-          0.7,
+          undefined,
+          0.52,
         );
 
-        // Phase 4: Circle collapse (starts after text animation finishes at 1.25s)
-        tl.to(
-          ptWipe,
+        // ── Phase 4: Overlapping Smooth Unveil & Wave Collapse (0.85s → 1.30s) ──
+        if (transitionContentWrapper) {
+          pageTransitionTimeline.to(
+            transitionContentWrapper,
+            {
+              scale: 1.03,
+              opacity: 0,
+              duration: 0.3,
+              ease: 'power2.inOut',
+            },
+            0.82,
+          );
+        }
+
+        pageTransitionTimeline.to(
+          darkCanvasWipeLayer,
           {
-            clipPath: `circle(0px at ${pos})`,
-            duration: 0.3,
-            ease: 'power2.inOut',
+            clipPath: `circle(0px at ${clipPathOriginPosition})`,
+            duration: 0.45,
+            ease: 'power3.inOut',
           },
-          1.25,
+          0.85,
         );
 
-        // Phase 5: Text fade out (starts after text animation finishes)
-        tl.to(ptBrand, { autoAlpha: 0, duration: 0.2 }, 1.25);
+        pageTransitionTimeline.to(
+          mintAccentWipeLayer,
+          {
+            clipPath: `circle(0px at ${clipPathOriginPosition})`,
+            duration: 0.45,
+            ease: 'power3.inOut',
+          },
+          0.87,
+        );
 
-        // Phase 6: Hide overlay after out animations
-        tl.set(ptOverlay, { autoAlpha: 0, pointerEvents: 'none' }, 1.55);
+        pageTransitionTimeline.to(
+          haloWipeLayer,
+          {
+            clipPath: `circle(0px at ${clipPathOriginPosition})`,
+            duration: 0.45,
+            ease: 'power3.inOut',
+          },
+          0.89,
+        );
+
+        pageTransitionTimeline.set(
+          transitionOverlay,
+          { autoAlpha: 0, pointerEvents: 'none' },
+          1.34,
+        );
       };
     </script>
   </body>
