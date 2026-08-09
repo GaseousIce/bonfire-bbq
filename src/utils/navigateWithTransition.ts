@@ -20,7 +20,8 @@ export function handleNavClick(event: Event): void {
     clickY = boundingRectangle.top + boundingRectangle.height / 2;
   }
   const destinationHref = targetElement?.getAttribute('href');
-  if (destinationHref && window.__pageTransition) {
+  if (!destinationHref || !destinationHref.startsWith('#')) return;
+  if (window.__pageTransition) {
     window.__pageTransition(destinationHref, clickX, clickY);
   }
 }
