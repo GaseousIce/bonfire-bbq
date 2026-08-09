@@ -32,14 +32,7 @@ const heroImage = await getImage({
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
 
-    <!-- Preconnect hints for Google Fonts — saves 200-500ms font TTFB -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&family=Newsreader:ital,opsz,wght@1,6..72,400&display=swap"
-      crossorigin="anonymous"
-    />
+    <!-- Fonts are self-hosted in public/fonts/ — no CDN dependency -->
 
     <!-- Preconnect for Unsplash images (Hero + About sections) -->
     <link rel="preconnect" href="https://images.unsplash.com" />
@@ -53,11 +46,7 @@ const heroImage = await getImage({
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
 
-    <!-- Content Security Policy -->
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'self'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' https://images.unsplash.com; script-src 'self' 'unsafe-inline'; connect-src 'self'; media-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'"
-    />
+    <!-- CSP: delivered via HTTP header in public/_headers — not meta tag -->
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
