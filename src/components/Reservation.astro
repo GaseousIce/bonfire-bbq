@@ -51,6 +51,9 @@ import BookingToast from './reservation/BookingToast.astro';
                 <input
                   type="text"
                   id="name"
+                  name="name"
+                  maxlength="100"
+                  autocomplete="name"
                   placeholder="e.g. Marcus Aurelius"
                   required
                   class="bg-canvas-black border border-white/20 text-sm font-sans text-hazard-white placeholder-secondary-text px-4 py-3 rounded-[12px] focus:outline-none focus:border-brand-mint focus:ring-1 focus:ring-brand-purple transition-[border-color,box-shadow] duration-150"
@@ -65,6 +68,9 @@ import BookingToast from './reservation/BookingToast.astro';
                 <input
                   type="email"
                   id="email"
+                  name="email"
+                  maxlength="254"
+                  autocomplete="email"
                   placeholder="e.g. pit@bonfire.com"
                   required
                   class="bg-canvas-black border border-white/20 text-sm font-sans text-hazard-white placeholder-secondary-text px-4 py-3 rounded-[12px] focus:outline-none focus:border-brand-mint focus:ring-1 focus:ring-brand-purple transition-[border-color,box-shadow] duration-150"
