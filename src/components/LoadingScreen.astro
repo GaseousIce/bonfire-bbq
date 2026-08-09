@@ -57,6 +57,7 @@
 
 <script>
   import { gsap } from 'gsap';
+  import { syncScrollTriggers } from '../utils/syncScrollTriggers';
 
   document.addEventListener('DOMContentLoaded', () => {
     const loadingScreenElement = document.getElementById('loading-screen');
@@ -127,7 +128,15 @@
               duration: 0.8,
               ease: 'power2.inOut',
               delay: 0.3,
-              onComplete: () => loadingScreenElement.remove(),
+              onComplete: () => {
+                loadingScreenElement.remove();
+                if (window.__smoother) {
+                  window.__smoother.paused(false);
+                }
+                syncScrollTriggers();
+                document.documentElement.classList.remove('is-loading');
+                document.body.classList.remove('is-loading');
+              },
             });
           },
         });

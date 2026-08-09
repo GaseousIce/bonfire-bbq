@@ -145,36 +145,42 @@ import BookingToast from './reservation/BookingToast.astro';
     if (!reserveSection) return;
 
     // Entrance Animations via ScrollTrigger
-    gsap.from(reserveInfo?.children, {
-      y: 40,
-      opacity: 0,
-      stagger: 0.12,
-      duration: 0.8,
-      ease: 'power3.out',
-      scrollTrigger: {
-        trigger: reserveSection,
-        start: 'top 75%',
-        toggleActions: 'play none none none',
-      },
-    });
+    if (reserveInfo?.children && reserveInfo.children.length > 0) {
+      gsap.set(reserveInfo.children, { y: 40, opacity: 0 });
+      gsap.to(reserveInfo.children, {
+        y: 0,
+        opacity: 1,
+        stagger: 0.12,
+        duration: 0.8,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: reserveSection,
+          start: 'top 75%',
+          toggleActions: 'play none none none',
+        },
+      });
+    }
 
-    gsap.from(reservationCardWrapper, {
-      y: 60,
-      scale: 0.96,
-      opacity: 0,
-      duration: 1.0,
-      ease: 'back.out(1.5)',
-      scrollTrigger: {
-        trigger: reserveSection,
-        start: 'top 70%',
-        toggleActions: 'play none none none',
-      },
-    });
+    if (reservationCardWrapper) {
+      gsap.set(reservationCardWrapper, { y: 60, scale: 0.96, opacity: 0 });
+      gsap.to(reservationCardWrapper, {
+        y: 0,
+        scale: 1,
+        opacity: 1,
+        duration: 1.0,
+        ease: 'back.out(1.5)',
+        scrollTrigger: {
+          trigger: reserveSection,
+          start: 'top 70%',
+          toggleActions: 'play none none none',
+        },
+      });
+    }
 
-    gsap.fromTo(
-      [primaryHearthGlow, secondaryHearthGlow],
-      { scale: 0.7, opacity: 0 },
-      {
+    if (primaryHearthGlow || secondaryHearthGlow) {
+      const glowElementsList = [primaryHearthGlow, secondaryHearthGlow].filter(Boolean);
+      gsap.set(glowElementsList, { scale: 0.7, opacity: 0 });
+      gsap.to(glowElementsList, {
         scale: 1.25,
         opacity: 0.45,
         duration: 1.8,
@@ -184,8 +190,8 @@ import BookingToast from './reservation/BookingToast.astro';
           start: 'top 80%',
           toggleActions: 'play none none none',
         },
-      },
-    );
+      });
+    }
 
     // Reserve button click → show toast
     const reserveButton = reserveSection.querySelector(

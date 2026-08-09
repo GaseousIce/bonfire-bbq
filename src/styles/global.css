@@ -63,6 +63,12 @@
 }
 
 @layer base {
+  html.is-loading,
+  html.is-loading body {
+    overflow: hidden !important;
+    touch-action: none;
+  }
+
   body {
     background-color: #131313;
     color: #ffffff;

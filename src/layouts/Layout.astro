@@ -25,7 +25,7 @@ const heroImage = await getImage({
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="is-loading">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -100,6 +100,7 @@ const heroImage = await getImage({
       import { ScrollTrigger } from 'gsap/ScrollTrigger';
       import { ScrollSmoother } from 'gsap/ScrollSmoother';
       import { SplitText } from 'gsap/SplitText';
+      import { syncScrollTriggers } from '../utils/syncScrollTriggers';
 
       declare global {
         interface Window {
@@ -118,17 +119,24 @@ const heroImage = await getImage({
           content: '#smooth-content',
           smooth: 0.6,
         });
+        if (document.getElementById('loading-screen')) {
+          window.__smoother.paused(true);
+        }
         return () => {
           window.__smoother?.kill();
           window.__smoother = undefined;
           ScrollTrigger.normalizeScroll(false);
         };
       });
-      requestAnimationFrame(() => ScrollTrigger.refresh());
+      requestAnimationFrame(() => syncScrollTriggers());
 
       const breakpointWatcher = window.matchMedia('(min-width: 768px)');
       breakpointWatcher.addEventListener('change', () => {
-        requestAnimationFrame(() => ScrollTrigger.refresh());
+        requestAnimationFrame(() => syncScrollTriggers());
+      });
+
+      window.addEventListener('hashchange', () => {
+        syncScrollTriggers();
       });
 
       // ── Page transition SplitText initialization (once, not on every click) ──
@@ -223,7 +231,7 @@ const heroImage = await getImage({
                   }
                 }
                 transferFocusToTargetSection(targetHref);
-                ScrollTrigger.refresh();
+                syncScrollTriggers();
               } catch (reducedMotionScrollError) {
                 console.warn(
                   '[PageTransition] Reduced motion scroll error:',
@@ -379,7 +387,7 @@ const heroImage = await getImage({
                 }
               }
               transferFocusToTargetSection(targetHref);
-              requestAnimationFrame(() => ScrollTrigger.refresh());
+              syncScrollTriggers();
             } catch (scrollExecutionError) {
               console.warn('[PageTransition] scroll error:', scrollExecutionError);
             }

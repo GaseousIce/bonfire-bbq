@@ -244,34 +244,43 @@ const timelineEvents = [
             const dotElement = timelineItemElement.querySelector('.timeline-dot');
             const timestampElement = timelineItemElement.querySelector('.timeline-time');
 
-            const startX = isDesktop ? -100 : -40;
+            const startXCoordinate = isDesktop ? -100 : -40;
+
+            if (cardElement) {
+              gsap.set(cardElement, { opacity: 0, x: startXCoordinate, scale: 0.9 });
+            }
+            if (dotElement) {
+              gsap.set(dotElement, {
+                backgroundColor: '#131313',
+                borderColor: 'rgba(82, 0, 255, 0.6)',
+                boxShadow: '0 0 0px rgba(60, 255, 208, 0)',
+              });
+            }
+            if (timestampElement) {
+              gsap.set(timestampElement, { opacity: 0.3 });
+            }
 
             const itemTimeline = gsap.timeline({
               scrollTrigger: {
                 trigger: timelineItemElement,
                 start: 'top 90%',
                 end: 'top 55%',
-                scrub: isDesktop ? 1 : 0.2,
+                scrub: isDesktop ? 0.4 : 0.2,
+                invalidateOnRefresh: true,
               },
             });
 
             if (cardElement) {
-              itemTimeline.fromTo(
+              itemTimeline.to(
                 cardElement,
-                { opacity: 0, x: startX, scale: 0.9 },
                 { opacity: 1, x: 0, scale: 1, ease: 'none', duration: 1 },
                 0,
               );
             }
 
             if (dotElement) {
-              itemTimeline.fromTo(
+              itemTimeline.to(
                 dotElement,
-                {
-                  backgroundColor: '#131313',
-                  borderColor: 'rgba(82, 0, 255, 0.6)',
-                  boxShadow: '0 0 0px rgba(60, 255, 208, 0)',
-                },
                 {
                   backgroundColor: '#3cffd0',
                   borderColor: '#3cffd0',
@@ -284,12 +293,7 @@ const timelineEvents = [
             }
 
             if (timestampElement) {
-              itemTimeline.fromTo(
-                timestampElement,
-                { opacity: 0.3 },
-                { opacity: 1, ease: 'none', duration: 1 },
-                0,
-              );
+              itemTimeline.to(timestampElement, { opacity: 1, ease: 'none', duration: 1 }, 0);
             }
           });
         },

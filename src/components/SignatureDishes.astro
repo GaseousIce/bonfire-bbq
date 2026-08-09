@@ -221,27 +221,28 @@ const dishes = [
           dishCardElements.forEach((dishCardElement) => {
             const dishImageElement = dishCardElement.querySelector('.dish-img');
 
+            gsap.set(dishCardElement, { scale: 0.92, opacity: 0.5 });
+            if (dishImageElement) {
+              gsap.set(dishImageElement, { scale: 1.02, xPercent: -3 });
+            }
+
             const cardTimeline = gsap.timeline({
               scrollTrigger: {
                 trigger: dishCardElement,
                 containerAnimation: scrollTween,
                 start: 'left right',
                 end: 'right left',
-                scrub: 1,
+                scrub: 0.4,
               },
             });
 
             cardTimeline
-              .fromTo(
-                dishCardElement,
-                { scale: 0.92, opacity: 0.5 },
-                {
-                  scale: 1.03,
-                  opacity: 1,
-                  ease: 'power1.inOut',
-                  duration: 0.5,
-                },
-              )
+              .to(dishCardElement, {
+                scale: 1.03,
+                opacity: 1,
+                ease: 'power1.inOut',
+                duration: 0.5,
+              })
               .to(dishCardElement, {
                 scale: 0.92,
                 opacity: 0.5,
@@ -249,10 +250,8 @@ const dishes = [
                 duration: 0.5,
               });
 
-            gsap.fromTo(
-              dishImageElement,
-              { scale: 1.02, xPercent: -3 },
-              {
+            if (dishImageElement) {
+              gsap.to(dishImageElement, {
                 scale: 1.15,
                 xPercent: 3,
                 ease: 'none',
@@ -261,10 +260,10 @@ const dishes = [
                   containerAnimation: scrollTween,
                   start: 'left right',
                   end: 'right left',
-                  scrub: 1,
+                  scrub: 0.4,
                 },
-              },
-            );
+              });
+            }
           });
         } else {
           // Reset card inline styles on mobile to avoid sticking, and keep them fully visible and normal-scale
