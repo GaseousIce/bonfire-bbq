@@ -1,0 +1,23 @@
+{
+  "scanned": "2026-11-12T13:56:35Z",
+  "findings": {
+    "fonts": "Cabinet Grotesk + Literata (src/styles/global.css:15-29)",
+    "palette": "OKLCH custom properties (src/styles/tokens.css:17-28)",
+    "motion": "GSAP 3.15 + ScrollTrigger (package.json:19, src/components/About.astro:135)",
+    "spacing": "Tailwind CSS v4 tokens (src/styles/tokens.css:38-47)",
+    "framework": "Astro 7 (package.json:18)"
+  },
+  "preserve": [
+    "font stack",
+    "palette",
+    "spacing scale",
+    "timeline content and quotes",
+    "#about anchor id",
+    "GSAP motion and ScrollTrigger"
+  ],
+  "introduce": [
+    "timeline composition and layout",
+    "Verge/Riso timeline structure",
+    "sloplint gate checks"
+  ]
+}
