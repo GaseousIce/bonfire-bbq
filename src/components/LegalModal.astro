@@ -1,35 +1,30 @@
 ---
-
+/**
+ * The legal sheet: a stock card framed in the blue, the copy set in Literata,
+ * the heads in the display face. Behaviour and ids unchanged.
+ */
 ---
 
 <div
   id="legal-modal"
-  class="fixed inset-0 z-50 bg-canvas-black/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 opacity-0 pointer-events-none transition-opacity duration-300"
+  class="fixed inset-0 z-50 flex items-center justify-center bg-[color-mix(in_oklab,var(--color-ink)_72%,transparent)] p-4 opacity-0 pointer-events-none transition-opacity duration-300 sm:p-6"
   aria-hidden="true"
   role="dialog"
   aria-modal="true"
 >
   <div
-    class="bg-canvas-black border border-white/10 rounded-2xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden relative transform scale-95 transition-transform duration-300"
+    class="relative flex max-h-[85vh] w-full max-w-2xl scale-95 flex-col overflow-hidden rounded-[2px] border-[1.5px] border-ink bg-paper transition-transform duration-300"
     id="legal-modal-card"
   >
     <!-- Modal Header -->
-    <div
-      class="flex items-center justify-between px-6 py-5 border-b border-white/10 bg-white/[0.02]"
-    >
-      <div class="flex items-center gap-3">
-        <span class="w-2 h-2 rounded-full bg-brand-mint"></span>
-        <h3
-          id="legal-modal-title"
-          class="font-mono text-xs uppercase tracking-[2px] text-brand-mint font-bold"
-        >
-          HEARTH CHARTER
-        </h3>
-      </div>
+    <div class="flex items-center justify-between border-b border-rule px-6 py-5">
+      <h3 id="legal-modal-title" class="font-display text-lg font-extrabold text-ink">
+        Hearth charter
+      </h3>
       <button
         type="button"
         id="legal-modal-close"
-        class="text-hazard-white/60 hover:text-brand-mint p-1 rounded-lg transition-colors cursor-pointer text-base font-mono leading-none"
+        class="cursor-pointer p-1 text-base leading-none text-muted transition-colors hover:text-ink"
         aria-label="Close dialog"
       >
         ✕
@@ -39,26 +34,20 @@
     <!-- Modal Body -->
     <div
       id="legal-modal-content"
-      class="p-6 overflow-y-auto space-y-4 font-sans text-xs text-hazard-white/80 leading-relaxed max-h-[60vh]"
+      class="max-h-[60vh] space-y-4 overflow-y-auto p-6 font-body text-sm leading-relaxed text-ink"
     >
     </div>
 
     <!-- Modal Footer -->
-    <div class="px-6 py-4 border-t border-white/10 bg-white/[0.02] flex justify-end">
-      <button
-        type="button"
-        id="legal-modal-done"
-        class="font-mono text-[11px] uppercase tracking-[1.5px] font-bold px-6 py-2.5 rounded-full bg-brand-mint text-canvas-black hover:bg-white transition-colors cursor-pointer"
-      >
-        Acknowledge &amp; Close
+    <div class="flex justify-end border-t border-rule px-6 py-4">
+      <button type="button" id="legal-modal-done" class="btn cursor-pointer px-6 text-sm">
+        Acknowledge &amp; close
       </button>
     </div>
   </div>
 </div>
 
 <script>
-  import { gsap } from 'gsap';
-
   document.addEventListener('DOMContentLoaded', () => {
     const legalModal = document.getElementById('legal-modal');
     const legalModalCard = document.getElementById('legal-modal-card');
@@ -76,24 +65,24 @@
 
     const legalTexts: Record<string, { title: string; paragraphs: LegalParagraph[] }> = {
       privacy: {
-        title: 'PRIVACY POLICY — HEARTH DATA CHARTER',
+        title: 'Privacy policy: hearth data charter',
         paragraphs: [
-          { text: '1. Hearth Commitment', bold: true },
+          { text: '1. Hearth commitment', bold: true },
           {
             text: 'At Bonfire Barbecue, we protect your personal information with the same dedication we bring to our open-fire cooking. This charter outlines how we manage your details when reserving seating or contacting our pit masters.',
             bold: false,
           },
-          { text: '2. Information Collection', bold: true },
+          { text: '2. Information collection', bold: true },
           {
             text: 'We collect only essential details required to manage reservations and seating preferences, including your name, email address, phone number, party size, and dietary notes.',
             bold: false,
           },
-          { text: '3. Culinary Analytics', bold: true },
+          { text: '3. Culinary analytics', bold: true },
           {
             text: 'We analyze anonymized visit metrics to optimize seasonal menu rotation and maintain kitchen pacing during peak dining hours.',
             bold: false,
           },
-          { text: '4. Data Protection', bold: true },
+          { text: '4. Data protection', bold: true },
           {
             text: 'Your details are securely encrypted. We strictly never sell, rent, or trade your personal information to third parties.',
             bold: false,
@@ -101,24 +90,24 @@
         ],
       },
       terms: {
-        title: 'TERMS OF SERVICE — DINING PROTOCOL',
+        title: 'Terms of service: dining protocol',
         paragraphs: [
-          { text: '1. Reservation Holding Pacing', bold: true },
+          { text: '1. Reservation holding pacing', bold: true },
           {
             text: 'Tables are held for up to 15 minutes past scheduled booking times. Due to live coal kitchen preparation, late arrivals may experience adjusted table seating or staggered dish timing.',
             bold: false,
           },
-          { text: '2. Pitmaster Tasting & Dietary Notes', bold: true },
+          { text: '2. Pitmaster tasting & dietary notes', bold: true },
           {
             text: 'Our dishes highlight traditional tandoori roasting and authentic spice blends. Please inform your server or note during booking of any severe food allergies.',
             bold: false,
           },
-          { text: '3. Party Cancellations', bold: true },
+          { text: '3. Party cancellations', bold: true },
           {
             text: 'For parties of 6 or more, we kindly request 24 hours advance cancellation notice to assist our culinary team with fresh daily sourcing.',
             bold: false,
           },
-          { text: '4. Atmosphere & Conduct', bold: true },
+          { text: '4. Atmosphere & conduct', bold: true },
           {
             text: 'Bonfire Barbecue preserves a cinematic, immersive hearth environment. Guests are asked to observe courteous dining etiquette near live charcoal stations.',
             bold: false,
@@ -129,14 +118,15 @@
 
     function renderLegalContent(container: HTMLElement, paragraphs: LegalParagraph[]): void {
       container.textContent = '';
-      for (let i = 0; i < paragraphs.length; i++) {
-        const p = document.createElement('p');
-        const classes = ['text-hazard-white'];
-        if (paragraphs[i].bold) classes.push('font-semibold');
-        if (i > 0 && paragraphs[i].bold) classes.push('pt-2');
-        p.className = classes.join(' ');
-        p.textContent = paragraphs[i].text;
-        container.appendChild(p);
+      for (let paragraphIndex = 0; paragraphIndex < paragraphs.length; paragraphIndex++) {
+        const paragraphElement = document.createElement('p');
+        const classList = ['text-ink'];
+        if (paragraphs[paragraphIndex].bold) {
+          classList.push('font-display', 'font-extrabold', 'text-lg', 'pt-2');
+        }
+        paragraphElement.className = classList.join(' ');
+        paragraphElement.textContent = paragraphs[paragraphIndex].text;
+        container.appendChild(paragraphElement);
       }
     }
 

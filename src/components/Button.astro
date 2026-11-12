@@ -16,13 +16,9 @@ const { as = 'a', href, type, variant = 'primary', class: className = '' } = Ast
 
 const ButtonTag = as;
 
-const baseClasses =
-  'hover-button font-mono font-bold uppercase rounded-full inline-flex items-center justify-center cursor-pointer';
+const baseClasses = 'btn';
 
-const variantClasses =
-  variant === 'primary'
-    ? 'bg-brand-mint text-canvas-black variant-primary'
-    : 'bg-transparent text-hazard-white variant-outline';
+const variantClasses = variant === 'primary' ? 'btn-primary' : 'btn--quiet';
 
 const allClasses = `${baseClasses} ${variantClasses} ${className}`.trim();
 ---
@@ -32,81 +28,5 @@ const allClasses = `${baseClasses} ${variantClasses} ${className}`.trim();
   type={as === 'button' ? type || 'button' : undefined}
   class={allClasses}
 >
-  <span class="hover-circle-wrapper">
-    <span class="hover-circle"></span>
-  </span>
   <slot />
 </ButtonTag>
-
-<style>
-  .hover-button {
-    position: relative;
-    overflow: hidden;
-    /* Create a stacking context so z-index: -1 children stay inside the button */
-    isolation: isolate;
-  }
-
-  .hover-circle-wrapper {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-    border-radius: 9999px;
-    pointer-events: none;
-    z-index: -1;
-  }
-
-  .hover-circle {
-    position: absolute;
-    border-radius: 50%;
-    width: 0;
-    height: 0;
-    transform: translate(-50%, -50%) scale(0);
-    pointer-events: none;
-  }
-
-  /* Draw border inside a pseudo-element so circle motion layers on top */
-  .hover-button::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: 9999px;
-    pointer-events: none;
-    z-index: -2;
-    transition: border-color 0.3s ease;
-  }
-
-  .hover-button.variant-outline::after {
-    border: 2px solid #ffffff;
-  }
-
-  .hover-button.variant-primary::after {
-    border: 1px solid transparent;
-  }
-
-  /* Mobile/Tablet Fallback Styling (< 1024px) */
-  @media (max-width: 1023px) {
-    .hover-button {
-      transition:
-        background-color 0.3s ease,
-        color 0.3s ease;
-    }
-
-    .hover-button.variant-primary:hover {
-      background-color: #ffffff;
-      color: #131313;
-    }
-
-    .hover-button.variant-outline:hover {
-      color: #3cffd0;
-    }
-
-    .hover-button.variant-outline:hover::after {
-      border-color: #3cffd0;
-    }
-  }
-</style>
-
-<script>
-  import { initHoverButtons } from '../utils/hoverButton';
-  initHoverButtons();
-</script>

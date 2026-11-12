@@ -1,4 +1,8 @@
 ---
+/**
+ * The date control: a blue-framed trigger and a calendar sheet printed on
+ * the stock. Logic, ids and events unchanged; only the sheet was re-set.
+ */
 const currentYear = new Date().getFullYear();
 const monthNames = [
   'January',
@@ -25,23 +29,21 @@ const years = Array.from({ length: 5 }, (_, yearOffset) => ({
 ---
 
 <div class="flex flex-col gap-2">
-  <label
-    for="date-trigger"
-    class="font-mono text-[10px] uppercase tracking-[1.5px] text-hazard-white/80">Date</label
-  >
+  <label for="date-trigger" class="font-body text-sm font-medium text-muted">Date</label>
   <div class="custom-datetime relative">
     <input type="hidden" name="date" value="" />
     <button
       type="button"
       id="date-trigger"
-      class="custom-dt-trigger bg-canvas-black border border-white/20 text-sm font-sans text-hazard-white px-4 py-3 rounded-[12px] focus:outline-none focus:border-brand-mint focus:ring-1 focus:ring-brand-purple transition-[border-color,box-shadow] duration-150 w-full flex items-center justify-between cursor-pointer"
+      class="custom-dt-trigger h-12 w-full cursor-pointer rounded-[2px] border-[1.5px] border-ink bg-paper px-4 font-display text-[15px] font-extrabold text-ink flex items-center justify-between"
       role="combobox"
       aria-expanded="false"
       aria-label="Date"
     >
-      <span class="custom-dt-label text-secondary-text">Select date</span>
+      <span class="custom-dt-label text-muted">Select date</span>
       <svg
-        class="w-3.5 h-3.5 text-hazard-white/60 flex-shrink-0"
+        class="w-3.5 h-3.5 flex-shrink-0 text-muted"
+        aria-hidden="true"
         width="14"
         height="14"
         viewBox="0 0 14 14"
@@ -57,27 +59,37 @@ const years = Array.from({ length: 5 }, (_, yearOffset) => ({
 
     <!-- Calendar panel -->
     <div
-      class="custom-dt-panel absolute top-full left-0 right-0 z-30 mt-1.5 bg-canvas-black border border-white/10 rounded-[16px] shadow-2xl min-w-[280px] sm:min-w-[300px]"
+      class="custom-dt-panel absolute top-full left-0 right-0 z-30 mt-1.5 min-w-[280px] rounded-[2px] border-[1.5px] border-ink bg-paper sm:min-w-[300px]"
       style="display: none; opacity: 0; transform: translateY(-6px);"
     >
       <!-- Month header -->
       <div class="flex items-center justify-between px-5 pt-4 pb-1.5">
         <button
           type="button"
-          class="dt-month-prev text-hazard-white/50 hover:text-brand-mint transition-colors text-xl leading-none p-1 cursor-pointer bg-transparent border-none"
-          aria-label="Previous month">&#8249;</button
+          class="dt-month-prev cursor-pointer border-none bg-transparent p-1 leading-none text-muted transition-colors hover:text-ink"
+          aria-label="Previous month"
         >
+          <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path
+              d="M10 3.5 5.5 8l4.5 4.5"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"></path>
+          </svg>
+        </button>
         <div class="flex items-center gap-1.5">
           <!-- Month Custom Dropdown -->
           <div class="custom-select dt-month-select relative" data-name="month">
             <button
               type="button"
-              class="custom-select-trigger bg-canvas-black border border-white/10 text-sm font-sans text-hazard-white px-2 py-1.5 rounded-[8px] focus:outline-none focus:border-brand-mint cursor-pointer hover:border-white/20 transition-colors flex items-center gap-1.5"
+              class="custom-select-trigger flex h-9 cursor-pointer items-center gap-1.5 rounded-[2px] border border-ink bg-paper px-2 font-display text-[15px] font-extrabold text-ink"
               aria-expanded="false"
             >
               <span class="custom-select-label">Jan</span>
               <svg
-                class="custom-select-arrow w-2 h-1.5 text-hazard-white/60"
+                class="custom-select-arrow h-1.5 w-2 text-muted"
+                aria-hidden="true"
                 viewBox="0 0 12 8"
                 fill="none"
                 style="transform-origin: center;"
@@ -90,14 +102,14 @@ const years = Array.from({ length: 5 }, (_, yearOffset) => ({
               </svg>
             </button>
             <div
-              class="custom-select-options grid grid-cols-3 gap-1 p-1.5 absolute top-full -left-6 z-40 mt-1 bg-canvas-black border border-white/10 rounded-[12px] shadow-2xl w-[180px]"
+              class="custom-select-options absolute top-full -left-6 z-40 mt-1 grid w-[180px] grid-cols-3 gap-1 rounded-[2px] border-[1.5px] border-ink bg-paper p-1.5"
               style="display: none; opacity: 0; transform: translateY(-6px);"
             >
               {
                 months.map((m) => (
                   <button
                     type="button"
-                    class="custom-select-option w-full text-center py-2 text-sm font-sans text-hazard-white hover:bg-white/10 hover:text-brand-mint transition-colors duration-150 rounded-[8px] cursor-pointer"
+                    class="custom-select-option w-full cursor-pointer rounded-[2px] py-2 text-center font-body text-sm text-ink transition-colors duration-150 hover:bg-paper-2"
                     data-value={m.value}
                   >
                     {m.label}
@@ -111,12 +123,13 @@ const years = Array.from({ length: 5 }, (_, yearOffset) => ({
           <div class="custom-select dt-year-select relative" data-name="year">
             <button
               type="button"
-              class="custom-select-trigger bg-canvas-black border border-white/10 text-sm font-sans text-hazard-white px-2 py-1.5 rounded-[8px] focus:outline-none focus:border-brand-mint cursor-pointer hover:border-white/20 transition-colors flex items-center gap-1.5"
+              class="custom-select-trigger flex h-9 cursor-pointer items-center gap-1.5 rounded-[2px] border border-ink bg-paper px-2 font-display text-[15px] font-extrabold text-ink"
               aria-expanded="false"
             >
               <span class="custom-select-label">{currentYear}</span>
               <svg
-                class="custom-select-arrow w-2 h-1.5 text-hazard-white/60"
+                class="custom-select-arrow h-1.5 w-2 text-muted"
+                aria-hidden="true"
                 viewBox="0 0 12 8"
                 fill="none"
                 style="transform-origin: center;"
@@ -129,14 +142,14 @@ const years = Array.from({ length: 5 }, (_, yearOffset) => ({
               </svg>
             </button>
             <div
-              class="custom-select-options absolute top-full left-0 z-40 mt-1 bg-canvas-black border border-white/10 rounded-[8px] overflow-x-hidden shadow-2xl min-w-[70px] max-h-[240px] overflow-y-auto custom-scrollbar"
+              class="custom-scrollbar custom-select-options absolute top-full left-0 z-40 mt-1 max-h-[240px] min-w-[70px] overflow-x-hidden overflow-y-auto rounded-[2px] border-[1.5px] border-ink bg-paper"
               style="display: none; opacity: 0; transform: translateY(-6px);"
             >
               {
                 years.map((y) => (
                   <button
                     type="button"
-                    class="custom-select-option w-full text-left px-3 py-2 text-sm font-sans text-hazard-white hover:bg-white/5 hover:text-brand-mint transition-colors duration-150 border-b border-white/5 last:border-b-0 cursor-pointer"
+                    class="custom-select-option block w-full cursor-pointer border-b border-rule px-3 py-2 text-left font-body text-sm text-ink transition-colors duration-150 last:border-b-0 hover:bg-paper-2"
                     data-value={y.value}
                   >
                     {y.label}
@@ -148,38 +161,33 @@ const years = Array.from({ length: 5 }, (_, yearOffset) => ({
         </div>
         <button
           type="button"
-          class="dt-month-next text-hazard-white/50 hover:text-brand-mint transition-colors text-xl leading-none p-1 cursor-pointer bg-transparent border-none"
-          aria-label="Next month">&#8250;</button
+          class="dt-month-next cursor-pointer border-none bg-transparent p-1 leading-none text-muted transition-colors hover:text-ink"
+          aria-label="Next month"
         >
+          <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path
+              d="M6 3.5 10.5 8 6 12.5"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"></path>
+          </svg>
+        </button>
       </div>
 
       <!-- Day-of-week headers -->
       <div class="grid grid-cols-7 px-5 pb-1">
-        <span class="text-center font-mono text-[9px] uppercase tracking-[1px] text-secondary-text"
-          >Su</span
-        >
-        <span class="text-center font-mono text-[9px] uppercase tracking-[1px] text-secondary-text"
-          >Mo</span
-        >
-        <span class="text-center font-mono text-[9px] uppercase tracking-[1px] text-secondary-text"
-          >Tu</span
-        >
-        <span class="text-center font-mono text-[9px] uppercase tracking-[1px] text-secondary-text"
-          >We</span
-        >
-        <span class="text-center font-mono text-[9px] uppercase tracking-[1px] text-secondary-text"
-          >Th</span
-        >
-        <span class="text-center font-mono text-[9px] uppercase tracking-[1px] text-secondary-text"
-          >Fr</span
-        >
-        <span class="text-center font-mono text-[9px] uppercase tracking-[1px] text-secondary-text"
-          >Sa</span
-        >
+        <span class="text-center font-body text-[11px] text-muted">Su</span>
+        <span class="text-center font-body text-[11px] text-muted">Mo</span>
+        <span class="text-center font-body text-[11px] text-muted">Tu</span>
+        <span class="text-center font-body text-[11px] text-muted">We</span>
+        <span class="text-center font-body text-[11px] text-muted">Th</span>
+        <span class="text-center font-body text-[11px] text-muted">Fr</span>
+        <span class="text-center font-body text-[11px] text-muted">Sa</span>
       </div>
 
       <!-- Day cells -->
-      <div class="dt-days grid grid-cols-7 px-5 pb-4 gap-0.5"></div>
+      <div class="dt-days grid grid-cols-7 gap-0.5 px-5 pb-4"></div>
     </div>
   </div>
 </div>
@@ -192,15 +200,12 @@ const years = Array.from({ length: 5 }, (_, yearOffset) => ({
     background: transparent;
   }
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 4px;
-  }
-  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.25);
+    background: color-mix(in oklab, var(--color-ink) 25%, transparent);
+    border-radius: 2px;
   }
   .custom-scrollbar {
     scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+    scrollbar-color: color-mix(in oklab, var(--color-ink) 25%, transparent) transparent;
   }
 </style>
 
@@ -268,8 +273,7 @@ const years = Array.from({ length: 5 }, (_, yearOffset) => ({
         (optionElement as HTMLButtonElement).disabled = isPast;
         optionElement.classList.toggle('opacity-30', isPast);
         optionElement.classList.toggle('cursor-not-allowed', isPast);
-        optionElement.classList.toggle('hover:bg-white/10', !isPast);
-        optionElement.classList.toggle('hover:text-brand-mint', !isPast);
+        optionElement.classList.toggle('hover:bg-paper-2', !isPast);
       });
     }
 
@@ -319,7 +323,7 @@ const years = Array.from({ length: 5 }, (_, yearOffset) => ({
         const dayButtonElement = document.createElement('button');
         dayButtonElement.type = 'button';
         dayButtonElement.className =
-          'dt-day text-center font-sans text-sm w-full aspect-square rounded-[8px] flex items-center justify-center cursor-pointer transition-colors duration-150';
+          'dt-day num text-center font-display text-sm font-extrabold w-full aspect-square rounded-[2px] flex items-center justify-center cursor-pointer transition-colors duration-150';
         dayButtonElement.textContent = String(dayOfMonth);
 
         const dateObj = new Date(viewedYear, viewedMonth, dayOfMonth);
@@ -330,21 +334,13 @@ const years = Array.from({ length: 5 }, (_, yearOffset) => ({
 
         if (isPastDate) {
           dayButtonElement.disabled = true;
-          dayButtonElement.classList.add(
-            'text-hazard-white/20',
-            'opacity-25',
-            'cursor-not-allowed',
-          );
+          dayButtonElement.classList.add('text-muted', 'opacity-25', 'cursor-not-allowed');
         } else if (isSelectedDate) {
-          dayButtonElement.classList.add('bg-brand-mint', 'text-canvas-black', 'font-semibold');
+          dayButtonElement.classList.add('bg-accent', 'text-accent-ink');
         } else if (isCurrentDay) {
-          dayButtonElement.classList.add('border', 'border-brand-mint/40', 'text-brand-mint');
+          dayButtonElement.classList.add('border', 'border-ink', 'text-ink');
         } else {
-          dayButtonElement.classList.add(
-            'text-hazard-white/80',
-            'hover:bg-white/5',
-            'hover:text-brand-mint',
-          );
+          dayButtonElement.classList.add('text-ink', 'hover:bg-paper-2');
         }
 
         if (!isPastDate) {
@@ -356,7 +352,7 @@ const years = Array.from({ length: 5 }, (_, yearOffset) => ({
             const monthShort = dateObj.toLocaleString('default', { month: 'short' });
             const day = dateObj.getDate();
             dateTimeLabelElement.textContent = `${monthShort} ${day}`;
-            dateTimeLabelElement.classList.remove('text-secondary-text');
+            dateTimeLabelElement.classList.remove('text-muted');
 
             const formattedYear = dateObj.getFullYear();
             const formattedMonth = String(dateObj.getMonth() + 1).padStart(2, '0');

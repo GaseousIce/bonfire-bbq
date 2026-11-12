@@ -1,7 +1,11 @@
 ---
+/**
+ * The time control: a blue-framed trigger and a flat panel of chips, each
+ * a small rectangle on the stock, the chosen one filled with the pink drum.
+ */
 const timeChipData = [
   {
-    section: 'LUNCH',
+    section: 'Lunch',
     chips: [
       { value: '11:30', label: '11:30 AM' },
       { value: '12:30', label: '12:30 PM' },
@@ -10,7 +14,7 @@ const timeChipData = [
     ],
   },
   {
-    section: 'DINNER',
+    section: 'Dinner',
     chips: [
       { value: '17:00', label: '5:00 PM' },
       { value: '18:00', label: '6:00 PM' },
@@ -23,23 +27,20 @@ const timeChipData = [
 ---
 
 <div class="flex flex-col gap-2">
-  <label
-    for="time-trigger"
-    class="font-mono text-[10px] uppercase tracking-[1.5px] text-hazard-white/80">Time</label
-  >
+  <label for="time-trigger" class="font-body text-sm font-medium text-muted">Time</label>
   <div class="time-picker-wrap relative">
     <input type="hidden" name="time" value="" />
     <button
       type="button"
       id="time-trigger"
-      class="time-trigger bg-canvas-black border border-white/20 text-sm font-sans text-hazard-white px-4 py-3 rounded-[12px] focus:outline-none focus:border-brand-mint focus:ring-1 focus:ring-brand-purple transition-[border-color,box-shadow] duration-150 w-full flex items-center justify-between cursor-pointer"
+      class="time-trigger h-12 w-full cursor-pointer rounded-[2px] border-[1.5px] border-ink bg-paper px-4 font-display text-[15px] font-extrabold text-ink flex items-center justify-between"
       role="combobox"
       aria-expanded="false"
       aria-label="Time"
     >
-      <span class="time-label text-secondary-text">Select time</span>
+      <span class="time-label text-muted">Select time</span>
       <svg
-        class="w-3.5 h-3.5 text-hazard-white/60 flex-shrink-0"
+        class="w-3.5 h-3.5 flex-shrink-0 text-muted"
         width="14"
         height="14"
         viewBox="0 0 24 24"
@@ -56,20 +57,18 @@ const timeChipData = [
 
     <!-- Time panel -->
     <div
-      class="time-panel absolute top-full left-0 right-0 z-30 mt-1.5 bg-canvas-black border border-white/10 rounded-[16px] shadow-2xl p-4 flex flex-col gap-3 min-w-[280px]"
+      class="time-panel absolute top-full left-0 right-0 z-30 mt-1.5 flex min-w-[280px] flex-col gap-3 rounded-[2px] border-[1.5px] border-ink bg-paper p-4"
       style="display: none; opacity: 0; transform: translateY(-6px);"
     >
       {
         timeChipData.map((group) => (
           <div>
-            <span class="font-mono text-[9px] uppercase tracking-[1px] text-secondary-text mb-2 block">
-              {group.section}
-            </span>
+            <span class="mb-2 block font-body text-[11px] text-muted">{group.section}</span>
             <div class="grid grid-cols-3 gap-2">
               {group.chips.map((chip) => (
                 <button
                   type="button"
-                  class="time-chip font-mono text-[11px] font-semibold text-hazard-white bg-surface-slate border border-white/10 hover:border-brand-mint rounded-[40px] py-2 px-1 cursor-pointer transition-colors duration-150 text-center"
+                  class="time-chip num cursor-pointer rounded-[2px] border border-ink bg-paper py-2 px-1 text-center font-display text-[13px] font-extrabold text-ink transition-colors duration-150 hover:bg-paper-2"
                   data-value={chip.value}
                 >
                   {chip.label}
@@ -117,36 +116,36 @@ const timeChipData = [
 
         chip.classList.toggle('opacity-25', isPast);
         chip.classList.toggle('cursor-not-allowed', isPast);
-        chip.classList.toggle('text-hazard-white/20', isPast);
-        chip.classList.toggle('border-white/5', isPast);
+        chip.classList.toggle('text-muted', isPast);
+        chip.classList.toggle('border-ink', !isPast);
 
         if (isPast && timeHiddenInput.value === chip.dataset.value) {
           timeHiddenInput.value = '';
           timeLabelElement.textContent = 'Select time';
-          timeLabelElement.classList.add('text-secondary-text');
+          timeLabelElement.classList.add('text-muted');
         }
 
         if (isPast) {
           chip.classList.remove(
-            'bg-surface-slate',
-            'text-hazard-white',
-            'border-white/10',
-            'hover:border-brand-mint',
-            'bg-brand-mint',
-            'text-canvas-black',
-            'border-brand-mint',
+            'bg-paper',
+            'text-ink',
+            'border-ink',
+            'hover:bg-paper-2',
+            'bg-accent',
+            'text-accent-ink',
+            'border-accent',
           );
         } else {
           const isSelected = timeHiddenInput.value === chip.dataset.value;
-          chip.classList.add('hover:border-brand-mint');
-          chip.classList.remove('text-hazard-white/20', 'border-white/5');
+          chip.classList.add('hover:bg-paper-2');
+          chip.classList.remove('text-muted');
 
           if (isSelected) {
-            chip.classList.remove('bg-surface-slate', 'text-hazard-white', 'border-white/10');
-            chip.classList.add('bg-brand-mint', 'text-canvas-black', 'border-brand-mint');
+            chip.classList.remove('bg-paper', 'text-ink', 'border-ink');
+            chip.classList.add('bg-accent', 'text-accent-ink', 'border-accent');
           } else {
-            chip.classList.remove('bg-brand-mint', 'text-canvas-black', 'border-brand-mint');
-            chip.classList.add('bg-surface-slate', 'text-hazard-white', 'border-white/10');
+            chip.classList.remove('bg-accent', 'text-accent-ink', 'border-accent');
+            chip.classList.add('bg-paper', 'text-ink', 'border-ink');
           }
         }
       });
@@ -218,16 +217,16 @@ const timeChipData = [
         const text = chip.textContent;
 
         timeChips.forEach((chipElement) => {
-          chipElement.classList.remove('bg-brand-mint', 'text-canvas-black', 'border-brand-mint');
-          chipElement.classList.add('bg-surface-slate', 'text-hazard-white', 'border-white/10');
+          chipElement.classList.remove('bg-accent', 'text-accent-ink', 'border-accent');
+          chipElement.classList.add('bg-paper', 'text-ink', 'border-ink');
         });
 
-        chip.classList.remove('bg-surface-slate', 'text-hazard-white', 'border-white/10');
-        chip.classList.add('bg-brand-mint', 'text-canvas-black', 'border-brand-mint');
+        chip.classList.remove('bg-paper', 'text-ink', 'border-ink');
+        chip.classList.add('bg-accent', 'text-accent-ink', 'border-accent');
 
         if (timeLabelElement && text) {
           timeLabelElement.textContent = text;
-          timeLabelElement.classList.remove('text-secondary-text');
+          timeLabelElement.classList.remove('text-muted');
         }
         if (timeHiddenInput && value) {
           timeHiddenInput.value = value;

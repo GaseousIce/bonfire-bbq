@@ -1,0 +1,42 @@
+[
+ {
+  "mode": "redesign",
+  "depth": "full",
+  "scope": "page",
+  "theme": "riso",
+  "shape": "Photographic §08",
+  "axes": "light/grotesk-heavy/chromatic-pink",
+  "hero": "Poster",
+  "nav": "floating printed chip",
+  "footer": "colophon block",
+  "imagery": "the client’s own tandoor photographs printed in two inks",
+  "photos": [],
+  "entry": "The storystream: hairline fire-day rows on the stock",
+  "fingerprint": "Overlapping|Single column|Hairline|Solid|Full-bleed|Fade-up stagger",
+  "sections": [
+   "Poster hero: duotone tandoor plate, misregistered word",
+   "The storystream: five fire-day hairline rows",
+   "Signature dishes: price list on the pink screen with the live total",
+   "The soul of the hearth: four duotone pulls with captions",
+   "Secure your hearth: blue band and stock booking sheet",
+   "Colophon footer: imprint, hours, legal triggers"
+  ],
+  "signature": "the hero word Bonfire printed a hair out of register, once",
+  "waived": [
+   "38iii"
+  ],
+  "dismissed": [
+   "23"
+  ],
+  "dropped": [
+   "Unsplash hotlinks and their two photographs",
+   "Pinned horizontal dish deck",
+   "Gallery flip-stack and pin",
+   "Parallax images, glows and blurs",
+   "The nav-active-indicator bar",
+   "Mono eyebrow labels and dashes"
+  ],
+  "prompt": "Hallmark redesign of the Bonfire BBQ single-page site in the Riso theme, keeping every dish, price, fire-day fact, form field and interaction",
+  "date": "2026-11-12"
+ }
+]

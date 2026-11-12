@@ -1,128 +1,115 @@
 ---
+/**
+ * The colophon: the sheet's imprint. Navigation, the hearth's address and
+ * hours, the small print naming the inks, and the legal triggers in the
+ * footer's one fill.
+ */
 import LegalModal from './LegalModal.astro';
 
 const currentYear = new Date().getFullYear();
 ---
 
 <footer
-  class="relative w-full bg-canvas-black border-t border-white/10 pt-20 pb-8 overflow-hidden z-10"
+  class="footer relative z-10 w-full overflow-hidden border-t-[1.5px] border-ink bg-paper pt-16 pb-10"
 >
-  <div class="max-w-7xl mx-auto px-6 md:px-12 flex flex-col gap-16">
-    <!-- Top Footer Columns -->
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-12">
-      <!-- Description col -->
-      <div class="md:col-span-5 flex flex-col gap-4">
+  <div class="container flex flex-col gap-14">
+    <!-- Masthead row -->
+    <div
+      class="flex flex-col justify-between gap-6 border-b border-rule pb-10 md:flex-row md:items-end"
+    >
+      <div class="flex flex-col gap-4">
         <span
-          class="logo-icon w-8 h-8 rounded-lg bg-brand-mint flex items-center justify-center font-display text-canvas-black text-xl font-black"
-          >B</span
+          class="brand-logo font-display text-3xl leading-none font-extrabold text-ink select-none"
         >
-        <p class="font-serif italic text-base text-hazard-white/70 leading-relaxed max-w-sm">
-          "Indian coal, clay ovens, and raw cooking mastery. Crafting premium tandoori, kebabs, and
-          slow-steamed biryanis daily in the heart of the city."
+          Bonfire
+        </span>
+        <p class="max-w-sm font-body text-sm text-ink italic">
+          Indian coal, clay ovens, and raw cooking mastery. Crafting premium tandoori, kebabs, and
+          slow-steamed biryanis daily in the heart of the city.
         </p>
       </div>
+    </div>
 
-      <!-- Links col 1 -->
-      <div class="md:col-span-2 flex flex-col gap-4">
-        <span class="font-mono text-[10px] uppercase tracking-[2px] text-brand-mint font-semibold"
-          >NAVIGATION</span
-        >
-        <ul class="flex flex-col gap-2 text-xs font-mono uppercase tracking-[1px]">
+    <!-- Colophon columns -->
+    <div class="grid grid-cols-1 gap-10 md:grid-cols-12 md:gap-8">
+      <div class="md:col-span-4">
+        <span class="font-body text-sm font-medium text-muted">Navigation</span>
+        <ul class="mt-4 flex flex-col gap-2">
           <li>
-            <a
-              href="#hero"
-              class="footer-nav-link text-hazard-white hover:text-link-blue transition-colors duration-150"
+            <a href="#hero" class="footer-nav-link underlined-link font-body text-sm text-ink"
               >Top</a
             >
           </li>
           <li>
-            <a
-              href="#about"
-              class="footer-nav-link text-hazard-white hover:text-link-blue transition-colors duration-150"
+            <a href="#about" class="footer-nav-link underlined-link font-body text-sm text-ink"
               >Timeline</a
             >
           </li>
           <li>
-            <a
-              href="#dishes"
-              class="footer-nav-link text-hazard-white hover:text-link-blue transition-colors duration-150"
+            <a href="#dishes" class="footer-nav-link underlined-link font-body text-sm text-ink"
               >Menu</a
             >
           </li>
           <li>
-            <a
-              href="#gallery"
-              class="footer-nav-link text-hazard-white hover:text-link-blue transition-colors duration-150"
+            <a href="#gallery" class="footer-nav-link underlined-link font-body text-sm text-ink"
               >Atmosphere</a
             >
           </li>
           <li>
-            <a
-              href="#reserve"
-              class="footer-nav-link text-hazard-white hover:text-link-blue transition-colors duration-150"
+            <a href="#reserve" class="footer-nav-link underlined-link font-body text-sm text-ink"
               >Reservations</a
             >
           </li>
         </ul>
       </div>
 
-      <!-- Links col 2 (Location / Contact) -->
-      <div class="md:col-span-3 flex flex-col gap-4">
-        <span class="font-mono text-[10px] uppercase tracking-[2px] text-brand-mint font-semibold"
-          >THE HEARTH</span
-        >
-        <address
-          class="not-italic flex flex-col gap-2 font-mono text-[11px] text-secondary-text uppercase tracking-[1px] leading-relaxed"
-        >
+      <div class="md:col-span-4">
+        <span class="font-body text-sm font-medium text-muted">The hearth</span>
+        <address class="mt-4 flex flex-col gap-2 font-body text-sm text-ink not-italic">
           <p>Police Line Square, OT Rd</p>
           <p>Balasore, Isamnagar, Odisha 756001, India</p>
           <p>Phone: +91 99990 39220</p>
-          <p>Email: hello@bonfire-bbq.com</p>
+          <p>
+            Email:
+            <a href="mailto:hello@bonfire-bbq.com" class="underlined-link">hello@bonfire-bbq.com</a>
+          </p>
         </address>
       </div>
 
-      <!-- Links col 3 (Hours) -->
-      <div class="md:col-span-2 flex flex-col gap-4">
-        <span class="font-mono text-[10px] uppercase tracking-[2px] text-brand-mint font-semibold"
-          >SERVICE HOURS</span
-        >
-        <div
-          class="flex flex-col gap-2 font-mono text-[11px] text-secondary-text uppercase tracking-[1px]"
-        >
-          <p>Wed – Sun: 4pm – Late</p>
-          <p>Mon – Tue: Pit Closed</p>
+      <div class="md:col-span-4">
+        <span class="font-body text-sm font-medium text-muted">Service hours</span>
+        <div class="mt-4 flex flex-col gap-2 font-body text-sm text-ink">
+          <p>Wed to Sun, 4pm to late</p>
+          <p>Mon and Tue: pit closed</p>
         </div>
       </div>
     </div>
 
-    <!-- Massive Editorial Wordmark -->
-    <div
-      class="border-t border-white/5 pt-10 select-none overflow-hidden flex justify-center items-center"
-    >
-      <span
-        class="font-display text-[min(24vw,280px)] text-center leading-[0.75] font-black text-white/5 tracking-wide w-full block"
-      >
-        BONFIRE
-      </span>
-    </div>
+    <!-- Imprint: the sheet names its own inks -->
+    <p class="max-w-[70ch] border-t border-rule pt-8 font-body text-xs text-muted">
+      Set in Cabinet Grotesk and Literata. Printed in two drums, ink blue and fluorescent pink, on
+      bright uncoated stock. Bonfire barbecue, {currentYear}.
+    </p>
 
-    <!-- Bottom Copyright -->
+    <!-- Bottom bar -->
     <div
-      class="flex flex-col sm:flex-row justify-between items-center gap-4 text-center font-mono text-[9px] text-secondary-text uppercase tracking-[1.5px] border-t border-white/5 pt-8"
+      class="flex flex-col items-start justify-between gap-4 border-t border-rule pt-8 sm:flex-row sm:items-center"
     >
-      <div>
-        <span>&copy; {currentYear} BONFIRE BARBECUE. ALL HEARTHS RESERVED.</span>
-      </div>
+      <span class="font-body text-xs text-muted">
+        &copy; {currentYear} Bonfire barbecue. All hearths reserved.
+      </span>
       <div class="flex gap-6">
         <button
           type="button"
-          class="legal-modal-trigger hover:text-link-blue transition-colors cursor-pointer"
-          data-modal="privacy">Privacy Policy</button
+          data-modal="privacy"
+          class="legal-modal-trigger underlined-link inline-flex min-h-11 cursor-pointer items-center font-body text-xs text-ink"
+          >Privacy policy</button
         >
         <button
           type="button"
-          class="legal-modal-trigger hover:text-link-blue transition-colors cursor-pointer"
-          data-modal="terms">Terms of Service</button
+          data-modal="terms"
+          class="legal-modal-trigger underlined-link inline-flex min-h-11 cursor-pointer items-center font-body text-xs text-ink"
+          >Terms of service</button
         >
       </div>
     </div>

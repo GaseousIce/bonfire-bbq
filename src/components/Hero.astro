@@ -6,140 +6,147 @@ import { heroTandoor } from '../assets/images';
 
 <section
   id="hero"
-  class="relative w-full min-h-screen flex flex-col justify-center items-center overflow-hidden bg-canvas-black select-none"
+  class="hero-section relative flex w-full flex-col overflow-hidden bg-paper"
+  style="min-height: 100dvh"
 >
-  <!-- Background Image with Parallax wrapper -->
-  <div class="absolute inset-0 w-full h-full scale-[1.12] hero-bg-wrap" data-parallax-scale="1.12">
+  <!-- Full-bleed duotone plate: the user's own tandoor photograph, both drums -->
+  <figure
+    class="hero-plate grain absolute inset-0"
+    data-slot="hero"
+    data-alt="A smoking tandoor kebab platter on a dark wooden table, seen by candlelight"
+  >
     <Image
       src={heroTandoor}
-      alt="Bonfire Indian tandoor cooking"
-      class="w-full h-full object-cover filter brightness-30 contrast-125 select-none pointer-events-none"
+      alt="A smoking tandoor kebab platter on a dark wooden table, seen by candlelight"
+      class="w-full object-cover select-none"
       loading="eager"
       fetchpriority="high"
       decoding="async"
-      widths={[640, 960, 1280, 1600, 1920]}
+      widths={[960, 1280, 1600, 1920]}
       sizes="100vw"
       format="webp"
       quality={82}
     />
-    <div
-      class="absolute inset-0 bg-gradient-to-t from-canvas-black via-transparent to-canvas-black/80"
-    >
-    </div>
-  </div>
+  </figure>
 
-  <!-- Glowing tandoor hearth backdrop (expanding fire glow) -->
-  <div
-    class="absolute w-[300px] h-[300px] sm:w-[400px] sm:h-[400px] lg:w-[600px] lg:h-[600px] rounded-full bg-brand-purple/10 filter blur-[80px] sm:blur-[100px] lg:blur-[130px] pointer-events-none z-10 hero-glow"
-  >
-  </div>
-  <div
-    class="absolute w-[200px] h-[200px] sm:w-[300px] sm:h-[300px] lg:w-[400px] lg:h-[400px] rounded-full bg-brand-mint/3 filter blur-[50px] sm:blur-[70px] lg:blur-[90px] pointer-events-none z-10 hero-glow-secondary"
-  >
-  </div>
+  <!-- Ink scrim behind the head, this side only -->
+  <div class="hero-scrim pointer-events-none absolute inset-0 z-10" aria-hidden="true"></div>
 
-  <!-- Drifting Smoke Layers (Vignette Boundary Mask) -->
-  <div
-    class="absolute inset-0 pointer-events-none z-10 opacity-30 md:opacity-20 mix-blend-plus-lighter select-none smoke-container"
-    style="mask-image: radial-gradient(circle, black 30%, transparent 80%); -webkit-mask-image: radial-gradient(circle, black 30%, transparent 80%);"
-  >
-    <div class="smoke-parallax-1 absolute inset-0">
-      <div
-        class="smoke-layer smoke-1 absolute -inset-[20%] bg-[url('https://images.unsplash.com/photo-1556388275-bb5585725aca?auto=format&fit=crop&w=1200&q=80')] bg-cover"
+  <!-- Content: low and left, as on a printed poster; mt-auto pins the whole
+       block to the section's foot so the caption lands in the real corner -->
+  <div class="container hero-content relative z-20 mt-auto flex flex-col">
+    <div class="hero-copy flex flex-col items-start gap-6 pt-40 pb-16 md:gap-8 md:pb-20">
+      <h1
+        class="hero-head grain font-display font-extrabold text-paper text-[clamp(4.5rem,11vw,9rem)] leading-[0.92]"
       >
+        <span class="misreg" data-text="Bonfire">Bonfire</span>
+      </h1>
+      <p class="hero-lead lead max-w-md text-paper">
+        Indian coal, clay tandoors and a sigree of live hardwood charcoal.
+      </p>
+      <div class="hero-cta flex flex-wrap items-center gap-3">
+        <Button href="#reserve" variant="primary" class="hero-cta-btn">Book a table</Button>
+        <Button href="#dishes" variant="outline" class="hero-cta-btn">The menu</Button>
       </div>
     </div>
-    <div class="smoke-parallax-2 absolute inset-0">
-      <div
-        class="smoke-layer smoke-2 absolute -inset-[20%] bg-[url('https://images.unsplash.com/photo-1602410086232-0cdfb78b434f?auto=format&fit=crop&w=1200&q=80')] bg-cover"
-      >
-      </div>
-    </div>
-  </div>
 
-  <!-- Content Container -->
-  <div
-    class="hero-content relative z-20 max-w-5xl mx-auto px-6 text-center flex flex-col items-center gap-6 pointer-events-auto"
-  >
-    <!-- Eyebrow Capitalized Label -->
-    <span
-      class="hero-eyebrow text-xs md:text-sm font-mono uppercase tracking-[3px] text-brand-mint translate-y-8 opacity-0"
-    >
-      Est. 2026 / Indian Coal & Clay Oven Craft
-    </span>
-
-    <!-- Headline: Staggered Characters -->
-    <h1
-      class="hero-title font-display uppercase leading-[0.85] text-hazard-white text-[clamp(48px,18vw,160px)] font-black tracking-wide select-none flex flex-wrap justify-center overflow-hidden py-2"
-    >
-      {
-        Array.from('BONFIRE').map((char, index) => (
-          <span
-            class="hero-char inline-block translate-y-[110%] rotate-6 transform"
-            style={`transform-origin: bottom center;`}
-          >
-            {char}
-          </span>
-        ))
-      }
-    </h1>
-
-    <!-- Supporting deck -->
-    <p
-      class="hero-deck max-w-xl text-sm md:text-base font-serif italic text-hazard-white/70 translate-y-8 opacity-0 leading-relaxed"
-    >
-      A sensory feast carved by Indian spices, tandoor clay ovens, and open-flame cooking. Where
-      ancient spice routes meet modern charcoal craft.
-    </p>
-
-    <!-- CTAs -->
-    <div
-      class="hero-cta flex flex-wrap gap-6 md:gap-12 justify-center items-center mt-6 translate-y-8 opacity-0"
-    >
-      <Button
-        href="#reserve"
-        variant="primary"
-        class="hero-cta-btn text-[11px] tracking-[1.5px] px-8 py-3.5"
-      >
-        Reserve A Hearth
-      </Button>
-      <Button
-        href="#dishes"
-        variant="outline"
-        class="hero-cta-btn text-[11px] tracking-[1.5px] px-8 py-3.5"
-      >
-        Explore Menu
-      </Button>
-    </div>
-  </div>
-
-  <!-- Scroll Down Indicator -->
-  <div
-    class="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 pointer-events-none opacity-0 hero-scroll-down"
-  >
-    <span class="text-[9px] font-mono uppercase tracking-[2px] text-hazard-white/40"
-      >Scroll to ignite</span
-    >
-    <div class="w-[1px] h-12 bg-white/20 relative overflow-hidden">
-      <div class="absolute top-0 left-0 w-full h-1/2 bg-brand-mint"></div>
-    </div>
+    <!-- Corner caption: the one fact the plate needs -->
+    <p class="hero-caption self-end pb-8 text-sm md:pb-10">Est. 2026.</p>
   </div>
 </section>
 
 <style>
-  .hero-bg-wrap,
-  .smoke-container,
-  .smoke-parallax-1,
-  .smoke-parallax-2,
-  .smoke-layer,
-  .hero-glow,
-  .hero-glow-secondary {
-    will-change: transform, opacity;
-    transform: translateZ(0);
-    backface-visibility: hidden;
+  /* Poster plate: the photograph prints in both drums, blue shadows into a pink screen */
+  .hero-plate {
+    aspect-ratio: auto;
+    min-height: 0;
   }
-  .smoke-layer {
-    background-position: center;
+  .hero-plate > img {
+    height: 100%;
+    /* Lift the mids and blow the highlights to white: multiply over the pink
+       screen leaves the paper where the light is, the ink where the fire is */
+    filter: grayscale(1) contrast(0.92) brightness(1.62);
+  }
+  /* The head prints as a solid blue band with the word knocked out to the
+     stock: paper letters on the pale drums would wash out, and the pink
+     echo reads against solid ink. One of the sheet's two bands. */
+  .hero-head {
+    align-self: flex-start;
+    background: var(--color-ink);
+    padding: var(--space-sm) var(--space-lg);
+  }
+  /* The sentence prints as a caption strip on the plate: body text over a
+     bright drum would wash out, so the strip carries it like a label */
+  .hero-lead {
+    color: var(--color-accent-ink);
+    background: var(--color-paper);
+    padding: var(--space-sm) var(--space-md);
+    border: 1px solid color-mix(in oklab, var(--color-ink) 12%, transparent);
+  }
+  /* The corner date prints the same way, as the smallest strip on the sheet */
+  .hero-caption {
+    color: var(--color-accent-ink);
+    background: var(--color-paper);
+    padding: var(--space-2xs) var(--space-sm);
+    border: 1px solid color-mix(in oklab, var(--color-ink) 12%, transparent);
+  }
+  /* A compact dark footing so the caption and CTA sit on top of the table:
+     the plate's own shadows carry the copy, the scrim only holds the base */
+  .hero-scrim {
+    background: linear-gradient(
+      to top,
+      color-mix(in oklab, var(--color-ink) 55%, transparent) 0%,
+      color-mix(in oklab, var(--color-ink) 24%, transparent) 14%,
+      transparent 34%
+    );
+  }
+  /* The outlined secondary is knocked out of the drum: a paper sticker on the
+     plate. :global — the button's own markup lives in Button.astro, so a
+     scoped selector would carry the wrong component id and never match. */
+  .hero-section :global(.btn--quiet) {
+    color: var(--color-accent-ink);
+    background: var(--color-paper);
+    border-color: var(--color-ink);
+  }
+  .hero-section :global(.btn--quiet:hover) {
+    background: var(--color-accent);
+    color: var(--color-accent-ink);
+  }
+  /* Entrance settling states: content visible with scripting off */
+  .hero-plate > img,
+  .hero-copy {
+    opacity: 1;
+  }
+  /* The pink drum settles into its offset: off-register when parked, registered when seen */
+  .misreg::after {
+    transform: translate(2px, 3px);
+  }
+  html.js .misreg::after {
+    transform: translate(-16px, -22px);
+    transition: transform var(--dur-long) var(--ease-out);
+  }
+  html.js .hero-section.hero-seen .misreg::after {
+    transform: translate(2px, 3px);
+  }
+  @media (max-width: 40rem) {
+    /* The same settle reads wider against a smaller head: the phone offset
+       keeps inside the 2px-ish fringe so it never hints at a drop shadow */
+    .hero-section .misreg::after {
+      transform: translate(1.5px, 2px);
+    }
+    html.js .hero-section .misreg::after {
+      transform: translate(-16px, -22px);
+      transition: transform var(--dur-long) var(--ease-out);
+    }
+    html.js .hero-section.hero-seen .misreg::after {
+      transform: translate(1.5px, 2px);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html.js .hero-section .misreg::after {
+      transform: translate(2px, 3px);
+      transition: none;
+    }
   }
 </style>
 
@@ -148,325 +155,41 @@ import { heroTandoor } from '../assets/images';
   import { handleNavClick } from '../utils/navigateWithTransition';
 
   document.addEventListener('DOMContentLoaded', () => {
-    const heroBackgroundWrapper = document.querySelector('.hero-bg-wrap') as HTMLElement | null;
-    const heroContent = document.querySelector('.hero-content') as HTMLElement | null;
-    const smoke1 = document.querySelector('.smoke-1') as HTMLElement | null;
-    const smoke2 = document.querySelector('.smoke-2') as HTMLElement | null;
-    const smokeParallax1 = document.querySelector('.smoke-parallax-1') as HTMLElement | null;
-    const smokeParallax2 = document.querySelector('.smoke-parallax-2') as HTMLElement | null;
-    const heroGlow = document.querySelector('.hero-glow') as HTMLElement | null;
-    const heroGlowSecondary = document.querySelector('.hero-glow-secondary') as HTMLElement | null;
+    const heroSection = document.querySelector('.hero-section') as HTMLElement | null;
+    const heroCopy = document.querySelector('.hero-copy') as HTMLElement | null;
+    const heroPlateImage = document.querySelector('.hero-plate > img') as HTMLElement | null;
+    const heroCaption = document.querySelector('.hero-caption') as HTMLElement | null;
 
-    if (!heroBackgroundWrapper || !heroContent || !smoke1 || !smoke2) return;
-
-    // Read target scale dynamically from HTML attribute (single source of truth)
-    const bgScale = parseFloat(heroBackgroundWrapper.dataset.parallaxScale || '1.12') || 1.12;
-
-    // Enforce default scale & hardware acceleration hints
-    gsap.set(heroBackgroundWrapper, { scale: bgScale, willChange: 'transform', force3D: true });
-    gsap.set([heroContent, smoke1, smoke2], { willChange: 'transform', force3D: true });
-    if (heroGlow || heroGlowSecondary) {
-      gsap.set([heroGlow, heroGlowSecondary].filter(Boolean), {
-        willChange: 'transform',
-        force3D: true,
-      });
+    // Reduced motion: content stamped in place, the drums already in register
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      heroSection?.classList.add('hero-seen');
+      return;
     }
 
-    // ----------------------------------------------------
-    // 2. Mouse Parallax — only on hover-capable devices
-    // ----------------------------------------------------
-    // ----------------------------------------------------
-    // 2. Mouse Parallax — only on hover-capable devices
-    // ----------------------------------------------------
-    const heroMediaMatcher = gsap.matchMedia();
-    heroMediaMatcher.add('(hover: hover)', () => {
-      const heroSection = document.getElementById('hero');
-      if (!heroSection) return () => {};
-
-      let heroWidth = heroSection.offsetWidth;
-      let heroHeight = heroSection.offsetHeight;
-
-      const onResize = () => {
-        heroWidth = heroSection.offsetWidth;
-        heroHeight = heroSection.offsetHeight;
-      };
-      window.addEventListener('resize', onResize);
-
-      // Pre-create quickTo function setters to avoid tween allocation churn on mousemove
-      const bgXTo = gsap.quickTo(heroBackgroundWrapper, 'x', { duration: 1.2, ease: 'power2.out' });
-      const bgYTo = gsap.quickTo(heroBackgroundWrapper, 'y', { duration: 1.2, ease: 'power2.out' });
-
-      const contentXTo = gsap.quickTo(heroContent, 'x', { duration: 1.0, ease: 'power2.out' });
-      const contentYTo = gsap.quickTo(heroContent, 'y', { duration: 1.0, ease: 'power2.out' });
-
-      const smoke1XTo = gsap.quickTo(smoke1, 'x', { duration: 1.5, ease: 'power1.out' });
-      const smoke1YTo = gsap.quickTo(smoke1, 'y', { duration: 1.5, ease: 'power1.out' });
-
-      const smoke2XTo = gsap.quickTo(smoke2, 'x', { duration: 1.8, ease: 'power1.out' });
-      const smoke2YTo = gsap.quickTo(smoke2, 'y', { duration: 1.8, ease: 'power1.out' });
-
-      const glowTargets = [heroGlow, heroGlowSecondary].filter(Boolean) as HTMLElement[];
-      const glowXTo =
-        glowTargets.length > 0
-          ? gsap.quickTo(glowTargets, 'x', { duration: 1.3, ease: 'power2.out' })
-          : null;
-      const glowYTo =
-        glowTargets.length > 0
-          ? gsap.quickTo(glowTargets, 'y', { duration: 1.3, ease: 'power2.out' })
-          : null;
-      let mouseX = 0;
-      let mouseY = 0;
-      let animationFrameId: number | null = null;
-      let isHeroVisible = true;
-
-      const updateParallax = () => {
-        const boundingRectangle = heroSection.getBoundingClientRect();
-        isHeroVisible = boundingRectangle.bottom > 0 && boundingRectangle.top < window.innerHeight;
-
-        if (!isHeroVisible) {
-          bgXTo(0);
-          bgYTo(0);
-          contentXTo(0);
-          contentYTo(0);
-          smoke1XTo(0);
-          smoke1YTo(0);
-          smoke2XTo(0);
-          smoke2YTo(0);
-          if (glowXTo && glowYTo) {
-            glowXTo(0);
-            glowYTo(0);
-          }
-          animationFrameId = null;
-          return;
-        }
-
-        // Clamp mouse position within viewport boundaries to ensure edges stay fully active
-        const clientX = Math.max(0, Math.min(window.innerWidth, mouseX));
-        const clientY = Math.max(0, Math.min(window.innerHeight, mouseY));
-
-        // Compute offsets relative to center of the Hero section
-        const xOffset = clientX - boundingRectangle.left - boundingRectangle.width / 2;
-        const yOffset = clientY - boundingRectangle.top - boundingRectangle.height / 2;
-
-        bgXTo(-xOffset * 0.025);
-        bgYTo(-yOffset * 0.025);
-
-        contentXTo(xOffset * 0.015);
-        contentYTo(yOffset * 0.015);
-
-        smoke1XTo(xOffset * 0.04);
-        smoke1YTo(yOffset * 0.04);
-
-        smoke2XTo(-xOffset * 0.03);
-        smoke2YTo(-yOffset * 0.03);
-
-        if (glowXTo && glowYTo) {
-          glowXTo(xOffset * 0.01);
-          glowYTo(yOffset * 0.01);
-        }
-
-        animationFrameId = null;
-      };
-
-      const onMouseMove = (mouseEvent: MouseEvent) => {
-        mouseX = mouseEvent.clientX;
-        mouseY = mouseEvent.clientY;
-
-        if (animationFrameId === null) {
-          animationFrameId = requestAnimationFrame(updateParallax);
-        }
-      };
-
-      const onMouseLeave = () => {
-        if (animationFrameId !== null) {
-          cancelAnimationFrame(animationFrameId);
-          animationFrameId = null;
-        }
-
-        bgXTo(0);
-        bgYTo(0);
-        contentXTo(0);
-        contentYTo(0);
-        smoke1XTo(0);
-        smoke1YTo(0);
-        smoke2XTo(0);
-        smoke2YTo(0);
-        if (glowXTo && glowYTo) {
-          glowXTo(0);
-          glowYTo(0);
-        }
-      };
-
-      window.addEventListener('mousemove', onMouseMove);
-      document.addEventListener('mouseleave', onMouseLeave);
-
-      return () => {
-        window.removeEventListener('mousemove', onMouseMove);
-        document.removeEventListener('mouseleave', onMouseLeave);
-        window.removeEventListener('resize', onResize);
-        if (animationFrameId !== null) {
-          cancelAnimationFrame(animationFrameId);
-          animationFrameId = null;
-        }
-        gsap.killTweensOf([
-          heroBackgroundWrapper,
-          heroContent,
-          smoke1,
-          smoke2,
-          heroGlow,
-          heroGlowSecondary,
-        ]);
-      };
-    });
-
-    // ----------------------------------------------------
-    // 3. Continuous Smoke & Glow Animations — runs on all devices
-    // ----------------------------------------------------
-    // Smoke drift animation — continuous organic movement
-    const smokeTimeline1 = gsap.timeline({ repeat: -1 });
-    smokeTimeline1
-      .to(smoke1, { xPercent: 18, yPercent: -12, duration: 14, ease: 'sine.inOut' })
-      .to(smoke1, { xPercent: -6, yPercent: 4, duration: 18, ease: 'sine.inOut' })
-      .to(smoke1, { xPercent: 0, yPercent: 0, duration: 16, ease: 'sine.inOut' });
-
-    const smokeTimeline2 = gsap.timeline({ repeat: -1 });
-    smokeTimeline2
-      .to(smoke2, { xPercent: -14, yPercent: 10, duration: 16, ease: 'sine.inOut' })
-      .to(smoke2, { xPercent: 8, yPercent: -6, duration: 14, ease: 'sine.inOut' })
-      .to(smoke2, { xPercent: 0, yPercent: 0, duration: 20, ease: 'sine.inOut' });
-
-    // Subtle scale breathing for volumetric feel
-    gsap.to(smoke1, { scale: 1.08, duration: 12, repeat: -1, yoyo: true, ease: 'sine.inOut' });
-    gsap.to(smoke2, { scale: 1.06, duration: 15, repeat: -1, yoyo: true, ease: 'sine.inOut' });
-
-    // Background glow pulsing animations
-    gsap.fromTo(
-      heroGlow,
-      { scale: 0.9, opacity: 0.3 },
-      {
-        scale: 1.15,
-        opacity: 0.65,
-        duration: 5,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-      },
-    );
-
-    gsap.fromTo(
-      heroGlowSecondary,
-      { scale: 1.1, opacity: 0.1 },
-      {
-        scale: 0.85,
-        opacity: 0.35,
-        duration: 3.8,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-      },
-    );
-
-    // ----------------------------------------------------
-    // 4. Scroll-based Parallax — responsive scrub & clamped bounds
-    // ----------------------------------------------------
-    const scrollMediaMatcher = gsap.matchMedia();
-    scrollMediaMatcher.add(
-      {
-        isMobile: '(max-width: 767px)',
-        isDesktop: '(min-width: 768px)',
-      },
-      (context) => {
-        const { isMobile } = context.conditions!;
-        const scrubSetting = isMobile ? true : 0.5;
-
-        gsap.to(heroBackgroundWrapper, {
-          yPercent: 10,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: '#hero',
-            start: 'clamp(top top)',
-            end: 'clamp(bottom top)',
-            scrub: scrubSetting,
-            fastScrollEnd: true,
-            preventOverlaps: true,
-            invalidateOnRefresh: true,
-          },
-        });
-
-        if (smokeParallax1) {
-          gsap.to(smokeParallax1, {
-            yPercent: -15,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: '#hero',
-              start: 'clamp(top top)',
-              end: 'clamp(bottom top)',
-              scrub: scrubSetting,
-              fastScrollEnd: true,
-              preventOverlaps: true,
-              invalidateOnRefresh: true,
-            },
-          });
-        }
-
-        if (smokeParallax2) {
-          gsap.to(smokeParallax2, {
-            yPercent: -12,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: '#hero',
-              start: 'clamp(top top)',
-              end: 'clamp(bottom top)',
-              scrub: scrubSetting,
-              fastScrollEnd: true,
-              preventOverlaps: true,
-              invalidateOnRefresh: true,
-            },
-          });
-        }
-      },
-    );
-
-    // Hero CTA buttons via page transition
+    // The hero CTA buttons navigate through the page transition
     const heroCtaButtons = document.querySelectorAll('.hero-cta-btn');
     heroCtaButtons.forEach((buttonElement) =>
       buttonElement.addEventListener('click', handleNavClick),
     );
 
-    // Hero entrance timeline (triggered by LoadingScreen)
+    // Entrance: one settle, chained from the loading screen, staged 60 to 100ms apart
     document.addEventListener('bonfire:hero-entrance', () => {
-      const heroBgWrapper = document.querySelector('.hero-bg-wrap') as HTMLElement | null;
-      const eyebrow = document.querySelector('.hero-eyebrow');
-      const chars = document.querySelectorAll('.hero-char');
-      const deck = document.querySelector('.hero-deck');
-      const cta = document.querySelector('.hero-cta');
-      const scrollDown = document.querySelector('.hero-scroll-down');
+      if (!heroSection || !heroCopy) return;
 
-      if (!heroBgWrapper) return;
+      heroSection.classList.add('hero-seen');
 
-      const bgScale = parseFloat(heroBgWrapper.dataset.parallaxScale || '1.12') || 1.12;
-      const startScale = bgScale + 0.13;
-
-      const masterEntranceTimeline = gsap.timeline({ defaults: { ease: 'power3.out' } });
-
-      masterEntranceTimeline.fromTo(
-        heroBgWrapper,
-        { scale: startScale },
-        { scale: bgScale, duration: 2.2, ease: 'power2.out' },
+      const entranceTimeline = gsap.timeline({ defaults: { ease: 'power3.out' } });
+      if (heroPlateImage) {
+        entranceTimeline.fromTo(heroPlateImage, { opacity: 0 }, { opacity: 1, duration: 0.5 }, 0);
+      }
+      entranceTimeline.from(
+        heroCopy.children,
+        { y: 16, opacity: 0, duration: 0.6, stagger: 0.08 },
+        0.12,
       );
-      masterEntranceTimeline.to(
-        chars,
-        { y: '0%', rotation: 0, stagger: 0.08, duration: 1.2, ease: 'back.out(1.5)' },
-        '-=1.6',
-      );
-      masterEntranceTimeline.to(eyebrow, { y: 0, opacity: 1, duration: 0.8 }, '-=0.8');
-      masterEntranceTimeline.to(deck, { y: 0, opacity: 1, duration: 0.8 }, '-=0.6');
-      masterEntranceTimeline.to(
-        cta,
-        { y: 0, opacity: 1, duration: 0.9, ease: 'back.out(1.8)' },
-        '-=0.4',
-      );
-      masterEntranceTimeline.to(scrollDown, { opacity: 1, duration: 0.6 }, '-=0.2');
+      if (heroCaption) {
+        entranceTimeline.from(heroCaption, { opacity: 0, duration: 0.5 }, 0.4);
+      }
     });
   });
 </script>

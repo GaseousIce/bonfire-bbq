@@ -1,111 +1,153 @@
-/* ── Self-hosted Google Fonts (eliminates CDN supply-chain risk) ── */
-@font-face {
-  font-family: 'Bebas Neue';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('/fonts/bebas-neue-latin.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'Space Grotesk';
-  font-style: normal;
-  font-weight: 100 900;
-  font-display: swap;
-  src: url('/fonts/space-grotesk-latin.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'Space Mono';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('/fonts/space-mono-latin-400.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'Space Mono';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url('/fonts/space-mono-latin-700.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'Newsreader';
-  font-style: italic;
-  font-weight: 400;
-  font-display: swap;
-  src: url('/fonts/newsreader-latin-italic.woff2') format('woff2');
-}
-
+/* Hallmark · shape: Photographic §08 · genre: editorial · theme: Riso (deal 3/3, seed indian-coal-clay-oven-6e53·b2878b53·2026-11-10·r0) · redesign: full · posture: committed
+ * hero: Poster · nav: floating printed chip · footer: colophon block · imagery: photographs, the user's own 14, duotone · signature: the hero word "Bonfire" printed a hair out of register, once
+ * axes: light/grotesk-heavy/chromatic-pink · draw: 6333be · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H4 E3 S5 R3 V5 · weakest: E, a fresh system landlaid across a whole component tree; every section swept against the riso do-nots before it ships */
+/* Hallmark · waive 38iii · the theme file names the misregistered word as its signature · set once, in the hero head */
+/* Hallmark · dismissed 23 · the accent fill is a 48px hero button on hover, not a viewport-scale field */
+/* Hallmark · reworded "b o n f i r e" to "Bonfire" · the hero word prints as one word, not a letter-spaced split */
+/* Hallmark · dropped photo-1546964124-0cce460f38ef, photo-1565299624946-b28f40a0ae38 · stock hotlinks replaced by the client's own tandoor photographs */
+/* Hallmark · dropped nav-active-indicator · the new nav marks the active section with a colour, not a separate bar */
 @import 'tailwindcss';
+@import './tokens.css';
+@import './base.css' layer(base);
 
-@theme {
-  --font-display: 'Bebas Neue', Impact, sans-serif;
-  --font-sans: 'Space Grotesk', Helvetica, Arial, sans-serif;
-  --font-mono: 'Space Mono', Courier New, monospace;
-  --font-serif: 'Newsreader', Georgia, serif;
-
-  --color-canvas-black: #131313;
-  --color-surface-slate: #2d2d2d;
-  --color-brand-mint: #3cffd0;
-  --color-brand-purple: #5200ff;
-  --color-border-mint: #309875;
-  --color-link-blue: #3860be;
-  --color-focus-cyan: #1eaedb;
-  --color-purple-rule: #3d00bf;
-  --color-hazard-white: #ffffff;
-  --color-dim-gray: #8c8c8c;
-  --color-image-frame: #313131;
-
-  --breakpoint-xs: 400px;
+/* ── Self-hosted fonts (project convention: no CDN dependency) ── */
+@font-face {
+  font-family: 'Cabinet Grotesk';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('/fonts/cabinet-grotesk-latin-800.woff2') format('woff2');
 }
 
+@font-face {
+  font-family: 'Literata';
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url('/fonts/literata-latin-400-500.woff2') format('woff2');
+}
+
+/* ── Grain: paper specks where the ink skips (riso texture).
+   The host element must be positioned; grain itself takes no position. ── */
+.grain {
+  isolation: isolate;
+}
+.grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: var(--texture-opacity);
+  background-size: 200px 200px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 9 -4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+
+/* The misregistered word: a pink copy behind the blue, nudged 2 to 3px down and right */
+.misreg {
+  position: relative;
+  display: inline-block;
+  isolation: isolate;
+}
+.misreg::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  white-space: nowrap;
+  pointer-events: none;
+  color: var(--color-accent);
+  transform: translate(2px, 3px);
+}
+
+/* Two-ink overprint: the purple nobody mixed, where the pink drum sits on blue */
+.overprint {
+  background: var(--color-accent);
+  mix-blend-mode: multiply;
+}
+
+/* Buttons: the pink-filled pair and its outlined sibling, a sheet that lands */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: 48px;
+  padding: 0 var(--space-lg);
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-card);
+  font: var(--display-weight) 0.9375rem/1 var(--font-display);
+  color: var(--color-accent-ink);
+  background: var(--color-accent);
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color var(--dur-short) var(--ease-out),
+    border-color var(--dur-short) var(--ease-out),
+    color var(--dur-short) var(--ease-out),
+    transform var(--dur-micro) var(--ease-out);
+}
+.btn:hover {
+  background: var(--color-accent-ink);
+  color: var(--color-paper);
+}
+.btn:active {
+  transform: translate(1px, 1px);
+}
+.btn:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+.btn:disabled,
+.btn[aria-disabled='true'] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+.btn[aria-busy='true'] {
+  cursor: progress;
+}
+.btn--quiet {
+  background: transparent;
+  color: var(--color-ink);
+  border-color: var(--color-ink);
+}
+.btn--quiet:hover {
+  background: var(--color-paper-2);
+  color: var(--color-ink);
+}
+
+/* Solid ink band: the blue drum prints at full strength */
+.band-ink {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+/* Links underline in pink, thicker on hover */
+.underlined-link {
+  text-decoration-color: var(--color-accent);
+  text-decoration-thickness: 2px;
+}
+.underlined-link:hover {
+  text-decoration-thickness: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .underlined-link {
+    transition: none;
+  }
+}
+
+/* ── Loading gate state (kept from the loading screen's contract) ── */
 @layer base {
   html.is-loading,
   html.is-loading body {
     overflow: hidden !important;
     touch-action: none;
   }
-
-  body {
-    background-color: #131313;
-    color: #ffffff;
-    font-family: 'Space Grotesk', Helvetica, Arial, sans-serif;
-    margin: 0;
-    overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
-    touch-action: manipulation;
-  }
 }
 
-@layer utilities {
-  @media (width < 400px) {
-    .section-padding {
-      padding-top: 2.5rem;
-      padding-bottom: 2.5rem;
-    }
-  }
-  @media (width >= 400px) and (width < 768px) {
-    .section-padding {
-      padding-top: 4rem;
-      padding-bottom: 4rem;
-    }
-  }
-  @media (width >= 768px) {
-    .section-padding {
-      padding-top: 6rem;
-      padding-bottom: 6rem;
-    }
-  }
-
-  /* Hide scrollbar utility */
-  .no-scrollbar {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
-  }
-  .no-scrollbar::-webkit-scrollbar {
-    display: none; /* Chrome, Safari and Opera */
-  }
-}
+/* The retired .section-padding utility went with the old page rhythm: every
+   section now carries its own --section-gap scale. */

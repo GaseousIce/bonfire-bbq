@@ -1,4 +1,9 @@
 ---
+/**
+ * The booking: the statement printed on the blue band (band two of two), the
+ * form itself a stock sheet with blue-framed fields. Every control, field and
+ * event of the old card is kept; only the sheet it lives on changed.
+ */
 import Button from './Button.astro';
 import ReservationInfo from './reservation/ReservationInfo.astro';
 import CalendarPicker from './reservation/CalendarPicker.astro';
@@ -7,47 +12,25 @@ import CustomDropdown from './reservation/CustomDropdown.astro';
 import BookingToast from './reservation/BookingToast.astro';
 ---
 
-<section
-  id="reserve"
-  class="reserve-section relative w-full min-h-screen bg-canvas-black py-16 sm:py-20 lg:py-24 flex items-center justify-center z-20 border-t border-white/5"
->
-  <!-- Glowing hearth backdrop -->
-  <div
-    class="absolute w-[300px] h-[300px] sm:w-[400px] sm:h-[400px] lg:w-[500px] lg:h-[500px] rounded-full bg-brand-purple/20 filter blur-[80px] sm:blur-[100px] lg:blur-[120px] pointer-events-none z-0 hearth-glow"
-  >
-  </div>
-  <div
-    class="absolute w-[200px] h-[200px] sm:w-[250px] sm:h-[250px] lg:w-[300px] lg:h-[300px] rounded-full bg-brand-mint/10 filter blur-[50px] sm:blur-[60px] lg:blur-[80px] pointer-events-none z-0 hearth-glow-secondary"
-  >
-  </div>
-
-  <div class="max-w-6xl mx-auto w-full px-6 md:px-12 relative z-10">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-      <!-- Left Column -->
+<section id="reserve" class="reserve-section relative w-full bg-paper py-(--section-gap-s)">
+  <div class="container">
+    <div class="grid grid-cols-1 items-start gap-12 lg:grid-cols-12 lg:gap-16">
+      <!-- Left column: the blue band -->
       <ReservationInfo />
 
-      <!-- Right Column: Booking Card Form -->
-      <div class="lg:col-span-6 reserve-card-wrap">
-        <div
-          class="bg-surface-slate border border-white/10 rounded-[24px] p-6 md:p-8 flex flex-col gap-6 relative shadow-2xl hover:border-brand-mint/30 transition-[border-color] duration-300"
-        >
-          <div class="flex justify-between items-baseline border-b border-white/5 pb-4">
-            <span
-              class="font-mono text-[10px] uppercase tracking-[2px] text-brand-mint font-semibold"
-              >HEARTH BOOKING</span
-            >
-            <span class="font-mono text-[9px] text-secondary-text">CODE: PIT-001</span>
+      <!-- Right column: the form sheet, framed in the blue -->
+      <div class="reserve-card-wrap relative lg:col-span-7">
+        <div class="reserve-card flex flex-col gap-6 border-[1.5px] border-ink bg-paper p-6 md:p-8">
+          <div class="flex items-baseline justify-between border-b border-rule pb-4">
+            <span class="font-body text-sm font-medium text-muted">Hearth booking</span>
+            <span class="font-body text-xs text-muted">Code: Pit-001</span>
           </div>
 
           <form class="flex flex-col gap-5" onsubmit="return false">
             <!-- Name & Email -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div class="flex flex-col gap-2">
-                <label
-                  for="name"
-                  class="font-mono text-[10px] uppercase tracking-[1.5px] text-hazard-white/80"
-                  >Your Name</label
-                >
+                <label for="name" class="font-body text-sm font-medium text-muted">Your name</label>
                 <input
                   type="text"
                   id="name"
@@ -56,14 +39,12 @@ import BookingToast from './reservation/BookingToast.astro';
                   autocomplete="name"
                   placeholder="e.g. Marcus Aurelius"
                   required
-                  class="bg-canvas-black border border-white/20 text-sm font-sans text-hazard-white placeholder-secondary-text px-4 py-3 rounded-[12px] focus:outline-none focus:border-brand-mint focus:ring-1 focus:ring-brand-purple transition-[border-color,box-shadow] duration-150"
+                  class="reserve-field"
                 />
               </div>
               <div class="flex flex-col gap-2">
-                <label
-                  for="email"
-                  class="font-mono text-[10px] uppercase tracking-[1.5px] text-hazard-white/80"
-                  >Email Address</label
+                <label for="email" class="font-body text-sm font-medium text-muted"
+                  >Email address</label
                 >
                 <input
                   type="email"
@@ -73,22 +54,22 @@ import BookingToast from './reservation/BookingToast.astro';
                   autocomplete="email"
                   placeholder="e.g. pit@bonfire.com"
                   required
-                  class="bg-canvas-black border border-white/20 text-sm font-sans text-hazard-white placeholder-secondary-text px-4 py-3 rounded-[12px] focus:outline-none focus:border-brand-mint focus:ring-1 focus:ring-brand-purple transition-[border-color,box-shadow] duration-150"
+                  class="reserve-field"
                 />
               </div>
             </div>
 
             <!-- Date & Time -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
               <CalendarPicker />
               <TimePicker />
             </div>
 
             <!-- Guests & Preference -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
               <CustomDropdown
                 name="guests"
-                label="Hearth Seating"
+                label="Hearth seating"
                 placeholder="Select seating"
                 options={[
                   { value: '2', label: '2 Pitmasters' },
@@ -99,7 +80,7 @@ import BookingToast from './reservation/BookingToast.astro';
               />
               <CustomDropdown
                 name="preference"
-                label="Hearth Preference"
+                label="Hearth preference"
                 placeholder="Select preference"
                 options={[
                   { value: 'tandoor-side', label: 'Tandoor Side (Direct clay oven view)' },
@@ -118,9 +99,9 @@ import BookingToast from './reservation/BookingToast.astro';
               as="button"
               type="button"
               variant="primary"
-              class="mt-4 text-[12px] tracking-[2px] py-4 gap-2 self-center px-8"
+              class="reserve-submit mt-3 self-start"
             >
-              Reserve Hearth Seating
+              Reserve hearth seating
             </Button>
           </form>
 
@@ -131,75 +112,68 @@ import BookingToast from './reservation/BookingToast.astro';
   </div>
 </section>
 
+<style>
+  /* Fields: 48px on the stock, 2px radius, the value set in Cabinet 800 */
+  .reserve-field {
+    height: 48px;
+    border: 1.5px solid var(--color-ink);
+    border-radius: var(--radius-card);
+    background: transparent;
+    padding: 0 var(--space-md);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 15px;
+    color: var(--color-ink);
+  }
+  .reserve-field::placeholder {
+    font-family: var(--font-body);
+    font-weight: 400;
+    color: var(--color-muted);
+  }
+  .reserve-field:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+</style>
+
 <script>
   import { gsap } from 'gsap';
 
   document.addEventListener('DOMContentLoaded', () => {
     const abortController = new AbortController();
-    const reserveSection = document.querySelector('.reserve-section') as HTMLElement;
-    const reserveInfo = document.querySelector('.reserve-info') as HTMLElement;
-    const reservationCardWrapper = document.querySelector('.reserve-card-wrap') as HTMLElement;
-    const primaryHearthGlow = document.querySelector('.hearth-glow') as HTMLElement;
-    const secondaryHearthGlow = document.querySelector('.hearth-glow-secondary') as HTMLElement;
+    const reserveSection = document.querySelector('.reserve-section') as HTMLElement | null;
+    const reserveCard = document.querySelector('.reserve-card') as HTMLElement | null;
 
     if (!reserveSection) return;
 
-    // Entrance Animations via ScrollTrigger
-    if (reserveInfo?.children && reserveInfo.children.length > 0) {
-      gsap.set(reserveInfo.children, { y: 40, opacity: 0 });
-      gsap.to(reserveInfo.children, {
-        y: 0,
-        opacity: 1,
-        stagger: 0.12,
-        duration: 0.8,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: reserveSection,
-          start: 'top 75%',
-          toggleActions: 'play none none none',
-        },
-      });
+    // Entrance: the sheet lands once, nothing loops
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const animationContext = gsap.context(() => {
+        if (reserveCard) {
+          gsap.from(reserveCard, {
+            y: 40,
+            opacity: 0,
+            duration: 0.8,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: reserveSection,
+              start: 'top 72%',
+              toggleActions: 'play none none none',
+              immediateRender: false,
+            },
+          });
+        }
+      }, reserveSection ?? undefined);
     }
 
-    if (reservationCardWrapper) {
-      gsap.set(reservationCardWrapper, { y: 60, scale: 0.96, opacity: 0 });
-      gsap.to(reservationCardWrapper, {
-        y: 0,
-        scale: 1,
-        opacity: 1,
-        duration: 1.0,
-        ease: 'back.out(1.5)',
-        scrollTrigger: {
-          trigger: reserveSection,
-          start: 'top 70%',
-          toggleActions: 'play none none none',
-        },
-      });
-    }
-
-    if (primaryHearthGlow || secondaryHearthGlow) {
-      const glowElementsList = [primaryHearthGlow, secondaryHearthGlow].filter(Boolean);
-      gsap.set(glowElementsList, { scale: 0.7, opacity: 0 });
-      gsap.to(glowElementsList, {
-        scale: 1.25,
-        opacity: 0.45,
-        duration: 1.8,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: reserveSection,
-          start: 'top 80%',
-          toggleActions: 'play none none none',
-        },
-      });
-    }
-
-    // Reserve button click → show toast
-    const reserveButton = reserveSection.querySelector(
-      'form > .hover-button[type="button"]',
+    // Reserve button click → toast. The submit sheet does not send anywhere:
+    // the overlay prints the honest state instead of inventing a confirmation.
+    const reserveSubmitButton = reserveSection.querySelector(
+      '.reserve-submit',
     ) as HTMLElement | null;
 
-    if (reserveButton) {
-      reserveButton.addEventListener(
+    if (reserveSubmitButton) {
+      reserveSubmitButton.addEventListener(
         'click',
         (clickEvent) => {
           clickEvent.preventDefault();

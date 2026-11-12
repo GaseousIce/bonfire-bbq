@@ -34,8 +34,31 @@ const heroImage = await getImage({
 
     <!-- Fonts are self-hosted in public/fonts/ — no CDN dependency -->
 
-    <!-- Preconnect for Unsplash images (Hero + About sections) -->
-    <link rel="preconnect" href="https://images.unsplash.com" />
+    <!-- The stamp again, inline: Vite strips CSS comments from the served
+         sheet, and the render tier reads the posture and the hero from here -->
+    <style is:inline>
+      /* Hallmark · theme: Riso (deal 3/3) · shape: Photographic §08 · genre: editorial · posture: committed · hero: Poster · nav: floating printed chip · footer: colophon block · redesign: full */
+    </style>
+
+    <!-- Content must ship visible: the .js class scopes every reveal -->
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+
+    <!-- Without scripting the loading screen cannot retire itself, so it never
+         appears and the sheet scrolls: the whole page is already in the HTML -->
+    <noscript>
+      <style>
+        #loading-screen {
+          display: none !important;
+        }
+        html.is-loading,
+        html.is-loading body {
+          overflow: auto !important;
+          touch-action: auto !important;
+        }
+      </style>
+    </noscript>
 
     <!-- Preload hero image (WebP via getImage — avoids preloading the 776 KB source PNG) -->
     <link rel="preload" href={heroImage.src} as="image" type="image/webp" fetchpriority="high" />
@@ -54,10 +77,9 @@ const heroImage = await getImage({
     <meta property="og:description" content={description} />
 
     <style>
-      /* Hide scrollbar for clean presentation but allow scrolling */
-      html {
-        scrollbar-width: thin;
-        scrollbar-color: #313131 #131313;
+      html,
+      body {
+        overflow-x: clip;
       }
 
       /* Promote smooth-wrapper/content to compositor layers on desktop where ScrollSmoother is active */
@@ -67,26 +89,9 @@ const heroImage = await getImage({
           will-change: transform;
         }
       }
-
-      /* Webkit scrollbar customization */
-      ::-webkit-scrollbar {
-        width: 6px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #131313;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #313131;
-        border-radius: 3px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #3cffd0;
-      }
     </style>
   </head>
-  <body
-    class="bg-canvas-black text-hazard-white selection:bg-brand-mint selection:text-canvas-black font-sans antialiased overflow-x-hidden"
-  >
+  <body class="bg-paper text-ink font-body antialiased">
     <LoadingScreen />
     <Navbar />
     <div id="smooth-wrapper">
@@ -95,6 +100,23 @@ const heroImage = await getImage({
       </div>
     </div>
     <PageTransition />
+    <script is:inline>
+      window.hallmarkSlots = (m) => {
+        for (const [k, v] of Object.entries(m)) {
+          const s = document.querySelector(`[data-slot="${k}"]`);
+          if (!s) continue;
+          const im = new Image();
+          im.src = typeof v === 'string' ? v : v.src;
+          im.alt = (typeof v === 'object' && v.alt) || s.dataset.alt || '';
+          s.querySelectorAll(':scope > img').forEach((o) => o.remove());
+          s.prepend(im);
+        }
+      };
+      document.querySelectorAll('[data-slot] img').forEach((i) => {
+        if (i.complete && !i.naturalWidth) i.remove();
+        else i.addEventListener('error', () => i.remove(), { once: true });
+      });
+    </script>
     <script>
       import { gsap } from 'gsap';
       import { ScrollTrigger } from 'gsap/ScrollTrigger';

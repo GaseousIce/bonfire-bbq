@@ -87,7 +87,7 @@ export function initCustomDropdown(dropdownContainer: HTMLElement, signal: Abort
       const selectedOptionText = optionElement.textContent;
       if (dropdownLabelElement) {
         dropdownLabelElement.textContent = selectedOptionText;
-        dropdownLabelElement.classList.remove('text-secondary-text');
+        dropdownLabelElement.classList.remove('text-muted');
       }
       if (hiddenInput) hiddenInput.value = value || '';
       dropdownContainer.dataset.value = value || '';

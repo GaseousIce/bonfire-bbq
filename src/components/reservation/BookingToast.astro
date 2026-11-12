@@ -1,30 +1,26 @@
 ---
-
+/**
+ * The honest overlay: this sheet has no endpoint, so a press covers the form
+ * with solid ink and prints a paper sticker — never a fabricated confirmation.
+ */
 ---
 
 <div
-  class="reserve-toast absolute inset-0 z-20 flex flex-col items-center justify-center rounded-[24px] pointer-events-none"
+  class="reserve-toast pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-center rounded-[2px]"
   style="opacity: 0;"
   role="status"
   aria-live="polite"
+  hidden
 >
-  <div class="absolute inset-0 bg-canvas-black/80 rounded-[24px]"></div>
-  <div class="relative flex flex-col items-center gap-3">
-    <span class="inline-block w-2.5 h-2.5 rounded-full bg-brand-mint"></span>
-    <span class="font-mono text-sm uppercase tracking-[2.5px] text-hazard-white"
-      >Booking coming soon</span
-    >
-    <span class="font-serif italic text-sm text-hazard-white/50 mt-1"
-      >We'll be taking reservations shortly</span
-    >
+  <div class="absolute inset-0 rounded-[2px] bg-ink"></div>
+  <div
+    class="relative mx-6 flex flex-col items-center gap-3 border-[1.5px] border-ink bg-paper px-8 py-7 text-center"
+  >
+    <span class="inline-block h-2.5 w-2.5 bg-accent" aria-hidden="true"></span>
+    <span class="font-display text-lg font-extrabold text-ink">Booking coming soon.</span>
+    <span class="font-body text-sm text-ink italic">We’ll be taking reservations shortly</span>
   </div>
 </div>
-
-<style>
-  .reserve-toast {
-    backdrop-filter: blur(4px);
-  }
-</style>
 
 <script>
   import { gsap } from 'gsap';
@@ -44,6 +40,7 @@
       if (toastTween) toastTween.kill();
       if (autoDismiss) autoDismiss.kill();
 
+      toastElement.hidden = false;
       toastElement.style.pointerEvents = 'auto';
       toastTween = gsap.timeline();
       toastTween.fromTo(
@@ -54,8 +51,8 @@
       );
       toastTween.fromTo(
         toastInner,
-        { opacity: 0, scale: 0.9, y: 12 },
-        { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: 'back.out(1.8)' },
+        { opacity: 0, y: 12 },
+        { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' },
         0.1,
       );
 
@@ -69,9 +66,10 @@
       toastTween = gsap.timeline({
         onComplete: () => {
           toastElement.style.pointerEvents = 'none';
+          toastElement.hidden = true;
         },
       });
-      toastTween.to(toastInner, { opacity: 0, scale: 0.95, duration: 0.2, ease: 'power2.in' }, 0);
+      toastTween.to(toastInner, { opacity: 0, duration: 0.2, ease: 'power2.in' }, 0);
       toastTween.to(toastElement, { opacity: 0, duration: 0.25, ease: 'power2.in' }, 0.05);
     }
 
